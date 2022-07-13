@@ -20,6 +20,7 @@ router.get("/", async (req, res) => {
     let result = await UserConversation.findAll({
       where: {
         userId: userId,
+        isDeleted: false,
       },
       include: {
         model: Conversation,
@@ -49,17 +50,98 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    let result = await Message.findAll({
+    const { receiverId } = req.body;
+
+    if (!receiverId) {
+      return res.sendStatus(400);
+    }
+
+    const receiver = await User.findByPk(receiverId);
+    if (!receiver) {
+      return res.sendStatus(404);
+    }
+
+    // Check if a conversation doesn't exxist yet
+    let result = await UserConversation.findOne({
       where: {
-        conversationId: req.params.id,
+        userId: userId,
       },
-      include: User,
-      order: [["createdAt", "ASC"]],
+      include: {
+        model: Conversation,
+        required: true,
+        include: {
+          required: true,
+          model: UserConversation,
+          where: {
+            isGroup: false,
+            userId: receiverId,
+          },
+          include: User,
+        },
+      },
     });
 
-    res.status(200).json(result);
+    if (result) {
+      if (result.isDeleted) {
+        await UserConversation.update(
+          {
+            isDeleted: false,
+          },
+          {
+            where: {
+              id: result.id,
+            },
+          }
+        );
+      }
+      return res.status(result.isDeleted ? 201 : 200).json({
+        id: result.conversationId,
+        user: result.conversation.user_conversations[0].user,
+      });
+    }
+
+    // Create new conversation
+    const newConversation = await Conversation.create();
+    conversationId = newConversation.id;
+
+    const users = [userId, receiverId];
+    for (let i = 0; i < users.length; i++) {
+      await UserConversation.create({
+        conversationId: conversationId,
+        userId: users[i],
+      });
+    }
+
+    res.status(201).json({
+      id: conversationId,
+      user: receiver,
+    });
+  } catch (error) {
+    res.sendStatus(500);
+    console.error(error);
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  try {
+    let result = await Conversation.findOne({
+      where: {
+        id: req.params.id,
+      },
+      include: {
+        model: Message,
+        include: User,
+        order: [["createdAt", "ASC"]],
+      },
+    });
+
+    if (!result) {
+      return res.sendStatus(404);
+    }
+
+    res.status(200).json(result.messages);
   } catch (error) {
     res.sendStatus(500);
     console.error(error);
@@ -99,7 +181,7 @@ router.post("/message", async (req, res) => {
 
     if (!conversationId) {
       if (!receiverId) {
-        throw new Error("Missing receiverId");
+        return res.sendStatus(400);
       }
 
       const newConversation = await Conversation.create();
@@ -135,7 +217,7 @@ router.post("/message", async (req, res) => {
 router.put("/message/:id", async (req, res) => {
   try {
     if (!req.body.content.length) {
-      throw new Error("Invalid content");
+      return res.sendStatus(400);
     }
 
     const [nbLines, [result]] = await Message.update(

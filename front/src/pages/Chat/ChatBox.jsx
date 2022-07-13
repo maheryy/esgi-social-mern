@@ -1,29 +1,39 @@
 import { useCallback, useEffect, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { API_URL } from "../../services/constants/constants";
 import { useChatContext } from "../../services/contexts/Chat/ChatContext";
 import { ChatActions } from "../../services/reducers/chat";
 
 export const ChatBox = () => {
-  const message = useRef("");
-  const { messages, dispatch, selected } = useChatContext();
+  const message = useRef();
+  const { messages, dispatchMessages, setSelected } = useChatContext();
+  const { chatId } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`${API_URL}/chat/${selected}`)
+    message.current.value = "";
+    setSelected(parseInt(chatId, 10));
+    fetch(`${API_URL}/chat/${chatId}`)
       .then((res) => res.json())
       .then((res) => {
-        dispatch({ type: ChatActions.LOAD, payload: res });
+        dispatchMessages({ type: ChatActions.LOAD, payload: res });
       })
       .catch((error) => {
         console.error(error);
+        navigate("/chat", { replace: true });
       });
-  }, [selected]);
+  }, [chatId]);
+
+  useEffect(() => {
+    message.current.focus();
+  });
 
   const sendMessage = useCallback(
     (e) => {
       e.preventDefault();
 
       const data = {
-        conversationId: selected,
+        conversationId: chatId,
         content: message.current.value,
       };
 
@@ -36,7 +46,7 @@ export const ChatBox = () => {
       })
         .then((res) => res.json())
         .then((res) => {
-          dispatch({
+          dispatchMessages({
             type: ChatActions.SEND,
             payload: res,
           });
@@ -47,7 +57,7 @@ export const ChatBox = () => {
 
       message.current.value = "";
     },
-    [selected]
+    [chatId]
   );
 
   return (
@@ -57,7 +67,7 @@ export const ChatBox = () => {
           <ul className="">
             {messages.map((el, i) => (
               <li key={el.id}>
-                {el?.user?.firstname ?? "BLANK"} : {el.content}
+                {el?.user?.firstname ?? "NEED_AUTH"} : {el.content}
               </li>
             ))}
           </ul>
@@ -67,6 +77,7 @@ export const ChatBox = () => {
             <input
               className="border-b border-teal-500 appearance-none bg-transparent w-full text-gray-700 focus:outline-none"
               type="text"
+              autoFocus
               placeholder="Your message..."
               ref={message}
             />

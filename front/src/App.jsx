@@ -8,16 +8,17 @@ import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 
 import "./App.css";
+import Home from "./pages/Home";
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Chat />} />
+        <Route path="/" element={<Home />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/analytics" element={<Analytic />} />
         <Route path="/logs" element={<Log />} />
-        <Route path="/chat" element={<Chat />} />
+        <Route path="/chat/*" element={<Chat />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />

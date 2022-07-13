@@ -12,13 +12,23 @@ export const useChatContext = () => {
 };
 
 const ChatProvider = ({ children }) => {
-  const [messages, dispatch] = useReducer(chatReducer, []);
-  const [selected, setSelected] = useState(1);
+  const [messages, dispatchMessages] = useReducer(chatReducer, []);
+  const [friends, dispatchFriends] = useReducer(chatReducer, []);
+  const [selected, setSelected] = useState(0);
   const [chats, setChats] = useState([]);
 
   return (
     <ChatContext.Provider
-      value={{ messages, dispatch, selected, setSelected, chats, setChats }}
+      value={{
+        messages,
+        dispatchMessages,
+        friends,
+        dispatchFriends,
+        selected,
+        setSelected,
+        chats,
+        setChats,
+      }}
     >
       {children}
     </ChatContext.Provider>
