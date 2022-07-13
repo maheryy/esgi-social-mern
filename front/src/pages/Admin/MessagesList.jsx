@@ -1,16 +1,24 @@
-import { useState } from 'react'
-import {
-    BrowserRouter as Router,
-    Route,
-    Routes,
-    Link
-} from "react-router-dom";
+import { useState, useEffect } from 'react'
+import ListComponent from './components/ListComponent'
 
 function MessagesList() {
 
+    const [messages, setMessages] = useState([])
+
+    useEffect(() => { fetchMessages() }, [])
+
+    const fetchMessages = async () => {
+        const response = await fetch('https://retoolapi.dev/l71nC7/data')
+        const data = await response.json()
+        setMessages(data)
+    }
+
     return (
         <div>
-            <h2>Hello messages</h2>
+            <h2>Liste des messages à traiter</h2>
+            <div>
+                <ListComponent messages={ messages } />
+            </div>
         </div>
     )
 }
