@@ -6,12 +6,12 @@ import {
     Link
 } from "react-router-dom";
 
-function UsersListScreen() {
+function LogsList() {
     return (
         <div>
-            <h2>Hello Users</h2>
+            <h2>Hello LOgs</h2>
         </div>
     )
 }
 
-export default UsersListScreen
+export default LogsList

@@ -6,7 +6,7 @@ import {
     Link
 } from "react-router-dom";
 
-function MessagesListScreen() {
+function MessagesList() {
 
     return (
         <div>
@@ -15,4 +15,4 @@ function MessagesListScreen() {
     )
 }
 
-export default MessagesListScreen
+export default MessagesList

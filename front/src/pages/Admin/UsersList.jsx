@@ -3,18 +3,15 @@ import {
     BrowserRouter as Router,
     Route,
     Routes,
-    Outlet,
     Link
 } from "react-router-dom";
-import Sidebar from './components/sidebar/sidebar';
 
-function AdminScreen() {
-
+function UsersList() {
     return (
         <div>
-            <Sidebar/>
+            <h2>Hello Users</h2>
         </div>
     )
 }
 
-export default AdminScreen
+export default UsersList

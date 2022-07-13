@@ -1,6 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Admin from "./pages/Admin/Admin";
+import UsersList from "./pages/Admin/UsersList";
+import MessagesList from "./pages/Admin/MessagesList";
+
+import LogsList from "./pages/Admin/LogsList";
 import "./App.css";
-import Admin from "./pages/Admin";
 import Analytic from "./pages/Analytic";
 import Chat from "./pages/Chat";
 import Log from "./pages/Log";
@@ -17,7 +22,6 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home/>}/>
-        <Route path="/admin" element={<Admin/>}/>
         <Route path="/analytics" element={<Analytic/>}/>
         <Route path="/logs" element={<Log/>}/>
         <Route path="/chat/*" element={<Chat/>}/>
@@ -27,6 +31,11 @@ const App = () => {
         <Route element={<ProtectedLayout/>}>
           <Route path="/discover" element={<Discover/>}/>
           <Route path="/friends/*" element={<Friend/>}/>
+        </Route>
+        <Route path="/admin" element={<Admin />}>
+          <Route path="users-list" element={<UsersList />} />
+          <Route path="messages-list" element={<MessagesList />} />
+          <Route path="logs-list" element={<LogsList />} />
         </Route>
       </Routes>
     </BrowserRouter>
