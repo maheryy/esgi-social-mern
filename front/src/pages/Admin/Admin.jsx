@@ -13,6 +13,7 @@ function Admin() {
     return (
         <div>
             <Sidebar/>
+            <Outlet />
         </div>
     )
 }
