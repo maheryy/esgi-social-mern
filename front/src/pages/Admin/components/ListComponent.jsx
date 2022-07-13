@@ -21,8 +21,6 @@ function ListComponent( {users = [], messages = [], logs = []}) {
         }
     }
 
-    console.log(getValues(users[0]))
-
     const headTable = ( users, messages, logs ) => {
 
         let head = []
@@ -43,6 +41,10 @@ function ListComponent( {users = [], messages = [], logs = []}) {
             })
         }
 
+        head.push(
+        <th scope="col" class="py-3 px-6">Editer</th>,
+        <th scope="col" class="py-3 px-6">Supprimer</th>
+        )
         return head;
     }
     
@@ -74,6 +76,15 @@ function ListComponent( {users = [], messages = [], logs = []}) {
             }
             )
         }
+
+        // for each user, add a button to edit and a button to delete
+        body.map( (user) => {
+            user.props.children.push(
+                <td class="border px-6 py-4">Editer</td>,
+                <td class="border px-6 py-4">Supprimer</td>
+            )
+        }
+        )
 
         return body;
     }
