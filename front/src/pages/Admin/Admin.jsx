@@ -11,7 +11,7 @@ import Sidebar from './Sidebar';
 function Admin() {
 
     return (
-        <div>
+        <div class="flex justify-start">
             <Sidebar/>
             <Outlet />
         </div>

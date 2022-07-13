@@ -1,15 +1,13 @@
 import { useState } from 'react'
-import {
-    BrowserRouter as Router,
-    Route,
-    Routes,
-    Link
-} from "react-router-dom";
+import ListComponent from './components/ListComponent'
 
 function UsersList() {
     return (
         <div>
-            <h2>Hello Users</h2>
+            <h2>Liste des utilisateurs</h2>
+            <div class="w-screen">
+                <ListComponent />
+            </div>
         </div>
     )
 }
