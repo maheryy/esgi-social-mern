@@ -1,17 +1,29 @@
-import { useCallback } from "react";
-import { useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { API_URL } from "../../services/constants/constants";
+import { useChatContext } from "../../services/contexts/Chat/ChatContext";
 import { ChatActions } from "../../services/reducers/chat";
 
-export const ChatBox = ({ chatId, messages, dispatch }) => {
+export const ChatBox = () => {
   const message = useRef("");
+  const { messages, dispatch, selected } = useChatContext();
+
+  useEffect(() => {
+    fetch(`${API_URL}/chat/${selected}`)
+      .then((res) => res.json())
+      .then((res) => {
+        dispatch({ type: ChatActions.LOAD, payload: res });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [selected]);
 
   const sendMessage = useCallback(
     (e) => {
       e.preventDefault();
 
       const data = {
-        conversationId: chatId,
+        conversationId: selected,
         content: message.current.value,
       };
 
@@ -35,7 +47,7 @@ export const ChatBox = ({ chatId, messages, dispatch }) => {
 
       message.current.value = "";
     },
-    [chatId]
+    [selected]
   );
 
   return (
