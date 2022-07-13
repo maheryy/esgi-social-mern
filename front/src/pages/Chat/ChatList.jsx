@@ -4,14 +4,14 @@ export const ChatList = ({ chats, selected, setSelected }) => {
       <ul>
         {chats.map((el, i) => (
           <li
-            key={i}
+            key={el.id}
             onClick={() => setSelected(el.id)}
             className={
               (selected === el.id ? "bg-gray-500 " : "") +
               "hover:cursor-pointer"
             }
           >
-            {el.name}
+            {el.label}
           </li>
         ))}
       </ul>

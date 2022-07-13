@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const port = process.env.PORT || 3000;
 const app = express();
 const ClientErrorsRouter = require("./routes/ClientError");
@@ -8,6 +9,7 @@ const UserRouter = require("./routes/User");
 const accessLog = require("./middleware/accessLog");
 
 app.use(express.json());
+app.use(cors());
 
 app.get("/", (req, res, next) => {
   res.send("Hello world!");

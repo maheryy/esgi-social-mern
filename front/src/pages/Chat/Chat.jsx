@@ -1,4 +1,5 @@
 import { useReducer, useEffect, useState } from "react";
+import { API_URL } from "../../services/constants/constants";
 import chatReducer, { ChatActions } from "../../services/reducers/chat";
 import { ChatBox } from "./ChatBox";
 import { ChatList } from "./ChatList";
@@ -9,21 +10,41 @@ export const Chat = () => {
   const [chats, setChats] = useState([]);
 
   useEffect(() => {
-    //fetch user chats
-    setChats(fakeChats);
-    setSelected(1);
+    fetch(`${API_URL}/chat`)
+      .then((res) => res.json())
+      .then((res) => {
+        // console.log(res);
+        const results = res.map((item) => ({
+          id: item.id,
+          label: item.users.map((user) => user.firstname).join(", "),
+        }));
+
+        setChats(results);
+        if (results.length) {
+          setSelected(results[0].id);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
   useEffect(() => {
-    //Fetch chat data => messages
-    dispatch({ type: ChatActions.LOAD, payload: fakeMessages });
+    fetch(`${API_URL}/chat/${selected}`)
+      .then((res) => res.json())
+      .then((res) => {
+        dispatch({ type: ChatActions.LOAD, payload: res });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, [selected]);
 
   return (
     <>
       <div className="flex h-screen">
         <ChatList selected={selected} setSelected={setSelected} chats={chats} />
-        <ChatBox messages={messages} dispatch={dispatch} />
+        <ChatBox chatId={selected} messages={messages} dispatch={dispatch} />
       </div>
     </>
   );

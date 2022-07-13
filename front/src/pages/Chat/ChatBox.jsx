@@ -1,24 +1,42 @@
 import { useCallback } from "react";
 import { useRef } from "react";
+import { API_URL } from "../../services/constants/constants";
 import { ChatActions } from "../../services/reducers/chat";
 
-export const ChatBox = ({ messages, dispatch }) => {
+export const ChatBox = ({ chatId, messages, dispatch }) => {
   const message = useRef("");
 
-  const sendMessage = useCallback((e) => {
-    e.preventDefault();
+  const sendMessage = useCallback(
+    (e) => {
+      e.preventDefault();
 
-    dispatch({
-      type: ChatActions.SEND,
-      payload: {
-        author: "John",
-        message: message.current.value,
-        timestamp: Date.now(),
-      },
-    });
+      const data = {
+        conversationId: chatId,
+        content: message.current.value,
+      };
 
-    message.current.value = "";
-  });
+      fetch(`${API_URL}/chat/message`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          dispatch({
+            type: ChatActions.SEND,
+            payload: res,
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      message.current.value = "";
+    },
+    [chatId]
+  );
 
   return (
     <div className="basis-full sm:basis-3/4">
@@ -26,8 +44,8 @@ export const ChatBox = ({ messages, dispatch }) => {
         <div className="py-4 overflow-y-scroll">
           <ul className="">
             {messages.map((el, i) => (
-              <li key={i}>
-                {el.author} : {el.message}
+              <li key={el.id}>
+                {el?.user?.firstname ?? "BLANK"} : {el.content}
               </li>
             ))}
           </ul>
