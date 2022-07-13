@@ -77,11 +77,20 @@ function ListComponent( {users = [], messages = [], logs = []}) {
             )
         }
 
-        // for each user, add a button to edit and a button to delete
         body.map( (user) => {
             user.props.children.push(
-                <td class="border px-6 py-4">Editer</td>,
-                <td class="border px-6 py-4">Supprimer</td>
+                <td class="border px-6 py-4">
+                    <Link to={`/admin/edit/${user.props.children[0].props.children}`}>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Editer
+                        </button>
+                    </Link>
+                </td>,
+                <td class="border px-6 py-4">
+                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Supprimer
+                    </button>
+                </td>
             )
         }
         )

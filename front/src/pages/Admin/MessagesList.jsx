@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import ListComponent from './components/ListComponent'
+import ArrayLoader from './components/ArrayLoader'
 
 function MessagesList() {
 
-    const [messages, setMessages] = useState([])
+    const [messages, setMessages] = useState(false)
 
     useEffect(() => { fetchMessages() }, [])
 
@@ -15,9 +16,13 @@ function MessagesList() {
 
     return (
         <div>
-            <h2>Liste des messages à traiter</h2>
+            <div class="text-left overflow-x-auto relative mx-5 my-5">
+                <h2 class="font-bold">Liste des messages à traiter</h2>
+            </div>
             <div>
-                <ListComponent messages={ messages } />
+                { messages.length > 0 && <ListComponent messages={ messages } /> }
+                { messages.length == 0 && <p>Aucune donnée trouvée</p> }
+                { !messages && <ArrayLoader /> }
             </div>
         </div>
     )
