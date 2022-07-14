@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../services/constants/constants";
-import { useChatContext } from "../../services/contexts/Chat/ChatContext";
+import { useChatContext } from "../../services/hooks";
 import { FriendActions } from "../../services/reducers/friend";
 
 export const FriendList = () => {
@@ -38,11 +38,11 @@ export const FriendList = () => {
       // New conversation was created
       if (response.status === 201) {
         setChats((oldChats) => [
-          ...oldChats,
           {
             id: data.id,
             label: data.user.firstname,
           },
+          ...oldChats,
         ]);
       }
 

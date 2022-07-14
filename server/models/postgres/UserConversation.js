@@ -7,11 +7,6 @@ const UserConversation = sequelize.define("user_conversation", {
     allowNull: false,
     defaultValue: false,
   },
-  isGroup: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-    defaultValue: false,
-  },
 });
 
 module.exports = UserConversation;

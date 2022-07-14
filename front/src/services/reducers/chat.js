@@ -7,13 +7,14 @@ export const ChatActions = {
 
 const reducer = (state, action) => {
   const { type, payload } = action;
+
   switch (type) {
     case ChatActions.SEND:
       return [...state, payload];
     case ChatActions.EDIT:
-      return state;
+      return state.map((el) => (payload.id === el.id ? payload : el));
     case ChatActions.REMOVE:
-      return state;
+      return state.map((el) => (payload.id === el.id ? payload : el));
     case ChatActions.LOAD:
       return payload;
   }

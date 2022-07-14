@@ -1,17 +1,21 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_URL } from "../../services/constants/constants";
-import { useChatContext } from "../../services/contexts/Chat/ChatContext";
+import { useChatContext, usePrevious } from "../../services/hooks";
 import { ChatActions } from "../../services/reducers/chat";
+import { Message } from "./Message";
 
 export const ChatBox = () => {
   const message = useRef();
+  const scrollView = useRef();
   const { messages, dispatchMessages, setSelected } = useChatContext();
   const { chatId } = useParams();
   const navigate = useNavigate();
+  const countOldMessages = usePrevious(messages.length);
 
   useEffect(() => {
     message.current.value = "";
+    message.current.focus();
     setSelected(parseInt(chatId, 10));
     fetch(`${API_URL}/chat/${chatId}`)
       .then((res) => res.json())
@@ -25,16 +29,25 @@ export const ChatBox = () => {
   }, [chatId]);
 
   useEffect(() => {
-    message.current.focus();
-  });
+    if (countOldMessages !== messages.length) {
+      scrollView.current.scrollIntoView({
+        block: "end",
+        inline: "nearest",
+      });
+    }
+  }, [chatId, messages]);
 
   const sendMessage = useCallback(
     (e) => {
       e.preventDefault();
 
+      if (message.current.value.trim() === "") {
+        return;
+      }
+
       const data = {
         conversationId: chatId,
-        content: message.current.value,
+        content: message.current.value.trim(),
       };
 
       fetch(`${API_URL}/chat/message`, {
@@ -64,11 +77,9 @@ export const ChatBox = () => {
     <div className="basis-full sm:basis-3/4">
       <div className="flex flex-col justify-between h-full py-8 px-4">
         <div className="py-4 overflow-y-scroll">
-          <ul className="">
+          <ul className="" ref={scrollView}>
             {messages.map((el, i) => (
-              <li key={el.id}>
-                {el?.user?.firstname ?? "NEED_AUTH"} : {el.content}
-              </li>
+              <Message data={el} key={el.id} />
             ))}
           </ul>
         </div>

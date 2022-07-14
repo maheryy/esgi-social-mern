@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { API_URL } from "../../services/constants/constants";
-import { useChatContext } from "../../services/contexts/Chat/ChatContext";
+import { useChatContext } from "../../services/hooks";
 
 export const ChatList = () => {
   const { chats, setChats, selected, setSelected } = useChatContext();
   const navigate = useNavigate();
+
   useEffect(() => {
     fetch(`${API_URL}/chat`)
       .then((res) => res.json())
       .then((res) => {
-        // console.log(res);
         const results = res.map((item) => ({
           id: item.id,
           label: item.users.map((user) => user.firstname).join(", "),

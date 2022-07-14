@@ -24,6 +24,9 @@ services:
     ports:
       - 127.0.0.1:8080:3000
     command: npm start
+    depends_on:
+      - db
+      - mongo
 
   db:
     image: postgres:alpine

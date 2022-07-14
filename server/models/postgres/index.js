@@ -11,7 +11,14 @@ exports.UserConversation.belongsTo(exports.User);
 exports.User.hasMany(exports.Message);
 exports.Message.belongsTo(exports.User);
 
-exports.Conversation.hasMany(exports.UserConversation);
+exports.Conversation.hasMany(exports.UserConversation, {
+  as: "userTargets",
+});
+exports.Conversation.hasMany(exports.UserConversation, {
+  as: "userParticipants",
+});
+exports.UserConversation.belongsTo(exports.Conversation);
+
 exports.UserConversation.belongsTo(exports.Conversation);
 
 exports.Conversation.hasMany(exports.Message);

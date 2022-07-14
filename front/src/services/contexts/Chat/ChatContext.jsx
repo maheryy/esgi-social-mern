@@ -1,15 +1,7 @@
 import { useReducer, useState, useContext, createContext } from "react";
 import chatReducer from "../../reducers/chat";
 
-const ChatContext = createContext();
-
-export const useChatContext = () => {
-  const context = useContext(ChatContext);
-  if (context === undefined) {
-    throw new Error("useChatContext must be used within a ChatProvider");
-  }
-  return context;
-};
+export const ChatContext = createContext();
 
 const ChatProvider = ({ children }) => {
   const [messages, dispatchMessages] = useReducer(chatReducer, []);

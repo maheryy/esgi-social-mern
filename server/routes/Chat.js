@@ -17,17 +17,22 @@ router.post("/test", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    let result = await UserConversation.findAll({
-      where: {
-        userId: userId,
-        isDeleted: false,
-      },
-      include: {
-        model: Conversation,
-        required: true,
-        include: {
-          required: true,
+    let data = await Conversation.findAll({
+      order: [["updatedAt", "DESC"]],
+      include: [
+        {
           model: UserConversation,
+          as: "userTargets",
+          required: true,
+          where: {
+            userId: userId,
+            isDeleted: false,
+          },
+          include: User,
+        },
+        {
+          model: UserConversation,
+          as: "userParticipants",
           where: {
             userId: {
               [Op.not]: userId,
@@ -35,12 +40,22 @@ router.get("/", async (req, res) => {
           },
           include: User,
         },
-      },
+        {
+          model: Message,
+          required: true,
+          limit: 1,
+        },
+      ],
     });
 
-    result = result.map((item) => ({
-      id: item.conversationId,
-      users: item.conversation.user_conversations.map((user) => user.user),
+    result = data.map((item) => ({
+      id: item.id,
+      lastMessage: item.messages[0],
+      users: item.userParticipants.map((el) => el.user),
+      // users: [
+      //   item.userTargets[0].user,
+      //   ...item.userParticipants.map((el) => el.user),
+      // ],
     }));
 
     res.status(200).json(result);
@@ -64,41 +79,50 @@ router.post("/", async (req, res) => {
     }
 
     // Check if a conversation doesn't exxist yet
-    let result = await UserConversation.findOne({
+    let result = await Conversation.findOne({
       where: {
-        userId: userId,
+        isGroup: false,
       },
-      include: {
-        model: Conversation,
-        required: true,
-        include: {
-          required: true,
+      include: [
+        {
           model: UserConversation,
+          as: "userTargets",
+          required: true,
           where: {
-            isGroup: false,
+            userId: userId,
+          },
+          include: User,
+        },
+        {
+          model: UserConversation,
+          as: "userParticipants",
+          required: true,
+          where: {
             userId: receiverId,
           },
           include: User,
         },
-      },
+      ],
     });
 
     if (result) {
-      if (result.isDeleted) {
+      const userConversation = result.userTargets[0];
+
+      if (userConversation.isDeleted) {
         await UserConversation.update(
           {
             isDeleted: false,
           },
           {
             where: {
-              id: result.id,
+              id: userConversation.id,
             },
           }
         );
       }
-      return res.status(result.isDeleted ? 201 : 200).json({
-        id: result.conversationId,
-        user: result.conversation.user_conversations[0].user,
+      return res.status(userConversation.isDeleted ? 201 : 200).json({
+        id: userConversation.conversationId,
+        user: userConversation.user,
       });
     }
 
@@ -126,22 +150,33 @@ router.post("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    let result = await Conversation.findOne({
+    let result = await Message.findAll({
       where: {
-        id: req.params.id,
+        conversationId: req.params.id,
       },
-      include: {
-        model: Message,
-        include: User,
-        order: [["createdAt", "ASC"]],
-      },
+      order: [["createdAt", "ASC"]],
+      include: User,
     });
 
     if (!result) {
       return res.sendStatus(404);
     }
 
-    res.status(200).json(result.messages);
+    // Update messages not read yet  by current user
+    await Message.update(
+      { readAt: new Date() },
+      {
+        where: {
+          conversationId: req.params.id,
+          userId: {
+            [Op.not]: userId,
+          },
+          readAt: null,
+        },
+      }
+    );
+
+    res.status(200).json(result);
   } catch (error) {
     res.sendStatus(500);
     console.error(error);
@@ -150,7 +185,7 @@ router.get("/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   try {
-    const [nbLines] = await UserConversation.update(
+    const [affectedRows] = await UserConversation.update(
       {
         isDeleted: true,
       },
@@ -162,7 +197,7 @@ router.delete("/:id", async (req, res) => {
       }
     );
 
-    if (!nbLines) {
+    if (!affectedRows) {
       res.sendStatus(404);
     } else {
       res.json({
@@ -177,29 +212,7 @@ router.delete("/:id", async (req, res) => {
 
 router.post("/message", async (req, res) => {
   try {
-    let { conversationId, receiverId } = req.body;
-
-    if (!conversationId) {
-      if (!receiverId) {
-        return res.sendStatus(400);
-      }
-
-      const newConversation = await Conversation.create();
-      conversationId = newConversation.id;
-
-      const users = !Array.isArray(receiverId)
-        ? [receiverId, userId]
-        : [...receiverId, userId];
-
-      console.log(users);
-
-      for (let i = 0; i < users.length; i++) {
-        await UserConversation.create({
-          conversationId: conversationId,
-          userId: users[i],
-        });
-      }
-    }
+    let { conversationId } = req.body;
 
     const result = await Message.create({
       content: req.body.content,
@@ -216,13 +229,14 @@ router.post("/message", async (req, res) => {
 
 router.put("/message/:id", async (req, res) => {
   try {
-    if (!req.body.content.length) {
+    if (!req.body?.content?.length) {
       return res.sendStatus(400);
     }
 
-    const [nbLines, [result]] = await Message.update(
+    const [affectedRows, [result]] = await Message.update(
       {
         content: req.body.content,
+        modifiedAt: new Date(),
       },
       {
         where: {
@@ -232,7 +246,7 @@ router.put("/message/:id", async (req, res) => {
       }
     );
 
-    if (!nbLines) {
+    if (!affectedRows) {
       res.sendStatus(404);
     } else {
       res.json(result);
@@ -245,7 +259,7 @@ router.put("/message/:id", async (req, res) => {
 
 router.delete("/message/:id", async (req, res) => {
   try {
-    const [nbLines] = await Message.update(
+    const [affectedRows, [result]] = await Message.update(
       {
         isDeleted: true,
       },
@@ -253,15 +267,14 @@ router.delete("/message/:id", async (req, res) => {
         where: {
           id: req.params.id,
         },
+        returning: true,
       }
     );
 
-    if (!nbLines) {
+    if (!affectedRows) {
       res.sendStatus(404);
     } else {
-      res.json({
-        success: true,
-      });
+      res.json(result);
     }
   } catch (error) {
     res.sendStatus(500);
