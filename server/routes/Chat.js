@@ -11,10 +11,6 @@ const { Op } = require("sequelize");
 // Todo Authentication
 userId = 1;
 
-router.post("/test", async (req, res) => {
-  res.send("testing some stuff...");
-});
-
 router.get("/", async (req, res) => {
   try {
     let data = await Conversation.findAll({
