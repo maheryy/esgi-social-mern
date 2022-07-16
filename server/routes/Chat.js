@@ -48,7 +48,7 @@ router.get("/", async (req, res) => {
       ],
     });
 
-    result = data.map((item) => ({
+    const result = data.map((item) => ({
       id: item.id,
       lastMessage: item.messages[0],
       users: item.userParticipants.map((el) => el.user),
