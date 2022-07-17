@@ -54,6 +54,65 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/discover", async (req, res) => {
+  try {
+    let criteria = {};
+
+    if (req.query.query) {
+      criteria.firstname = {
+        [Op.iLike]: `%${req.query.query}%`
+      };
+    }
+
+    let result = await User.findAll({
+      where: {
+        id: {
+          [Op.not]: userId
+        },
+        ...criteria
+      },
+      include: [
+        {
+          model: UserFriend,
+          required: false,
+          as: "requestors",
+          where: {
+            targetId: userId,
+            status: {
+              [Op.in]: [STATUS_HOLD, STATUS_ACCEPTED]
+            }
+          }
+        },
+        {
+          model: UserFriend,
+          required: false,
+          as: "targets",
+          where: {
+            requestorId: userId,
+            status: {
+              [Op.in]: [STATUS_HOLD, STATUS_ACCEPTED]
+            }
+          }
+        },
+      ]
+    });
+
+    result = result.map((row) => ({
+      id: row.id,
+      email: row.email,
+      firstname: row.firstname,
+      relationship: row.requestors.length
+        ? (row.requestors[0])
+        : (row.targets.length ? row.targets[0] : null)
+    }));
+
+    res.json(result);
+  } catch (error) {
+    res.sendStatus(500);
+    console.error(error);
+  }
+});
+
 router.post("/", async (req, res) => {
   try {
     const { targetId } = req.body;
@@ -177,6 +236,6 @@ const getFriendship = async (a, b) => {
       ]
     }
   });
-}
+};
 
 module.exports = router;

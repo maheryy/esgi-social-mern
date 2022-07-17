@@ -1,5 +1,5 @@
 .invisible-scrollbar::-webkit-scrollbar {
-    width: 0px;
+    width: 0;
 }
 
 .invisible-scrollbar::-webkit-scrollbar-track {

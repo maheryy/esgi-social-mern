@@ -10,6 +10,7 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import ProtectedLayout from "./layouts/ProtectedLayout";
 import Friend from "./pages/Friend";
+import Discover from "./pages/Discover";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="/register" element={<Register/>}/>
         <Route path="/profile" element={<Profile/>}/>
         <Route element={<ProtectedLayout/>}>
+          <Route path="/discover" element={<Discover/>}/>
           <Route path="/friends/*" element={<Friend/>}/>
         </Route>
       </Routes>

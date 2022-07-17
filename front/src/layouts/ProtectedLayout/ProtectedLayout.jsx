@@ -8,8 +8,8 @@ export const ProtectedLayout = () => {
   const [sidebar, setSidebar] = useState(true);
 
   return (
-    <div className="flex w-full">
-      <div className="h-screen sm:h-screen min-w-max">
+    <div className="flex w-full w-screen">
+      <div className="h-screen max-h-screen sm:h-screen min-w-max">
         <Sidebar sidebar={sidebar} setSidebar={setSidebar}/>
       </div>
       <div id="content-container" className="w-full h-screen max-h-screen">

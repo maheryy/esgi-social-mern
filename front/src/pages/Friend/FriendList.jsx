@@ -1,9 +1,9 @@
 import { useOutletContext } from "react-router-dom";
 import { useEffect } from "react";
-import { API_URL } from "../../services/constants/constants";
+import { API_URL } from "../../services/constants";
 import { FriendActions } from "../../services/reducers/friend";
 
-export const FriendList = (endppoint) => {
+export const FriendList = () => {
   const { friends, dispatch } = useOutletContext();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export const FriendList = (endppoint) => {
       <ul className="p-4">
         {
           friends.map((item) => (
-            <Item key={item.id} data={item} />
+            <Item key={item.id} data={item}/>
           ))
         }
       </ul>
@@ -34,11 +34,10 @@ export const FriendList = (endppoint) => {
   );
 };
 
-
-const Item = ({data}) => {
+const Item = ({ data }) => {
   return (
-      <li className="border border-gray-400 p-6 hover:bg-gray-300">
-        {data.user.firstname}
-      </li>
+    <li className="border border-gray-400 p-6 hover:bg-gray-300">
+      {data.user.firstname}
+    </li>
   );
-}
+};

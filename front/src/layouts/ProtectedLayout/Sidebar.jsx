@@ -1,8 +1,9 @@
+import { Link } from "react-router-dom";
 
-export const Sidebar = ({sidebar, setSidebar}) => {
+export const Sidebar = ({ sidebar, setSidebar }) => {
   return (
     <div
-      className={"relative bg-gray-800 shadow p-4 h-full justify-between sm:flex flex-col " + (sidebar ? "flex basis-80 w-80" : "hidden basis-24 w-24")}>
+      className={"relative bg-gray-800 shadow p-4 h-full max-h-max justify-between sm:flex flex-col " + (sidebar ? "flex basis-80 w-80" : "hidden basis-24 w-24")}>
       <div
         className={"hidden sm:flex h-10 w-10 bg-gray-800 absolute right-0 mt-16 -mr-10 items-center shadow justify-center cursor-pointer text-gray-300 " + (sidebar ? "rounded-tr rounded-br" : "rotate-180 rounded-tl rounded-bl")}
         onClick={() => setSidebar((old) => !old)}>
@@ -11,10 +12,11 @@ export const Sidebar = ({sidebar, setSidebar}) => {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18"/>
         </svg>
       </div>
-      <div className="py-2">
+      <div className="pt-1 pb-3">
         <ul className="">
           <RegularItem
             visible={sidebar}
+            path={"friends"}
             label={"Accueil"}
             icon={
               <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -24,6 +26,7 @@ export const Sidebar = ({sidebar, setSidebar}) => {
             }/>
           <RegularItem
             visible={sidebar}
+            path={"friends"}
             label={"Amis"}
             icon={
               <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -31,17 +34,28 @@ export const Sidebar = ({sidebar, setSidebar}) => {
                   d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
               </svg>
             }/>
+          <RegularItem
+            visible={sidebar}
+            path={"discover"}
+            label={"Découvrir"}
+            icon={
+              <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fillRule="evenodd"
+                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                      clipRule="evenodd"/>
+              </svg>
+            }/>
         </ul>
       </div>
       <div className="h-3/4 overflow-hidden border-t border-gray-700 py-2">
-        <span className={"text-sm font-semibold text-gray-300 block w-full pb-2 " + (sidebar ? "" : "hidden")}>Conversation récentes</span>
+        <span className={"text-sm font-semibold text-gray-300 block w-full pt-1 pb-3 " + (sidebar ? "" : "hidden")}>Conversations récentes</span>
         <ul className="invisible-scrollbar h-full overflow-y-auto">
-          {/*<ChatItem visible={sidebar} label={"Content flss"}/>*/}
-          {/*<ChatItem visible={sidebar} label={"Content flss"}/>*/}
-          {/*<ChatItem visible={sidebar} label={"Content flss"}/>*/}
-          {/*<ChatItem visible={sidebar} label={"Content flss"}/>*/}
-          {/*<ChatItem visible={sidebar} label={"Content flss"}/>*/}
-          {/*<ChatItem visible={sidebar} label={"Content flss"}/>*/}
+          <ChatItem visible={sidebar} label={"Content flss"}/>
+          <ChatItem visible={sidebar} label={"Content flss"}/>
+          <ChatItem visible={sidebar} label={"Content flss"}/>
+          <ChatItem visible={sidebar} label={"Content flss"}/>
+          <ChatItem visible={sidebar} label={"Content flss"}/>
+          <ChatItem visible={sidebar} label={"Content flss"}/>
           <ChatItem visible={sidebar} label={"Content flss"}/>
           <ChatItem visible={sidebar} label={"Content flss"}/>
           <ChatItem visible={sidebar} label={"Content flss"}/>
@@ -129,16 +143,20 @@ const ChatItem = ({ visible, label, icon }) => {
   );
 };
 
-const RegularItem = ({ visible, label, icon }) => {
+const RegularItem = ({ visible, label, path, icon }) => {
   return (
     <li
-      className={"p-2 py-1 flex w-full items-center text-gray-300 hover:text-gray-500 cursor-pointer hover:bg-gray-700 rounded-md " + (visible ? "" : "justify-center")}>
-      <div className="w-12 h-12 border-gray-500 flex justify-center items-center w-fit">
-        {icon}
-      </div>
-      <div className={"text-md px-2 " + (visible ? "" : "hidden")}>
-        {label}
-      </div>
+      className="px-2 py-1 w-full text-gray-300 hover:text-gray-500 cursor-pointer hover:bg-gray-700 rounded-md ">
+      <Link to={path ?? "/"}>
+        <span className={"flex items-center " + (visible ? "" : "justify-center")}>
+          <span className="w-10 h-10 border-gray-500 flex justify-center items-center w-fit">
+            {icon}
+          </span>
+          <span className={"text-md px-4 " + (visible ? "" : "hidden")}>
+            {label}
+          </span>
+        </span>
+      </Link>
     </li>
   );
 };

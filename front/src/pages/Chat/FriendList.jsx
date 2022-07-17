@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { API_URL } from "../../services/constants/constants";
+import { API_URL } from "../../services/constants";
 import { useChatContext } from "../../services/hooks";
 import { FriendActions } from "../../services/reducers/friend";
 
