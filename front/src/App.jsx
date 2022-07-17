@@ -24,7 +24,7 @@ const App = () => {
         <Route path="/register" element={<Register/>}/>
         <Route path="/profile" element={<Profile/>}/>
         <Route element={<ProtectedLayout/>}>
-          <Route path="/friends" element={<Friend/>}/>
+          <Route path="/friends/*" element={<Friend/>}/>
         </Route>
       </Routes>
     </BrowserRouter>

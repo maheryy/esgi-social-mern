@@ -1,13 +1,10 @@
-import { useState } from "react";
 
-export const Sidebar = () => {
-  const [sidebar, setSidebar] = useState(true);
-
+export const Sidebar = ({sidebar, setSidebar}) => {
   return (
     <div
-      className={"relative bg-gray-800 shadow p-4 h-full justify-between sm:flex flex-col " + (sidebar ? "basis-80 w-80" : "basis-24 w-24")}>
+      className={"relative bg-gray-800 shadow p-4 h-full justify-between sm:flex flex-col " + (sidebar ? "flex basis-80 w-80" : "hidden basis-24 w-24")}>
       <div
-        className={"h-10 w-10 bg-gray-800 absolute right-0 mt-16 -mr-10 flex items-center shadow justify-center cursor-pointer text-gray-300 " + (sidebar ? "rounded-tr rounded-br" : "rotate-180 rounded-tl rounded-bl")}
+        className={"hidden sm:flex h-10 w-10 bg-gray-800 absolute right-0 mt-16 -mr-10 items-center shadow justify-center cursor-pointer text-gray-300 " + (sidebar ? "rounded-tr rounded-br" : "rotate-180 rounded-tl rounded-bl")}
         onClick={() => setSidebar((old) => !old)}>
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
              xmlns="http://www.w3.org/2000/svg">
@@ -54,9 +51,9 @@ export const Sidebar = () => {
           <ChatItem visible={sidebar} label={"Content flss"}/>
         </ul>
       </div>
-      <div className={"hidden sm:block border-t border-gray-700 " + (sidebar ? "" : "sm:hidden")}>
-        <ul className="w-full flex items-center justify-between bg-gray-800">
-          <li className="cursor-pointer text-white pt-5 pb-3">
+      <div className={"sm:block border-t border-gray-700 " + (sidebar ? "" : "sm:hidden")}>
+        <ul className="w-full flex items-center justify-between">
+          <li className="cursor-pointer text-white py-4">
             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-bell" width={20}
                  height={20} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none"
                  strokeLinecap="round" strokeLinejoin="round">
@@ -65,7 +62,7 @@ export const Sidebar = () => {
               <path d="M9 17v1a3 3 0 0 0 6 0v-1"/>
             </svg>
           </li>
-          <li className="cursor-pointer text-white pt-5 pb-3">
+          <li className="cursor-pointer text-white py-4">
             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-messages" width={20}
                  height={20} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none"
                  strokeLinecap="round" strokeLinejoin="round">
@@ -74,7 +71,7 @@ export const Sidebar = () => {
               <path d="M14 15v2a1 1 0 0 1 -1 1h-7l-3 3v-10a1 1 0 0 1 1 -1h2"/>
             </svg>
           </li>
-          <li className="cursor-pointer text-white pt-5 pb-3">
+          <li className="cursor-pointer text-white py-4">
             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-settings" width={20}
                  height={20} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none"
                  strokeLinecap="round" strokeLinejoin="round">
@@ -84,7 +81,21 @@ export const Sidebar = () => {
               <circle cx={12} cy={12} r={3}/>
             </svg>
           </li>
-          <li className="cursor-pointer text-white pt-5 pb-3">
+          <li className="cursor-pointer text-white py-4">
+            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-archive" width={20}
+                 height={20} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none"
+                 strokeLinecap="round" strokeLinejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z"/>
+              <rect x={3} y={4} width={18} height={4} rx={2}/>
+              <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10"/>
+              <line x1={10} y1={12} x2={14} y2={12}/>
+            </svg>
+          </li>
+        </ul>
+      </div>
+      <div className={"hidden border-t border-gray-700 " + (sidebar ? "sm:hidden" : "sm:block")}>
+        <ul className="w-full flex items-center justify-center">
+          <li className="cursor-pointer text-white py-4">
             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-archive" width={20}
                  height={20} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none"
                  strokeLinecap="round" strokeLinejoin="round">
@@ -103,7 +114,7 @@ export const Sidebar = () => {
 const ChatItem = ({ visible, label, icon }) => {
   return (
     <li
-      className="px-2 flex w-full items-center py-2.5 text-gray-300 hover:text-gray-500 cursor-pointer hover:bg-gray-700 rounded-md">
+      className={"px-2 flex w-full items-center py-2.5 text-gray-300 hover:text-gray-500 cursor-pointer hover:bg-gray-700 rounded-md " + (visible ? "" : "justify-center")}>
       <div className="text-2xl flex justify-center items-center">
         <img
           className="rounded-full w-12 h-12 bg-cover bg-center "
@@ -121,7 +132,7 @@ const ChatItem = ({ visible, label, icon }) => {
 const RegularItem = ({ visible, label, icon }) => {
   return (
     <li
-      className="p-2 py-1 flex w-full items-center text-gray-300 hover:text-gray-500 cursor-pointer hover:bg-gray-700 rounded-md">
+      className={"p-2 py-1 flex w-full items-center text-gray-300 hover:text-gray-500 cursor-pointer hover:bg-gray-700 rounded-md " + (visible ? "" : "justify-center")}>
       <div className="w-12 h-12 border-gray-500 flex justify-center items-center w-fit">
         {icon}
       </div>
