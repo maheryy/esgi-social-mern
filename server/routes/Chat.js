@@ -11,10 +11,6 @@ const { Op } = require("sequelize");
 // Todo Authentication
 userId = 1;
 
-router.post("/test", async (req, res) => {
-  res.send("testing some stuff...");
-});
-
 router.get("/", async (req, res) => {
   try {
     let data = await Conversation.findAll({
@@ -48,7 +44,7 @@ router.get("/", async (req, res) => {
       ],
     });
 
-    result = data.map((item) => ({
+    const result = data.map((item) => ({
       id: item.id,
       lastMessage: item.messages[0],
       users: item.userParticipants.map((el) => el.user),

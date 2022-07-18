@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from "react";
-import { API_URL } from "../../services/constants/constants";
+import { API_URL } from "../../services/constants";
 import { useChatContext } from "../../services/hooks";
 import { ChatActions } from "../../services/reducers/chat";
 
@@ -33,7 +33,7 @@ export const UserMessage = ({ data }) => {
       .catch((error) => {
         console.error(error);
       });
-  });
+  }, []);
 
   const removeMessage = useCallback(() => {
     fetch(`${API_URL}/chat/message/${data.id}`, {
@@ -49,17 +49,17 @@ export const UserMessage = ({ data }) => {
       .catch((error) => {
         console.error(error);
       });
-  });
+  }, []);
 
   const cancelEdit = useCallback(() => {
     setEditMode(false);
     text.current.value = data.content;
-  });
+  }, []);
 
   const editMessage = useCallback(async () => {
     await setEditMode(true);
     text.current.focus();
-  });
+  }, []);
 
   return (
     <li className="py-2 w-full flex items-center justify-end">

@@ -10,7 +10,7 @@ export const Chat = () => {
       <div className="flex h-screen">
         <ChatList />
         <Routes>
-          <Route path="" element={<FriendList />} />
+          <Route index element={<FriendList />} />
           <Route path=":chatId" element={<ChatBox />} />
         </Routes>
       </div>

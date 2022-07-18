@@ -1,0 +1,17 @@
+.invisible-scrollbar::-webkit-scrollbar {
+    width: 0;
+}
+
+.invisible-scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    background: none;
+}
+
+.invisible-scrollbar::-webkit-scrollbar-thumb {
+    background: #ffffff;
+    border-radius: 100vh;
+}
+
+.invisible-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #c0a0b9;
+}

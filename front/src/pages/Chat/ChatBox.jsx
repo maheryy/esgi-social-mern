@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { API_URL } from "../../services/constants/constants";
+import { API_URL } from "../../services/constants";
 import { useChatContext, usePrevious } from "../../services/hooks";
 import { ChatActions } from "../../services/reducers/chat";
 import { Message } from "./Message";
