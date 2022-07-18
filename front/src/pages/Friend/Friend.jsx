@@ -1,6 +1,8 @@
 import { FriendList } from "./FriendList";
 import { Header } from "../../layouts/ProtectedLayout/Header";
 import { Link, Route, Routes } from "react-router-dom";
+import { RequestList } from "./RequestList";
+import { InvitationList } from "./InvitationList";
 
 export const Friend = () => {
 
@@ -24,7 +26,9 @@ export const Friend = () => {
       </Header>
       <div className="bg-slate-800 w-full basis-full px-6 py-4">
         <Routes>
-          <Route index element={<FriendList />} />
+          <Route index element={<FriendList/>}/>
+          <Route path="requests" element={<RequestList/>}/>
+          <Route path="invitations" element={<InvitationList/>}/>
         </Routes>
       </div>
     </div>

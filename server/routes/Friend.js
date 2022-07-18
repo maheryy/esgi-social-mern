@@ -17,16 +17,24 @@ const { Op } = require("sequelize");
 userId = 1;
 
 router.get("/", async (req, res) => {
-  const { status } = req.query;
+  const { status, as } = req.query;
+
+  let criteria = [
+    { requestorId: userId },
+    { targetId: userId },
+  ];
+
+  if (as === "requestor") {
+    criteria = [{ requestorId: userId }];
+  } else if (as === "target") {
+    criteria = [{ targetId: userId }];
+  }
 
   try {
     let result = await UserFriend.findAll({
       where: {
         status: status ?? STATUS_ACCEPTED,
-        [Op.or]: [
-          { requestorId: userId },
-          { targetId: userId },
-        ]
+        [Op.or]: criteria
       },
       include: [
         {
@@ -51,7 +59,7 @@ router.get("/", async (req, res) => {
           id: row.id,
           status: row.status
         }
-      }
+      };
     });
 
     res.status(200).json(result);

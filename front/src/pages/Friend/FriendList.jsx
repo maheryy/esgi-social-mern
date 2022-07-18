@@ -13,7 +13,6 @@ export const FriendList = () => {
       .then((res) => res.json())
       .then((res) => {
         setFriends(res);
-        console.log(res);
       })
       .catch((error) => {
         console.error(error);
@@ -64,7 +63,8 @@ export const FriendList = () => {
     <div className="w-11/12 mx-auto px-4">
       <div className="py-4">
         <div className="">
-          <span className="text-xs font-semibold">{friends.length} amis</span>
+          <span
+            className="text-xs font-semibold">{friends.length <= 1 ? `${friends.length} ami` : `${friends.length} amis`}</span>
         </div>
         <ul className="py-2">
           {
