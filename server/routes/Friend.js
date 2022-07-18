@@ -35,17 +35,24 @@ router.get("/", async (req, res) => {
         },
         {
           model: User,
-          required: false,
           as: "target",
         },
       ]
     });
 
-    result = result.map((row) => ({
-      id: row.id,
-      status: row.status,
-      user: row.requestorId === userId ? row.target : row.requestor
-    }));
+    result = result.map((row) => {
+      let user = row.requestorId === userId ? row.target : row.requestor;
+      return {
+        id: user.id,
+        firstname: user.firstname,
+        email: user.email,
+        status: user.status,
+        relationship: {
+          id: row.id,
+          status: row.status
+        }
+      }
+    });
 
     res.status(200).json(result);
   } catch (error) {

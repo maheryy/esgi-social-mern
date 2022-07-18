@@ -1,6 +1,4 @@
-import { ActionButton } from "./ActionButton";
-
-export const ListItem = ({ data, action }) => {
+const FriendListItem = ({ data, children }) => {
   return (
     <li className="border-t border-gray-700 cursor-pointer w-full">
       <div className="w-full rounded-sm p-3 hover:bg-gray-700 flex justify-between">
@@ -16,15 +14,18 @@ export const ListItem = ({ data, action }) => {
             <span className="font-semibold">
               {data.firstname}
             </span>
-            <span className="text-xs font-thin truncate w-32 sm:w-64 hover:text-clip">
-                Lorem ipsum dolor sit amet AZ
+            <span className="hidden sm:block text-xs font-thin truncate w-32 sm:w-64 hover:text-clip">
+                Lorem ipsum dolor sit amet AZ DJOPQZ DQZJD¨QZ¨DZQ
             </span>
           </div>
         </div>
-        <div className="w-2/12 flex items-center justify-end">
-          <ActionButton status={data.relationship?.status} action={action}/>
+        <div className="w-3/12 flex items-center justify-end">
+          {/* Set item actions in children */}
+          {children}
         </div>
       </div>
     </li>
   );
 };
+
+export default FriendListItem;

@@ -1,6 +1,6 @@
 import { FriendList } from "./FriendList";
 import { Header } from "../../layouts/ProtectedLayout/Header";
-import { Link } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 
 export const Friend = () => {
 
@@ -23,7 +23,9 @@ export const Friend = () => {
         </div>
       </Header>
       <div className="bg-slate-800 w-full basis-full px-6 py-4">
-        <FriendList/>
+        <Routes>
+          <Route index element={<FriendList />} />
+        </Routes>
       </div>
     </div>
   );

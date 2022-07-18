@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export const Sidebar = ({ sidebar, setSidebar }) => {
   return (
     <div
-      className={"relative bg-gray-800 shadow p-4 h-full max-h-max justify-between sm:flex flex-col " + (sidebar ? "flex basis-80 w-80" : "hidden basis-24 w-24")}>
+      className={"text-sm relative bg-gray-800 shadow p-4 h-full max-h-max justify-between sm:flex flex-col " + (sidebar ? "flex basis-72 w-72" : "hidden basis-24 w-24")}>
       <div
         className={"hidden sm:flex h-10 w-10 bg-gray-800 absolute right-0 mt-16 -mr-10 items-center shadow justify-center cursor-pointer text-gray-300 " + (sidebar ? "rounded-tr rounded-br" : "rotate-180 rounded-tl rounded-bl")}
         onClick={() => setSidebar((old) => !old)}>

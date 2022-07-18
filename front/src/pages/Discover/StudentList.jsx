@@ -3,7 +3,8 @@ import { API_URL, STUDY_LIST, TECH_LIST } from "../../services/constants";
 import { fromObjectListToSelectOptions } from "../../services/helpers";
 import Searchbar from "../../components/Searchbar";
 import MultiSelectFilter from "../../components/MultiSelectFilter";
-import { ListItem } from "./ListItem";
+import FriendListItem from "../../components/FriendListItem";
+import { ActionButton } from "./ActionButton";
 
 export const StudentList = () => {
   const [students, setStudents] = useState([]);
@@ -69,11 +70,9 @@ export const StudentList = () => {
         <ul className="py-2 w-full">
           {
             students.map((item) => (
-              <ListItem
-                key={item.id}
-                data={item}
-                action={() => sendFriendRequest(item.id)}
-              />
+              <FriendListItem key={item.id} data={item}>
+                <ActionButton status={item.relationship?.status} action={() => sendFriendRequest(item.id)}/>
+              </FriendListItem>
             ))
           }
         </ul>
