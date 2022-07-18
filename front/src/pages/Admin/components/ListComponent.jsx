@@ -4,7 +4,7 @@ import {
     BrowserRouter as Router,
     Route,
     Routes,
-    Link
+    Link,
 } from "react-router-dom";
 
 function ListComponent( {users = [], messages = [], logs = []}) {
@@ -30,6 +30,9 @@ function ListComponent( {users = [], messages = [], logs = []}) {
                 head.push(<th scope="col" class="py-3 px-6">{property}</th>)
             })
         }
+        if(users.length > 0) {
+            head.push(<th scope="col" class="py-3 px-6">Editer</th>)
+        }
         if(messages.length > 0) {
             getProperties(messages[0]).map( (property) => {
                 head.push(<th scope="col" class="py-3 px-6">{property}</th>)
@@ -40,9 +43,7 @@ function ListComponent( {users = [], messages = [], logs = []}) {
                 head.push(<th scope="col" class="py-3 px-6">{property}</th>)
             })
         }
-
         head.push(
-        <th scope="col" class="py-3 px-6">Editer</th>,
         <th scope="col" class="py-3 px-6">Supprimer</th>
         )
         return head;
@@ -77,15 +78,17 @@ function ListComponent( {users = [], messages = [], logs = []}) {
             )
         }
 
-        body.map( (user) => {
-            user.props.children.push(
-                <td class="border px-6 py-4">
-                    <Link to={`/admin/edit/${user.props.children[0].props.children}`}>
+        body.map( (item) => {
+            item.props.children.push(
+                users.length > 0 && (
+                    <td class="border px-6 py-4">
+                    <Link to={`/admin/users-list/${item.props.children[0].props.children}`}>
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             Editer
                         </button>
                     </Link>
-                </td>,
+                    </td>
+                ),
                 <td class="border px-6 py-4">
                     <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                         Supprimer

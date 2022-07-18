@@ -3,6 +3,24 @@ const sequelize = require("./db");
 const bcryptjs = require("bcryptjs");
 
 const User = sequelize.define("user", {
+  firstname: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      len: {
+        min: 2,
+      },
+    },
+  },
+  lastname: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      len: {
+        min: 2,
+      },
+    },
+  },
   email: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -21,19 +39,15 @@ const User = sequelize.define("user", {
       },
     },
   },
+  status: {
+    type: DataTypes.STRING,
+    enum: ["active", "deleted", "banned"],
+    defaultValue: "active",
+  },
   isAdmin: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
     allowNull: false,
-  },
-  firstname: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      len: {
-        min: 2,
-      },
-    },
   },
 });
 
