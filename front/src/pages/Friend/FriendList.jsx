@@ -1,8 +1,8 @@
-import { useNavigate, useOutletContext } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { API_URL } from "../../services/constants";
-import { FriendActions } from "../../services/reducers/friend";
 import FriendListItem from "../../components/FriendListItem";
+import { renderTabs } from "./Friend";
 
 export const FriendList = () => {
   const [friends, setFriends] = useState([]);
@@ -17,7 +17,6 @@ export const FriendList = () => {
       .catch((error) => {
         console.error(error);
       });
-
   }, []);
 
   const removeFriend = (relationshipId) => {
@@ -61,6 +60,9 @@ export const FriendList = () => {
 
   return (
     <div className="w-11/12 mx-auto px-4">
+      <div className="">
+        {renderTabs(0)}
+      </div>
       <div className="py-4">
         <div className="">
           <span

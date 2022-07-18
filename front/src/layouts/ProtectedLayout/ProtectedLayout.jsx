@@ -1,10 +1,8 @@
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "./Sidebar";
-import { useReducer, useState } from "react";
-import friendReducer from "../../services/reducers/friend";
+import { useState } from "react";
 
 export const ProtectedLayout = () => {
-  const [friends, dispatch] = useReducer(friendReducer, []);
   const [sidebar, setSidebar] = useState(true);
 
   return (
@@ -13,7 +11,7 @@ export const ProtectedLayout = () => {
         <Sidebar sidebar={sidebar} setSidebar={setSidebar}/>
       </div>
       <div id="content-container" className="w-full h-screen max-h-screen">
-        <Outlet context={{friends, dispatch, sidebar, setSidebar}}/>
+        <Outlet context={{ sidebar, setSidebar }}/>
       </div>
     </div>
   );

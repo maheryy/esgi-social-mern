@@ -5,7 +5,6 @@ import { RequestList } from "./RequestList";
 import { InvitationList } from "./InvitationList";
 
 export const Friend = () => {
-
   return (
     <div className="flex flex-col h-screen border-l border-gray-700 text-gray-300">
       <Header title={"Mes amis"}>
@@ -32,5 +31,42 @@ export const Friend = () => {
         </Routes>
       </div>
     </div>
+  );
+};
+
+export const renderTabs = (selected) => {
+  const tabList = [
+    {
+      path: "/friends/",
+      label: "Mes amis",
+      mobileLabel: "Amis",
+    },
+    {
+      path: "/friends/requests",
+      label: "Demandes envoyées",
+      mobileLabel: "Envoyées",
+    },
+    {
+      path: "/friends/invitations",
+      label: "Invitations reçues",
+      mobileLabel: "Reçues",
+    },
+  ];
+
+  return (
+    <ul
+      className="mx-auto sm:mx-0 flex items-center justify-center w-fit border-b border-gray-700 text-sm font-semibold">
+      {tabList.map((item, key) => (
+        <li key={key}>
+          <Link
+            to={item.path}
+            className={"block h-full px-4 py-2 cursor-pointer border-b border-gray-700 hover:border-sky-600 " + (key === selected ? "border-sky-600" : "")}
+          >
+            <span className="hidden sm:block">{item.label}</span>
+            <span className="sm:hidden">{item.mobileLabel ?? item.label}</span>
+          </Link>
+        </li>
+      ))}
+    </ul>
   );
 };

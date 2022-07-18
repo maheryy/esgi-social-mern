@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { API_URL, STATUS_CANCELLED, STATUS_HOLD } from "../../services/constants";
 import FriendListItem from "../../components/FriendListItem";
+import { renderTabs } from "./Friend";
 
 export const RequestList = () => {
   const [users, setUsers] = useState([]);
@@ -34,6 +35,9 @@ export const RequestList = () => {
 
   return (
     <div className="w-11/12 mx-auto px-4">
+      <div className="">
+        {renderTabs(1)}
+      </div>
       <div className="py-4">
         <div className="">
           <span className="text-xs font-semibold">{users.length <= 1 ? `${users.length} demande envoyée` : `${users.length} demandes envoyées`}</span>

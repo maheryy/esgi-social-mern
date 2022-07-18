@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { API_URL, STATUS_ACCEPTED, STATUS_CANCELLED, STATUS_HOLD, STATUS_REJECTED } from "../../services/constants";
+import { API_URL, STATUS_ACCEPTED, STATUS_HOLD, STATUS_REJECTED } from "../../services/constants";
 import FriendListItem from "../../components/FriendListItem";
+import { renderTabs } from "./Friend";
 
 export const InvitationList = () => {
   const [users, setUsers] = useState([]);
@@ -34,6 +35,9 @@ export const InvitationList = () => {
 
   return (
     <div className="w-11/12 mx-auto px-4">
+      <div className="">
+        {renderTabs(2)}
+      </div>
       <div className="py-4">
         <div className="">
           <span
