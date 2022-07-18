@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import ListComponent from './components/ListComponent'
 import ArrayLoader from './components/ArrayLoader'
+import { API_URL } from "../../services/constants/constants";
+import { useCallback } from 'react';
 
 function UsersList() {
 
@@ -8,11 +10,16 @@ function UsersList() {
 
     useEffect(() => { fetchUsers() }, [])
 
-    const fetchUsers = async () => {
-        const response = await fetch('https://retoolapi.dev/KJRvhs/data')
-        const data = await response.json()
-        setUsers(data)
-    }
+    const fetchUsers = useCallback(() => {
+        fetch(`${API_URL}/users`)
+        .then((res) => res.json())
+        .then((res) => {
+            setUsers(res)
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }, [])
 
     return (
         <div>
