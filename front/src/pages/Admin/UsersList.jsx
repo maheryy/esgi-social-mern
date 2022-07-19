@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import ListComponent from './components/ListComponent'
 import ArrayLoader from './components/ArrayLoader'
-import { API_URL } from "../../services/constants/constants";
+import { API_URL } from "../../services/constants";
 import { useCallback } from 'react';
 
 function UsersList() {

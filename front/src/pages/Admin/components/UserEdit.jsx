@@ -3,7 +3,7 @@ import {
     useEffect,
     useCallback,
     } from 'react'
-import { API_URL } from "../../../services/constants/constants";
+import { API_URL } from "../../../services/constants";
 import { useParams } from 'react-router-dom';
 import UserForm from './forms/UserForm'
 // INSERT INTO users VALUES ('3', 'test@gmail.com', 'password', 'false', 'calvin', '2008-11-11 13:23:44', '2008-11-11 13:23:44', 'Intha', 'active')
