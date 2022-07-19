@@ -3,7 +3,7 @@ import {
     useEffect,
     useCallback,
     } from 'react'
-import { API_URL } from "../../../../services/constants/constants";
+import { API_URL } from "../../../../services/constants";
 import { Formik } from 'formik';
 import { useParams } from 'react-router-dom';
 import ArrayLoader from '../ArrayLoader'
