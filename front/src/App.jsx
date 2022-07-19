@@ -17,6 +17,7 @@ import ProtectedLayout from "./layouts/ProtectedLayout";
 import Friend from "./pages/Friend";
 import Discover from "./pages/Discover";
 import UserEdit from "./pages/Admin/components/UserEdit";
+import UserCreate from "./pages/Admin/components/UserCreate";
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
         <Route path="/admin" element={<Admin />}>
           <Route path="users-list" element={<UsersList />} />
           <Route path="users-list/:id" element={<UserEdit />} />
+          <Route path="users-list/add" element={<UserCreate />} />
           <Route path="messages-list" element={<MessagesList />} />
           <Route path="logs-list" element={<LogsList />} />
         </Route>

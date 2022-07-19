@@ -6,7 +6,7 @@ import {
 
 const AlertMessages = ( response ) => {
     const [showAlert, setShowAlert] = useState(false);
-    const [color, setColor] = useState("false");
+    const [color, setColor] = useState(false);
     const [message, setMessage] = useState(false);
 
     useEffect(() => {

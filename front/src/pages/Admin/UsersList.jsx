@@ -26,6 +26,11 @@ function UsersList() {
             <div class="text-left overflow-x-auto relative mx-5 my-5">
                 <h2 class="font-bold">Liste des utilisateurs</h2>
             </div>
+            <div class="flex justify-start">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    <a href="/admin/users-list/add">Ajouter un utilisateur</a>
+                </button>
+            </div>
             <div>
                 { users.length > 0 && <ListComponent users={ users } /> }
                 { users.length == 0 && <p>Aucune donnée trouvée</p> }

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import ListComponent from './components/ListComponent'
 import ArrayLoader from './components/ArrayLoader'
+import { API_URL } from "../../services/constants/index.js";
+import { useCallback } from 'react';
 
 function MessagesList() {
 
@@ -8,11 +10,16 @@ function MessagesList() {
 
     useEffect(() => { fetchMessages() }, [])
 
-    const fetchMessages = async () => {
-        const response = await fetch('https://retoolapi.dev/l71nC7/data')
-        const data = await response.json()
-        setMessages(data)
-    }
+    const fetchMessages = useCallback(() => {
+        fetch(`${API_URL}/moderated`)
+        .then((res) => res.json())
+        .then((res) => {
+            setMessages(res)
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }, [])
 
     return (
         <div>

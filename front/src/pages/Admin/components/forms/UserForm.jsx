@@ -95,7 +95,7 @@ function UserForm( { response, setResponse } ) {
                     <div className="md:w-1/3">
                         <input
                             type="text"
-                            name="firstname"
+                            name="lastname"
                             onChange={handleChange}
                             onBlur={handleBlur}
                             value={values.lastname}
@@ -142,7 +142,7 @@ function UserForm( { response, setResponse } ) {
                 </div>
                 <div className="md:flex md:items-center mb-6">
                     <div className="md:w-1/3">
-                        <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="password">
+                        <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="status">
                             Statut
                         </label>
                     </div>
