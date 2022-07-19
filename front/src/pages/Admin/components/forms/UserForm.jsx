@@ -3,12 +3,12 @@ import {
     useEffect,
     useCallback,
     } from 'react'
-import { API_URL } from "../../../../services/constants";
+import { API_URL } from "../../../../services/constants/index.js";
 import { Formik } from 'formik';
 import { useParams } from 'react-router-dom';
 import ArrayLoader from '../ArrayLoader'
 
-function UserForm() {
+function UserForm( { response, setResponse } ) {
 
     const params = useParams();
     const [user, setUser] = useState()
@@ -43,10 +43,13 @@ function UserForm() {
                     },
                     body: JSON.stringify(values),
                 })
-                .then((res) => res.json())
+                .then((res) => {
+                    res.json()
+                    setResponse(res.status)
+                })
                 .then((res) => {
                     setSubmitting(false);
-                    window.location.reload()
+                    //window.location.reload()
                 }).catch((error) => {
                     console.error(error);
                 }).finally(() => {
