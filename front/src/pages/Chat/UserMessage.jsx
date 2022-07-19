@@ -1,10 +1,8 @@
 import { useState, useRef, useCallback } from "react";
 import { API_URL } from "../../services/constants";
-import { useProtectedContext } from "../../services/hooks";
 import { MessageActions } from "../../services/reducers/message";
 
-export const UserMessage = ({ data }) => {
-  const { dispatchMessages } = useProtectedContext();
+export const UserMessage = ({ data, dispatch }) => {
   const [editMode, setEditMode] = useState(false);
   const text = useRef();
 
@@ -24,7 +22,7 @@ export const UserMessage = ({ data }) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        dispatchMessages({
+        dispatch({
           type: MessageActions.EDIT,
           payload: res,
         });
@@ -41,7 +39,7 @@ export const UserMessage = ({ data }) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        dispatchMessages({
+        dispatch({
           type: MessageActions.REMOVE,
           payload: res,
         });

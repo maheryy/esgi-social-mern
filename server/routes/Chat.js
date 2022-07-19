@@ -116,9 +116,10 @@ router.post("/", async (req, res) => {
           }
         );
       }
+
       return res.status(userConversation.isDeleted ? 201 : 200).json({
         id: userConversation.conversationId,
-        user: userConversation.user,
+        user: result.userParticipants[0].user,
       });
     }
 
@@ -146,6 +147,11 @@ router.post("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
+    const check = await Conversation.findByPk(parseInt(req.params.id, 10));
+    if (!check) {
+      return res.sendStatus(404);
+    }
+
     let result = await Message.findAll({
       where: {
         conversationId: req.params.id,
@@ -154,23 +160,21 @@ router.get("/:id", async (req, res) => {
       include: User,
     });
 
-    if (!result) {
-      return res.sendStatus(404);
-    }
-
     // Update messages not read yet  by current user
-    await Message.update(
-      { readAt: new Date() },
-      {
-        where: {
-          conversationId: req.params.id,
-          userId: {
-            [Op.not]: userId,
+    if (result.length) {
+      await Message.update(
+        { readAt: new Date() },
+        {
+          where: {
+            conversationId: req.params.id,
+            userId: {
+              [Op.not]: userId,
+            },
+            readAt: null,
           },
-          readAt: null,
-        },
-      }
-    );
+        }
+      );
+    }
 
     res.status(200).json(result);
   } catch (error) {

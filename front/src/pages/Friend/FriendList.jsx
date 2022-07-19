@@ -62,16 +62,16 @@ export const FriendList = () => {
   };
 
   return (
-    <div className="w-11/12 mx-auto px-4">
-      <div className="">
+    <div className="w-11/12 mx-auto px-4 flex flex-col h-full items-center">
+      <div className="w-full">
         {renderTabs(0)}
       </div>
-      <div className="py-4">
-        <div className="">
+      <div className="pt-4 pb-10 w-full h-0 basis-full">
+        <div className="py-2">
           <span
             className="text-xs font-semibold">{friends.length <= 1 ? `${friends.length} ami` : `${friends.length} amis`}</span>
         </div>
-        <ul className="py-2">
+        <ul className="scrollbar-dark py-2 h-full w-full overflow-y-auto overflow-x-hidden">
           {
             friends.map((item) => (
               <ListItem

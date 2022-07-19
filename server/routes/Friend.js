@@ -144,7 +144,11 @@ router.post("/", async (req, res) => {
 
       if (isRenewal) {
         const [affectedRows, [updated]] = await UserFriend.update(
-          { status: STATUS_HOLD },
+          {
+            status: STATUS_HOLD,
+            targetId: targetId,
+            requestorId: userId,
+          },
           {
             where: {
               id: friendship.id

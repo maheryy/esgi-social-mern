@@ -15,7 +15,7 @@ const FriendListItem = ({ data, children }) => {
               {data.firstname}
             </span>
             <span className="hidden sm:block text-xs font-thin truncate w-32 sm:w-64 hover:text-clip">
-                Lorem ipsum dolor sit amet AZ DJOPQZ DQZJD¨QZ¨DZQ
+                Lorem ipsum dolor sit amet
             </span>
           </div>
         </div>

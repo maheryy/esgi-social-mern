@@ -1,16 +1,17 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useReducer, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_URL } from "../../services/constants";
 import { usePrevious, useProtectedContext } from "../../services/hooks";
-import { Message } from "./Message";
-import { MessageActions } from "../../services/reducers/message";
+import messageReducer, { MessageActions } from "../../services/reducers/message";
 import { Header } from "../../layouts/ProtectedLayout/Header";
-import { StudentList } from "../Discover/StudentList";
+import { UserMessage } from "./UserMessage";
+import { OtherMessage } from "./OtherMessage";
 
 export const Chat = () => {
   const message = useRef();
   const scrollView = useRef();
-  const { messages, dispatchMessages, setSelectedChat } = useProtectedContext();
+  const { setSelectedChat } = useProtectedContext();
+  const [messages, dispatch] = useReducer(messageReducer, []);
   const { chatId } = useParams();
   const navigate = useNavigate();
   const countOldMessages = usePrevious(messages.length);
@@ -23,11 +24,11 @@ export const Chat = () => {
     fetch(`${API_URL}/chat/${chatId}`)
       .then((res) => res.json())
       .then((res) => {
-        dispatchMessages({ type: MessageActions.LOAD, payload: res });
+        dispatch({ type: MessageActions.LOAD, payload: res });
       })
       .catch((error) => {
         console.error(error);
-        navigate("/chat", { replace: true });
+        navigate("/friends", { replace: true });
       });
   }, [chatId]);
 
@@ -60,7 +61,7 @@ export const Chat = () => {
       })
         .then((res) => res.json())
         .then((res) => {
-          dispatchMessages({
+          dispatch({
             type: MessageActions.SEND,
             payload: res,
           });
@@ -74,14 +75,19 @@ export const Chat = () => {
     [chatId]
   );
 
+  // TODO : change this when auth works
+  const isUserMessage = useCallback((userId) => userId === 1, []);
+
   return (
     <div className="flex flex-col h-screen border-l border-gray-700 text-gray-300">
       <Header title={"Chat en cours"}/>
       <div className="bg-slate-800 w-full basis-full h-0 px-6 pb-4 flex flex-col justify-between">
         <div className="h-full overflow-y-auto">
           <ul className="py-4" ref={scrollView}>
-            {messages.map((el, i) => (
-              <Message data={el} key={el.id}/>
+            {messages.map((item) => (
+              isUserMessage(item.userId)
+                ? <UserMessage key={item.id} data={item} dispatch={dispatch}/>
+                : <OtherMessage key={item.id} data={item}/>
             ))}
           </ul>
         </div>
