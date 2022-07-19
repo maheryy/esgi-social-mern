@@ -9,11 +9,11 @@ const router = new Router();
 const { Op } = require("sequelize");
 
 // Todo Authentication
-userId = 1;
+const userId = 1;
 
 router.get("/", async (req, res) => {
   try {
-    let data = await Conversation.findAll({
+    let result = await Conversation.findAll({
       order: [["updatedAt", "DESC"]],
       include: [
         {
@@ -44,7 +44,7 @@ router.get("/", async (req, res) => {
       ],
     });
 
-    const result = data.map((item) => ({
+    result = result.map((item) => ({
       id: item.id,
       lastMessage: item.messages[0],
       users: item.userParticipants.map((el) => el.user),
@@ -147,21 +147,36 @@ router.post("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    const check = await Conversation.findByPk(parseInt(req.params.id, 10));
-    if (!check) {
+    const result = await Conversation.findOne({
+      where: {
+        id: req.params.id
+      },
+      order: [
+        [Message, "createdAt", "ASC"]
+      ],
+      include: [
+        {
+          model: Message,
+        },
+        {
+          model: UserConversation,
+          as: "userParticipants",
+          where: {
+            userId: {
+              [Op.not]: userId,
+            }
+          },
+          include: User,
+        }
+      ]
+    });
+
+    if (!result) {
       return res.sendStatus(404);
     }
 
-    let result = await Message.findAll({
-      where: {
-        conversationId: req.params.id,
-      },
-      order: [["createdAt", "ASC"]],
-      include: User,
-    });
-
     // Update messages not read yet  by current user
-    if (result.length) {
+    if (result.messages.length) {
       await Message.update(
         { readAt: new Date() },
         {

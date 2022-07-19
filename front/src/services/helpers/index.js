@@ -4,3 +4,10 @@ export const fromObjectListToSelectOptions = (object) => (
     value: key,
   }))
 );
+
+
+export const getTimeFromDate = (date) => {
+  const d = new Date(date);
+
+  return `${("0" + d.getHours()).slice(-2)}:${("0" + d.getMinutes()).slice(-2)}`;
+};

@@ -1,6 +1,6 @@
 import { useProtectedContext } from "../../services/hooks";
 
-export const Header = ({ children, title }) => {
+export const Header = ({ children, title, icon }) => {
   const { setExtendedSidebar } = useProtectedContext();
 
   return (
@@ -12,7 +12,17 @@ export const Header = ({ children, title }) => {
               d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z"
               clipRule="evenodd"/></svg>
           </span>
-        <span className="px-3 font-semibold">{title}</span>
+        <div className="px-3 font-semibold flex items-center">
+          {
+            icon &&
+            <img
+              className="rounded-full w-8 h-8 bg-cover bg-center mr-2"
+              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1760&q=80"
+              alt="profileImage"
+            />
+          }
+          <span>{title}</span>
+        </div>
       </div>
       {children}
     </header>

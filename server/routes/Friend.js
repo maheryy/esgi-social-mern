@@ -14,7 +14,7 @@ const router = new Router();
 const { Op } = require("sequelize");
 
 // Todo Authentication
-userId = 1;
+const userId = 1;
 
 router.get("/", async (req, res) => {
   const { status, as } = req.query;

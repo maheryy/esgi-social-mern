@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useRef } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_URL } from "../../services/constants";
 import { usePrevious, useProtectedContext } from "../../services/hooks";
@@ -15,6 +15,7 @@ export const Chat = () => {
   const { chatId } = useParams();
   const navigate = useNavigate();
   const countOldMessages = usePrevious(messages.length);
+  const [title, setTitle] = useState("");
 
   useEffect(() => {
     message.current.value = "";
@@ -24,7 +25,8 @@ export const Chat = () => {
     fetch(`${API_URL}/chat/${chatId}`)
       .then((res) => res.json())
       .then((res) => {
-        dispatch({ type: MessageActions.LOAD, payload: res });
+        setTitle(res.userParticipants.map((el) => el.user.firstname).join(', '));
+        dispatch({ type: MessageActions.LOAD, payload: res.messages });
       })
       .catch((error) => {
         console.error(error);
@@ -80,10 +82,10 @@ export const Chat = () => {
 
   return (
     <div className="flex flex-col h-screen border-l border-gray-700 text-gray-300">
-      <Header title={"Chat en cours"}/>
+      <Header title={title} icon={true}/>
       <div className="bg-slate-800 w-full basis-full h-0 px-6 pb-4 flex flex-col justify-between">
-        <div className="h-full overflow-y-auto">
-          <ul className="py-4" ref={scrollView}>
+        <div className="h-full overflow-y-auto scrollbar-dark">
+          <ul className="py-4 px-2" ref={scrollView}>
             {messages.map((item) => (
               isUserMessage(item.userId)
                 ? <UserMessage key={item.id} data={item} dispatch={dispatch}/>
@@ -92,14 +94,17 @@ export const Chat = () => {
           </ul>
         </div>
         <div className="py-2">
-          <form onSubmit={sendMessage}>
+          <form onSubmit={sendMessage} className="flex">
             <input
               className="border-b border-teal-500 appearance-none bg-transparent w-full text-gray-300 focus:outline-none"
               type="text"
               autoFocus
-              placeholder="Your message..."
+              placeholder="Entre ton message..."
               ref={message}
             />
+            <button className="px-2 text-gray-300 hover:text-teal-500 appearance-none outline-none">
+              <svg className="w-7 h-7 rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
+            </button>
           </form>
         </div>
       </div>
