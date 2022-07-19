@@ -1,10 +1,10 @@
 import { useContext, useEffect, useRef } from "react";
-import { ChatContext } from "../contexts/Chat/ChatContext";
+import { ProtectedContext } from "../contexts/Protected/ProtectedContext";
 
-export const useChatContext = () => {
-  const context = useContext(ChatContext);
+export const useProtectedContext = () => {
+  const context = useContext(ProtectedContext);
   if (context === undefined) {
-    throw new Error("useChatContext must be used within a ChatProvider");
+    throw new Error("useProtectedContext must be used within a ProtectedProvider");
   }
   return context;
 };
@@ -18,3 +18,4 @@ export const usePrevious = (value) => {
 
   return ref.current;
 };
+

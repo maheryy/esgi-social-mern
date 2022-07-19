@@ -3,9 +3,12 @@ import { useEffect, useState } from "react";
 import { API_URL } from "../../services/constants";
 import FriendListItem from "../../components/FriendListItem";
 import { renderTabs } from "./Friend";
+import { useProtectedContext } from "../../services/hooks";
+import { ChatActions } from "../../services/reducers/chat";
 
 export const FriendList = () => {
   const [friends, setFriends] = useState([]);
+  const { dispatchChats } = useProtectedContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,13 +46,13 @@ export const FriendList = () => {
 
       // New conversation was created
       if (response.status === 201) {
-        // setChats((oldChats) => [
-        //   {
-        //     id: data.id,
-        //     label: data.user.firstname,
-        //   },
-        //   ...oldChats,
-        // ]);
+        dispatchChats({
+          type: ChatActions.CREATE,
+          payload: {
+            id: data.id,
+            label: data.user.firstname,
+          }
+        });
       }
 
       navigate(`/chat/${data.id}`);

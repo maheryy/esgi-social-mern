@@ -1,10 +1,10 @@
 import { useState, useRef, useCallback } from "react";
 import { API_URL } from "../../services/constants";
-import { useChatContext } from "../../services/hooks";
-import { ChatActions } from "../../services/reducers/chat";
+import { useProtectedContext } from "../../services/hooks";
+import { MessageActions } from "../../services/reducers/message";
 
 export const UserMessage = ({ data }) => {
-  const { dispatchMessages } = useChatContext();
+  const { dispatchMessages } = useProtectedContext();
   const [editMode, setEditMode] = useState(false);
   const text = useRef();
 
@@ -25,7 +25,7 @@ export const UserMessage = ({ data }) => {
       .then((res) => res.json())
       .then((res) => {
         dispatchMessages({
-          type: ChatActions.EDIT,
+          type: MessageActions.EDIT,
           payload: res,
         });
         setEditMode(false);
@@ -42,7 +42,7 @@ export const UserMessage = ({ data }) => {
       .then((res) => res.json())
       .then((res) => {
         dispatchMessages({
-          type: ChatActions.REMOVE,
+          type: MessageActions.REMOVE,
           payload: res,
         });
       })
