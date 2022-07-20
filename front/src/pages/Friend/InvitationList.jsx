@@ -34,16 +34,16 @@ export const InvitationList = () => {
   };
 
   return (
-    <div className="w-11/12 mx-auto px-4">
-      <div className="">
+    <div className="w-11/12 mx-auto px-4 flex flex-col h-full items-center">
+      <div className="w-full">
         {renderTabs(2)}
       </div>
-      <div className="py-4">
-        <div className="">
+      <div className="pt-4 pb-10 basis-full h-0 w-full">
+        <div className="py-2">
           <span
             className="text-xs font-semibold">{users.length <= 1 ? `${users.length} invitation en attente` : `${users.length} invitations en attente`}</span>
         </div>
-        <ul className="py-2">
+        <ul className="scrollbar-dark py-2 w-full h-full overflow-y-auto overflow-x-hidden">
           {
             users.map((item) => (
               <ListItem

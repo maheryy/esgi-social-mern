@@ -1,11 +1,14 @@
 import { STATUS_ACCEPTED, STATUS_HOLD } from "../../services/constants";
 import Tooltip from "../../components/Tooltip";
 
-export const ActionButton = ({ status, action }) => {
-  switch (status) {
+export const ActionButton = ({ relationship, action }) => {
+  // TODO: change this when auth works
+  const isUserRequestor = () => relationship?.requestorId === 1;
+
+  switch (relationship?.status) {
     case STATUS_HOLD:
       return (
-        <Tooltip content="Invitation envoyée">
+        <Tooltip content={!isUserRequestor() ? "Invitation reçue" : "Demande envoyée"}>
           <button disabled
                   className="rounded-full text-sm border disabled:bg-teal-700 disabled:opacity-50 border-teal-600 bg-teal-600 text-white p-2">
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

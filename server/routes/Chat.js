@@ -9,11 +9,11 @@ const router = new Router();
 const { Op } = require("sequelize");
 
 // Todo Authentication
-userId = 1;
+const userId = 1;
 
 router.get("/", async (req, res) => {
   try {
-    let data = await Conversation.findAll({
+    let result = await Conversation.findAll({
       order: [["updatedAt", "DESC"]],
       include: [
         {
@@ -44,7 +44,7 @@ router.get("/", async (req, res) => {
       ],
     });
 
-    const result = data.map((item) => ({
+    result = result.map((item) => ({
       id: item.id,
       lastMessage: item.messages[0],
       users: item.userParticipants.map((el) => el.user),
@@ -116,9 +116,10 @@ router.post("/", async (req, res) => {
           }
         );
       }
+
       return res.status(userConversation.isDeleted ? 201 : 200).json({
         id: userConversation.conversationId,
-        user: userConversation.user,
+        user: result.userParticipants[0].user,
       });
     }
 
@@ -146,12 +147,28 @@ router.post("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    let result = await Message.findAll({
+    const result = await Conversation.findOne({
       where: {
-        conversationId: req.params.id,
+        id: req.params.id
       },
-      order: [["createdAt", "ASC"]],
-      include: User,
+      order: [
+        [Message, "createdAt", "ASC"]
+      ],
+      include: [
+        {
+          model: Message,
+        },
+        {
+          model: UserConversation,
+          as: "userParticipants",
+          where: {
+            userId: {
+              [Op.not]: userId,
+            }
+          },
+          include: User,
+        }
+      ]
     });
 
     if (!result) {
@@ -159,18 +176,20 @@ router.get("/:id", async (req, res) => {
     }
 
     // Update messages not read yet  by current user
-    await Message.update(
-      { readAt: new Date() },
-      {
-        where: {
-          conversationId: req.params.id,
-          userId: {
-            [Op.not]: userId,
+    if (result.messages.length) {
+      await Message.update(
+        { readAt: new Date() },
+        {
+          where: {
+            conversationId: req.params.id,
+            userId: {
+              [Op.not]: userId,
+            },
+            readAt: null,
           },
-          readAt: null,
-        },
-      }
-    );
+        }
+      );
+    }
 
     res.status(200).json(result);
   } catch (error) {

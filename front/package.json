@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "emoji-picker-react": "^3.5.1",
     "formik": "^2.2.9",
     "primeicons": "^5.0.0",
     "primereact": "^8.2.0",

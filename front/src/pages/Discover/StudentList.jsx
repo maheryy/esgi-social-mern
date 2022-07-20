@@ -38,8 +38,9 @@ export const StudentList = () => {
       });
   }, []);
 
+
   return (
-    <div className="w-11/12 mx-auto px-4">
+    <div className="w-11/12 mx-auto px-4 h-full flex flex-col items-center">
       <div className="w-full py-2">
         <Searchbar value={term} setValue={setTerm} placeholder="Rechercher des étudiants inscrits..."/>
       </div>
@@ -63,15 +64,15 @@ export const StudentList = () => {
           />
         </div>
       </div>
-      <div className="py-4">
-        <div className="">
+      <div className="pt-4 pb-10 basis-full h-0 w-full">
+        <div className="py-2">
           <span className="text-xs font-semibold">{students.length} étudiants trouvés</span>
         </div>
-        <ul className="py-2 w-full">
+        <ul className="scrollbar-dark py-2 w-full h-full overflow-y-auto overflow-x-hidden">
           {
             students.map((item) => (
               <FriendListItem key={item.id} data={item}>
-                <ActionButton status={item.relationship?.status} action={() => sendFriendRequest(item.id)}/>
+                <ActionButton relationship={item.relationship} action={() => sendFriendRequest(item.id)}/>
               </FriendListItem>
             ))
           }

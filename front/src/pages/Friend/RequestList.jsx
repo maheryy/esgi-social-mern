@@ -34,15 +34,16 @@ export const RequestList = () => {
   };
 
   return (
-    <div className="w-11/12 mx-auto px-4">
-      <div className="">
+    <div className="w-11/12 mx-auto px-4 flex flex-col h-full items-center">
+      <div className="w-full">
         {renderTabs(1)}
       </div>
-      <div className="py-4">
-        <div className="">
-          <span className="text-xs font-semibold">{users.length <= 1 ? `${users.length} demande envoyée` : `${users.length} demandes envoyées`}</span>
+      <div className="pt-4 pb-10 basis-full h-0 w-full">
+        <div className="py-2">
+          <span
+            className="text-xs font-semibold">{users.length <= 1 ? `${users.length} demande envoyée` : `${users.length} demandes envoyées`}</span>
         </div>
-        <ul className="py-2">
+        <ul className="scrollbar-dark py-2 w-full h-full overflow-y-auto overflow-x-hidden">
           {
             users.map((item) => (
               <ListItem

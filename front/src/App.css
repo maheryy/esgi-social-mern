@@ -15,3 +15,20 @@
 .invisible-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #c0a0b9;
 }
+
+.scrollbar-dark::-webkit-scrollbar {
+    width: 3px;
+}
+
+.scrollbar-dark::-webkit-scrollbar-track {
+    background: none;
+}
+
+.scrollbar-dark::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 10px;
+}
+
+.scrollbar-dark::-webkit-scrollbar-thumb:hover {
+    background: #558be6;
+}

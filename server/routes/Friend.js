@@ -14,7 +14,7 @@ const router = new Router();
 const { Op } = require("sequelize");
 
 // Todo Authentication
-userId = 1;
+const userId = 1;
 
 router.get("/", async (req, res) => {
   const { status, as } = req.query;
@@ -144,7 +144,11 @@ router.post("/", async (req, res) => {
 
       if (isRenewal) {
         const [affectedRows, [updated]] = await UserFriend.update(
-          { status: STATUS_HOLD },
+          {
+            status: STATUS_HOLD,
+            targetId: targetId,
+            requestorId: userId,
+          },
           {
             where: {
               id: friendship.id

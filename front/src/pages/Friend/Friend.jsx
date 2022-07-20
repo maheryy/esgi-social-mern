@@ -23,7 +23,7 @@ export const Friend = () => {
           </Link>
         </div>
       </Header>
-      <div className="bg-slate-800 w-full basis-full px-6 py-4">
+      <div className="bg-slate-800 w-full basis-full h-0 px-6 py-4">
         <Routes>
           <Route index element={<FriendList/>}/>
           <Route path="requests" element={<RequestList/>}/>
