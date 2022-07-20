@@ -38,6 +38,9 @@ function ListComponent( {users = [], messages = [], logs = []}) {
                 head.push(<th scope="col" class="py-3 px-6">{property}</th>)
             })
         }
+        if(messages.length > 0) {
+            head.push(<th scope="col" class="py-3 px-6">Editer</th>)
+        }
         if(logs.length > 0) {
             getProperties(logs[0]).map( (property) => {
                 head.push(<th scope="col" class="py-3 px-6">{property}</th>)
@@ -83,6 +86,15 @@ function ListComponent( {users = [], messages = [], logs = []}) {
                 users.length > 0 && (
                     <td class="border px-6 py-4">
                     <Link to={`/admin/users-list/${item.props.children[0].props.children}`}>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Editer
+                        </button>
+                    </Link>
+                    </td>
+                ),
+                messages.length > 0 && (
+                    <td class="border px-6 py-4">
+                    <Link to={`/admin/messages-list/${item.props.children[0].props.children}`}>
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             Editer
                         </button>

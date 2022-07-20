@@ -11,7 +11,7 @@ function MessagesList() {
     useEffect(() => { fetchMessages() }, [])
 
     const fetchMessages = useCallback(() => {
-        fetch(`${API_URL}/moderated`)
+        fetch(`${API_URL}/messages`)
         .then((res) => res.json())
         .then((res) => {
             setMessages(res)

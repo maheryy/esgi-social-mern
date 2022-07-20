@@ -8,11 +8,16 @@ function LogsList() {
 
     useEffect(() => { fetchLogs() }, [])
 
-    const fetchLogs = async () => {
-        const response = await fetch('https://retoolapi.dev/eBGTJM/data')
-        const data = await response.json()
-        setLogs(data)
-    }
+    const fetchLogs = useCallback(() => {
+        fetch(`${API_URL}/client-errors`)
+        .then((res) => res.json())
+        .then((res) => {
+            setLogs(res)
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }, [])
 
     return (
         <div>
