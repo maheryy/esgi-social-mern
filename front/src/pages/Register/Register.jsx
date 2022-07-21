@@ -27,24 +27,32 @@ export const Register = () => {
     };
 
     const handleCheckStudy = (event) => {
-        var updatedList = [...studyChecked];
+        var updatedList2 = [...studyChecked];
         if (event.target.checked) {
-            updatedList = [...studyChecked, event.target.value];
+            updatedList2 = [...studyChecked, event.target.value];
         } else {
-            updatedList.splice(studyChecked.indexOf(event.target.value), 1);
+            updatedList2.splice(studyChecked.indexOf(event.target.value), 1);
         }
-        setStudyReg(updatedList);
+        setStudyReg(updatedList2);
     };
     
     //créer une chaine avec toutes les tech cochés
-    var checkedItems = techChecked.length
+    var checkedTechItems = techChecked.length
     ? techChecked.reduce((total, item) => {
+        return total + ", " + item;
+    })
+    : "";
+
+    //créer une chaine avec toutes les tech cochés
+    var checkedStudyItems = studyChecked.length
+    ? studyChecked.reduce((total, item) => {
         return total + ", " + item;
     })
     : "raida,";
     
     
-    console.log({checkedItems})
+    console.log({checkedStudyItems})
+    console.log({checkedTechItems})
     
     
     
@@ -143,11 +151,44 @@ export const Register = () => {
             ))}
             </div>           
             </div>
-            </div>     
+            </div>  
+
+            <div 
+        className="flex flex-wrap -mx-3 mb-6">
+        <div 
+        className="w-full md:w-1/2 px-3 mb-6 md:mb-0x">
+        <label 
+        className="block uppercase mb-4 text-gray-700 text-xs font-bold mb-2" 
+        htmlFor="grid-techList">
+        Choisis tes technos préférées
+        </label>
+        <div className="grid grid-flow-col grid-col-rows auto-cols-max">
+        
+        {Object.values(STUDY_LIST).map((item, index) => (
+            <div className="flex items-center mr-4 pl-4 rounded border border-purple-200 ">
+            
+            <input 
+            key={`study-${index}`}  
+            id={`study-${index}`} 
+            type="checkbox" 
+            value={item} 
+            onChange={handleCheckStudy}
+            name="bordered-checkbox" 
+            className="w-4 h-4 text-purple-600 bg-purple-100 rounded border-gray-300 focus:ring-purple-500"/>
+            <label 
+            htmlFor={`study-${index}`}
+            className="py-4 ml-2 mr-2 w-3/5 text-sm font-medium text-gray-900 ">{item}
+            </label>
+            </div>
+            ))}
+            </div>           
+            </div>
+            </div> 
+
             <div className="flex flex-wrap content-center -mx-3 mb-6">
             <div>
             <label htmlFor="">
-            {`Items checked are: ${checkedItems}`}
+            {`Items checked are: ${checkedStudyItems}`}
             </label>           
             </div>
             <button 
