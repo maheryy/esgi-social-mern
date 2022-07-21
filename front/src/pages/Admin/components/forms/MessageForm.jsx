@@ -87,7 +87,7 @@ function MessageForm() {
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" disabled={isSubmitting} className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">
+                            <button type="submit" disabled={isSubmitting} className="shadow bg-indigo-500 hover:bg-indigo-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">
                                 Valider la plainte
                             </button>
                         </form>
