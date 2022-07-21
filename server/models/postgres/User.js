@@ -44,6 +44,23 @@ const User = sequelize.define("user", {
     enum: ["active", "deleted", "banned"],
     defaultValue: "active",
   },
+  pseudo: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      len: {
+        min: 2,
+      },
+    },
+  },
+  techList :{
+    type: DataTypes.STRING,
+    allowNull: false,     
+  },
+  studyList :{
+    type: DataTypes.STRING,
+    allowNull: false, 
+  }, 
   isAdmin: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
