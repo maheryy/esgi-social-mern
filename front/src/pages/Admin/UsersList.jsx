@@ -31,7 +31,7 @@ function UsersList() {
                     <a href="/admin/users-list/add">Ajouter un utilisateur</a>
                 </button>
             </div>
-            <div>
+            <div class="ml-5 my-3">
                 { users.length > 0 && <ListComponent users={ users } /> }
                 { users.length == 0 && <p>Aucune donnée trouvée</p> }
                 { !users && <ArrayLoader /> }

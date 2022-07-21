@@ -4,7 +4,7 @@ import {
     useCallback,
     } from 'react'
 import { API_URL } from "../../../../services/constants/index.js";
-import { Formik } from 'formik';
+import { Field, Formik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 
 function CreateForm() {
@@ -14,8 +14,10 @@ function CreateForm() {
     return (
         <div>
             <Formik
-                initialValues={{ email: '', password: '', firstname: '', lastname: '', status: '' }}
+                initialValues={{ pseudo: '', email: '', password: '', firstname: '', lastname: '', status: '' , techList: '' , studyList: '' }}
                 onSubmit={(values, { setSubmitting }) => {
+                    values.techList = values.techList.join()
+                    console.log(values.techList)
                     setSubmitting(true);
                     fetch(`${API_URL}/users`, {
                         method: 'POST',
@@ -83,6 +85,24 @@ function CreateForm() {
                                 )}
                             </div>
                             <div className="w-full px-3">
+                                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="pseudo">
+                                    Pseudo
+                                </label>
+                                <input
+                                    className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    id="pseudo"
+                                    name="pseudo"
+                                    type="text"
+                                    placeholder="Pseudo"
+                                    value={values.pseudo}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                />
+                                {errors.pseudo && touched.pseudo && (
+                                    <div className="text-red-500 text-xs italic">{errors.pseudo}</div>
+                                )}
+                            </div>
+                            <div className="w-full px-3">
                                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="firstname">
                                     Prénom
                                 </label>
@@ -116,6 +136,108 @@ function CreateForm() {
                                 />
                                 {errors.lastname && touched.lastname && (
                                     <div className="text-red-500 text-xs italic">{errors.lastname}</div>
+                                )}
+                            </div>
+                            <div className="w-full px-3">
+                                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="techList">
+                                    Liste des technos
+                                </label>
+                                <label>
+                                    <Field type="checkbox" name="techList" value="cpp" />
+                                    C++
+                                </label>
+                                <label>
+                                    <Field type="checkbox" name="techList" value="php" />
+                                    PHP
+                                </label>
+                                <label>
+                                    <Field type="checkbox" name="techList" value="js" />
+                                    Javascript
+                                </label>
+                                <label>
+                                    <Field type="checkbox" name="techList" value="pgsql" />
+                                    PostgreSQL
+                                </label>
+                                <label>
+                                    <Field type="checkbox" name="techList" value="msql" />
+                                    MySQL
+                                </label>
+                                <label>
+                                    <Field type="checkbox" name="techList" value="c" />
+                                    C
+                                </label>
+                                <label>
+                                    <Field type="checkbox" name="techList" value="nosql" />
+                                    NoSQL
+                                </label>
+                                <label>
+                                    <Field type="checkbox" name="techList" value="fm" />
+                                    Figma
+                                </label>
+                                <label>
+                                    <Field type="checkbox" name="techList" value="java" />
+                                    Java
+                                </label>
+                                <label>
+                                    <Field type="checkbox" name="techList" value="ps" />
+                                    Photoshop
+                                </label>
+                                <label>
+                                    <Field type="checkbox" name="techList" value="not" />
+                                    Notion
+                                </label>
+                                <label>
+                                    <Field type="checkbox" name="techList" value="jsx" />
+                                    React
+                                </label>
+                                <label>
+                                    <Field type="checkbox" name="techList" value="lara" />
+                                    Laravel
+                                </label>
+                                <label>
+                                    <Field type="checkbox" name="techList" value="bs" />
+                                    Bootstrap
+                                </label>
+                                <label>
+                                    <Field type="checkbox" name="techList" value="jq" />
+                                    jQuery
+                                </label>
+                                <label>
+                                    <Field type="checkbox" name="techList" value="exp" />
+                                    Express
+                                </label>
+                                <label>
+                                    <Field type="checkbox" name="techList" value="node" />
+                                    Node.js
+                                </label>
+                                <label>
+                                    <Field type="checkbox" name="techList" value="sf" />
+                                    Symfony
+                                </label>
+                            </div>
+                            <div className="w-full px-3">
+                                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="studyList">
+                                    Filiaire d'études
+                                </label>
+                                <select
+                                    className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    id="studyList"
+                                    name="studyList"
+                                    value={values.studyList}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                >
+                                    <option value="">Choisir une filiaire</option>
+                                    <option value="web">Web</option>
+                                    <option value="net">Réseaux</option>
+                                    <option value="cloud">Cloud</option>
+                                    <option value="ai">Intelligence artificielle</option>
+                                    <option value="mb">Mobile</option>
+                                    <option value="game">Jeux</option>
+                                    <option value="ui">Design</option>
+                                </select>
+                                {errors.studyList && touched.studyList && (
+                                    <div className="text-red-500 text-xs italic">{errors.studyList}</div>
                                 )}
                             </div>
                             <div className="w-full px-3">

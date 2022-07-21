@@ -155,6 +155,7 @@ function UserForm( { response, setResponse } ) {
                             className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
                         >
                             <option value="">Choisir un statut</option>
+                            <option value="suspended">Suspendu</option>
                             <option value="active">Actif</option>
                             <option value="banned">Banni</option>
                             <option value="deleted">Supprimé</option>
