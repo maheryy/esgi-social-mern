@@ -1,4 +1,8 @@
 export const Login = () => {
+
+  const [mail, setMail] = useState('');
+  const [pwd, setPwd] = useState('');
+
   return (
     <>
       <h1 className="text-center text-purple-400 text-5xl">Hi Raida</h1>
@@ -20,7 +24,8 @@ export const Login = () => {
           {/* <!-- Email input --> */}
           <div className="mb-6">
             <input
-              type="text"
+              type="text" 
+              onChange={(e) => setMail(e.target.value)} 
               className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
               placeholder="Adresse Mail"
             />
@@ -30,6 +35,7 @@ export const Login = () => {
           <div className="mb-6">
             <input
               type="password"
+              onChange={(e) => setPwd(e.target.value)}
               className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
               placeholder="Mot de passe"
             />
