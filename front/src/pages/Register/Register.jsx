@@ -9,6 +9,7 @@ import React, { useRef, useState } from "react";
 export const Register = () => {
     
     const [firstname, setFirstnameReg] = useState('')
+    const [lastname, setLastnameReg] = useState('')
     const [pseudo, setPseudoReg] = useState('')
     const [mail, setMailReg] = useState('')
     const [pwd, setPwdReg] = useState('')
@@ -70,9 +71,9 @@ export const Register = () => {
         </div>
         <div className="w-full px-6 py-4 mt-6 overflow-hidden bg-white shadow-md sm:w-3/5 sm:rounded-lg">
         <form>
-        <div className="flex flex-wrap -mx-3 mb-6">
-        <div className="w-full px-3">
-        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mt-3 mb-2" 
+        <div className="flex flex-wrap -mx-3 mb-6 mt-3 ">
+        <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" 
         htmlFor="grid-firstname">
         Prenom
         </label>
@@ -82,6 +83,25 @@ export const Register = () => {
         type="text" 
         placeholder="firstname" 
         onChange={(e) => setFirstnameReg(e.target.value)}/>
+        
+        {/* <p className="text-red-500 text-xs italic">Veuillez remplir ce champs s'il vous plaît.</p> */}
+        </div>
+        <div className="w-full md:w-1/2 px-3">
+        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" 
+        htmlFor="grid-last-name">
+        Nom
+        </label>
+        <input className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" 
+        id="grid-last-name" 
+        type="text" 
+        placeholder="Skrzypczyk"
+        onChange={(e) => setLastnameReg(e.target.value)}/>
+        </div>
+        </div>
+        <div 
+        className="flex flex-wrap -mx-3 mb-6">
+        <div 
+        className="w-full px-3">
         <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mt-3 mb-2" 
         htmlFor="grid-pseudo">
         Pseudo
@@ -92,13 +112,6 @@ export const Register = () => {
         type="text" 
         placeholder="pseudo" 
         onChange={(e) => setPseudoReg(e.target.value)}/>
-        {/* <p className="text-red-500 text-xs italic">Veuillez remplir ce champs s'il vous plaît.</p> */}
-        </div>
-        </div>
-        <div 
-        className="flex flex-wrap -mx-3 mb-6">
-        <div 
-        className="w-full px-3">
         <label 
         className="block uppercase tracking-wide text-gray-700 text-xs font-bold mt-6 mb-2" 
         htmlFor="grid-pseudo">
