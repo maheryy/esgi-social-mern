@@ -60,7 +60,7 @@ const User = sequelize.define("user", {
   studyList :{
     type: DataTypes.STRING,
     allowNull: false, 
-  },
+  }, 
   isAdmin: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
