@@ -35,6 +35,7 @@ function UserForm( { response, setResponse } ) {
         <Formik
             initialValues={{ email: user.email, password: user.password, firstname: user.firstname, status: user.status }}
             onSubmit={(values, { setSubmitting }) => {
+                console.log(values)
                 setSubmitting(true);
                 fetch(`${API_URL}/users/${params.id}`, {
                     method: 'PUT',
@@ -140,7 +141,6 @@ function UserForm( { response, setResponse } ) {
                             <option value="suspended">Suspendu</option>
                             <option value="active">Actif</option>
                             <option value="banned">Banni</option>
-                            <option value="deleted">Supprimé</option>
                         </select>
                         {errors.password && touched.password && errors.password}
                     </div>

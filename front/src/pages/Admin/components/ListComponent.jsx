@@ -6,6 +6,7 @@ import {
     Routes,
     Link,
 } from "react-router-dom";
+import { API_URL } from "../../../services/constants/index.js";
 
 function ListComponent( {users = [], messages = [], logs = []}) {
 
@@ -99,6 +100,13 @@ function ListComponent( {users = [], messages = [], logs = []}) {
                     </Link>
                     </td>
                 ),
+                users.length > 0 && (
+                    <td class="border px-6 py-4">
+                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={ () => hundleDelete(item.props.children[0].props.children) }>
+                            Supprimer
+                        </button>
+                    </td>
+                ),
                 messages.length > 0 && (
                     <td class="border px-6 py-4">
                     <Link to={`/admin/messages-list/${item.props.children[0].props.children}`}>
@@ -111,13 +119,36 @@ function ListComponent( {users = [], messages = [], logs = []}) {
             )
         }
         )
-
         return body;
+    }
+
+    const hundleDelete = (id) => {
+        fetch(`${API_URL}/users/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                firstname: "deleted",
+                password: "deleted",
+                status: -1,
+                techList: "deleted",
+                studyList: "deleted",
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+        })
+        .catch(error => console.error(error))
+        .finally(() => {
+            window.location.reload()
+        })
     }
 
     return (
         <div class=" shadow-md sm:rounded-lg mx-5 my-5">
-            <table class="table-fixed text-sm text-left text-gray-500 dark:text-gray-400">
+            <table class="table-auto text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     { headTable( users, messages, logs ) }
                 </thead>

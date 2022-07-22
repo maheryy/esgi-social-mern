@@ -51,7 +51,6 @@ function CreateForm() {
                 initialValues={{ pseudo: '', email: '', password: '', firstname: '', status: '' , techList: '' , studyList: '' }}
                 onSubmit={(values, { setSubmitting }) => {
                     values.techList = values.techList.join()
-                    console.log(values.techList)
                     setSubmitting(true);
                     fetch(`${API_URL}/users`, {
                         method: 'POST',
@@ -194,7 +193,6 @@ function CreateForm() {
                                     <option value={ STATUS_HOLD }>En suspend</option>
                                     <option value={ STATUS_ACTIVE }>Actif</option>
                                     <option value={ STATUS_CANCELLED }>Bannir</option>
-                                    <option value={ STATUS_DELETED }>Supprimer</option>
                                 </select>
                                 {errors.status && touched.status && (
                                     <div className="text-red-500 text-xs italic">{errors.status}</div>
