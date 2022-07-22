@@ -33,7 +33,7 @@ function UserForm( { response, setResponse } ) {
     return (
         <div>
         <Formik
-            initialValues={{ email: user.email, password: user.password, firstname: user.firstname, lastname: user.lastname, status: user.status }}
+            initialValues={{ email: user.email, password: user.password, firstname: user.firstname, status: user.status }}
             onSubmit={(values, { setSubmitting }) => {
                 setSubmitting(true);
                 fetch(`${API_URL}/users/${params.id}`, {
@@ -82,24 +82,6 @@ function UserForm( { response, setResponse } ) {
                             onBlur={handleBlur}
                             value={values.firstname}
                             className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name"
-                        />
-                        {errors.email && touched.email && errors.email}
-                    </div>
-                </div>
-                <div className="md:flex md:items-center mb-6">
-                    <div className="md:w-1/3">
-                        <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="lastname">
-                            Nom
-                        </label>
-                    </div>
-                    <div className="md:w-1/3">
-                        <input
-                            type="text"
-                            name="lastname"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.lastname}
-                            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
                         />
                         {errors.email && touched.email && errors.email}
                     </div>

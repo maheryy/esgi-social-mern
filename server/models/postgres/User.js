@@ -31,9 +31,9 @@ const User = sequelize.define("user", {
     },
   },
   status: {
-    type: DataTypes.STRING,
-    enum: ["active", "deleted", "banned", "suspended"],
-    defaultValue: "active",
+    type: DataTypes.SMALLINT,
+    allowNull: true,
+    defaultValue: "0",
   },
   pseudo: {
     type: DataTypes.STRING,
