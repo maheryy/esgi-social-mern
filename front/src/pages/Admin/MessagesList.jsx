@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import ListComponent from './components/ListComponent'
 import ArrayLoader from './components/ArrayLoader'
+import { API_URL } from "../../services/constants/index.js";
+import { useCallback } from 'react';
 
 function MessagesList() {
 
@@ -8,18 +10,23 @@ function MessagesList() {
 
     useEffect(() => { fetchMessages() }, [])
 
-    const fetchMessages = async () => {
-        const response = await fetch('https://retoolapi.dev/l71nC7/data')
-        const data = await response.json()
-        setMessages(data)
-    }
+    const fetchMessages = useCallback(() => {
+        fetch(`${API_URL}/messages`)
+        .then((res) => res.json())
+        .then((res) => {
+            setMessages(res)
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }, [])
 
     return (
         <div>
             <div class="text-left overflow-x-auto relative mx-5 my-5">
-                <h2 class="font-bold">Liste des messages à traiter</h2>
+                <h1 class="font-bold text-xl">Liste des messages à traiter</h1>
             </div>
-            <div>
+            <div class="ml-5">
                 { messages.length > 0 && <ListComponent messages={ messages } /> }
                 { messages.length == 0 && <p>Aucune donnée trouvée</p> }
                 { !messages && <ArrayLoader /> }

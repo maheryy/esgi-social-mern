@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import ListComponent from './components/ListComponent'
 import ArrayLoader from './components/ArrayLoader'
+import { API_URL } from "../../services/constants/index.js";
 
 function LogsList() {
 
@@ -8,11 +9,16 @@ function LogsList() {
 
     useEffect(() => { fetchLogs() }, [])
 
-    const fetchLogs = async () => {
-        const response = await fetch('https://retoolapi.dev/eBGTJM/data')
-        const data = await response.json()
-        setLogs(data)
-    }
+    const fetchLogs = useCallback(() => {
+        fetch(`${API_URL}/access-logs`)
+        .then((res) => res.json())
+        .then((res) => {
+            setLogs(res)
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }, [])
 
     return (
         <div>

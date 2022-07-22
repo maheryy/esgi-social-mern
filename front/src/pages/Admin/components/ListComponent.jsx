@@ -6,9 +6,11 @@ import {
     Routes,
     Link,
 } from "react-router-dom";
+import { API_URL } from "../../../services/constants/index.js";
 
 function ListComponent( {users = [], messages = [], logs = []}) {
 
+    console.log(logs)
     const getProperties = (array) => {
         if(array !== undefined) {
             return Object.keys(array)
@@ -31,21 +33,29 @@ function ListComponent( {users = [], messages = [], logs = []}) {
             })
         }
         if(users.length > 0) {
-            head.push(<th scope="col" class="py-3 px-6">Editer</th>)
+            head.push(
+            <th scope="col" class="py-3 px-6">Editer</th>,
+            <th scope="col" class="py-3 px-6">Supprimer</th>
+            )
         }
         if(messages.length > 0) {
             getProperties(messages[0]).map( (property) => {
                 head.push(<th scope="col" class="py-3 px-6">{property}</th>)
             })
         }
-        if(logs.length > 0) {
-            getProperties(logs[0]).map( (property) => {
-                head.push(<th scope="col" class="py-3 px-6">{property}</th>)
-            })
+        if(messages.length > 0) {
+            head.push(<th scope="col" class="py-3 px-6">Editer</th>)
         }
-        head.push(
-        <th scope="col" class="py-3 px-6">Supprimer</th>
-        )
+        if(logs.length > 0) {
+            head.push(
+                <th scope="col" class="py-3 px-6">ID</th>,
+                <th scope="col" class="py-3 px-6">Host</th>,
+                <th scope="col" class="py-3 px-6">Method</th>,
+                <th scope="col" class="py-3 px-6">Url</th>,
+                <th scope="col" class="py-3 px-6">Status</th>,
+                <th scope="col" class="py-3 px-6">Date</th>
+            )
+        }
         return head;
     }
     
@@ -71,11 +81,12 @@ function ListComponent( {users = [], messages = [], logs = []}) {
         }
         if(logs.length > 0) {
             logs.map( (log) => {
-                body.push(<tr>{getValues(log).map( (value) => {
-                    return <td class="border px-6 py-4">{value}</td>
-                })}</tr>)
-            }
-            )
+                body.push(
+                    <tr>
+                        <td class="border px-6 py-4">{log[0].timestamp}</td>
+                    </tr>
+                )
+            })
         }
 
         body.map( (item) => {
@@ -83,27 +94,61 @@ function ListComponent( {users = [], messages = [], logs = []}) {
                 users.length > 0 && (
                     <td class="border px-6 py-4">
                     <Link to={`/admin/users-list/${item.props.children[0].props.children}`}>
-                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <button class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
                             Editer
                         </button>
                     </Link>
                     </td>
                 ),
-                <td class="border px-6 py-4">
-                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                        Supprimer
-                    </button>
-                </td>
+                users.length > 0 && (
+                    <td class="border px-6 py-4">
+                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={ () => hundleDelete(item.props.children[0].props.children) }>
+                            Supprimer
+                        </button>
+                    </td>
+                ),
+                messages.length > 0 && (
+                    <td class="border px-6 py-4">
+                    <Link to={`/admin/messages-list/${item.props.children[0].props.children}`}>
+                        <button class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
+                            Editer
+                        </button>
+                    </Link>
+                    </td>
+                )
             )
         }
         )
-
         return body;
     }
 
+    const hundleDelete = (id) => {
+        fetch(`${API_URL}/users/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                firstname: "deleted",
+                password: "deleted",
+                status: -1,
+                techList: "deleted",
+                studyList: "deleted",
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+        })
+        .catch(error => console.error(error))
+        .finally(() => {
+            window.location.reload()
+        })
+    }
+
     return (
-        <div class="overflow-x-auto relative shadow-md sm:rounded-lg mx-5 my-5">
-            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <div class=" shadow-md sm:rounded-lg mx-5 my-5">
+            <table class="table-auto text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     { headTable( users, messages, logs ) }
                 </thead>

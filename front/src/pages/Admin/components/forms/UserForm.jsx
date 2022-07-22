@@ -3,12 +3,12 @@ import {
     useEffect,
     useCallback,
     } from 'react'
-import { API_URL } from "../../../../services/constants";
+import { API_URL } from "../../../../services/constants/index.js";
 import { Formik } from 'formik';
 import { useParams } from 'react-router-dom';
 import ArrayLoader from '../ArrayLoader'
 
-function UserForm() {
+function UserForm( { response, setResponse } ) {
 
     const params = useParams();
     const [user, setUser] = useState()
@@ -33,8 +33,9 @@ function UserForm() {
     return (
         <div>
         <Formik
-            initialValues={{ email: user.email, password: user.password, firstname: user.firstname, lastname: user.lastname, status: user.status }}
+            initialValues={{ email: user.email, password: user.password, firstname: user.firstname, status: user.status }}
             onSubmit={(values, { setSubmitting }) => {
+                console.log(values)
                 setSubmitting(true);
                 fetch(`${API_URL}/users/${params.id}`, {
                     method: 'PUT',
@@ -43,10 +44,13 @@ function UserForm() {
                     },
                     body: JSON.stringify(values),
                 })
-                .then((res) => res.json())
+                .then((res) => {
+                    res.json()
+                    setResponse(res.status)
+                })
                 .then((res) => {
                     setSubmitting(false);
-                    window.location.reload()
+                    //window.location.reload()
                 }).catch((error) => {
                     console.error(error);
                 }).finally(() => {
@@ -79,24 +83,6 @@ function UserForm() {
                             onBlur={handleBlur}
                             value={values.firstname}
                             className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name"
-                        />
-                        {errors.email && touched.email && errors.email}
-                    </div>
-                </div>
-                <div className="md:flex md:items-center mb-6">
-                    <div className="md:w-1/3">
-                        <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="lastname">
-                            Nom
-                        </label>
-                    </div>
-                    <div className="md:w-1/3">
-                        <input
-                            type="text"
-                            name="firstname"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.lastname}
-                            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
                         />
                         {errors.email && touched.email && errors.email}
                     </div>
@@ -139,7 +125,7 @@ function UserForm() {
                 </div>
                 <div className="md:flex md:items-center mb-6">
                     <div className="md:w-1/3">
-                        <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="password">
+                        <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="status">
                             Statut
                         </label>
                     </div>
@@ -152,14 +138,14 @@ function UserForm() {
                             className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
                         >
                             <option value="">Choisir un statut</option>
+                            <option value="suspended">Suspendu</option>
                             <option value="active">Actif</option>
                             <option value="banned">Banni</option>
-                            <option value="deleted">Supprimé</option>
                         </select>
                         {errors.password && touched.password && errors.password}
                     </div>
                 </div>
-                <button type="submit" disabled={isSubmitting} className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">
+                <button type="submit" disabled={isSubmitting} className="shadow bg-indigo-500 hover:bg-indigo-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">
                     Modifier
                 </button>
             </form>

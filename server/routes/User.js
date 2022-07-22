@@ -13,18 +13,24 @@ const formatError = (validationError) => {
 
 router.get("/", async (req, res) => {
   try {
-    const { page = 1, perPage = 10, ...criteria } = req.query;
-    const result = await User.findAll({
-      where: criteria,
-      limit: perPage,
-      offset: (page - 1) * perPage,
-    });
-    res.json(result);
-  } catch (error) {
-    res.sendStatus(500);
-    console.error(error);
+    const users = await User.findAll(
+      {
+        attributes: ["id", "firstname", "email", "pseudo", "status", "techList", "studyList"],
+        order: [["status", "DESC"]],
+        where: {
+          status: {
+            [Op.ne]: -1
+          }
+        }
+      },
+    );
+    res.json(users);
   }
-});
+  catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+);
 
 router.post("/", async (req, res) => {
   try {
