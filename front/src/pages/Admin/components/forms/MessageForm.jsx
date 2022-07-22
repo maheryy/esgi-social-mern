@@ -46,11 +46,12 @@ function MessageForm() {
                             body: JSON.stringify(values),
                         })
                         .then((res) => {
-                            setSubmitting(false);
+                            res.json()
                         }).catch((error) => {
                             console.error(error);
                         }).finally(() => {
                             setSubmitting(false);
+                            navigate("/admin/messages-list");
                         }
                         )
                     }

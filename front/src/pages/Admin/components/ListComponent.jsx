@@ -107,12 +107,7 @@ function ListComponent( {users = [], messages = [], logs = []}) {
                         </button>
                     </Link>
                     </td>
-                ),
-                <td class="border px-6 py-4">
-                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                        Supprimer
-                    </button>
-                </td>
+                )
             )
         }
         )

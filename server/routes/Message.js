@@ -18,6 +18,7 @@ router.get("/", async (req, res) => {
     try {
         const { page = 1, perPage = 10, ...criteria } = req.query;
         const result = await Message.findAll({
+        attributes: ["id", "content", "readAt", "createdAt", "userId", "conversationId"],
         where: {
             isModerated: true
         },
