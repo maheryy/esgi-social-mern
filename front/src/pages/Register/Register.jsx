@@ -1,5 +1,5 @@
 import { API_URL, STUDY_LIST, TECH_LIST } from "../../services/constants";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 
 
 
@@ -16,6 +16,8 @@ export const Register = () => {
     const [techChecked, setTechReg] = useState([])
     const [studyChecked, setStudyReg] = useState([])
     
+    
+
     
     const handleCheckTech = (event) => {
         var updatedList = [...techChecked];
@@ -37,25 +39,40 @@ export const Register = () => {
         setStudyReg(updatedList2);
     };
     
-    //créer une chaine avec toutes les tech cochés
-    var checkedTechItems = techChecked.length
-    ? techChecked.reduce((total, item) => {
-        return total + ", " + item;
-    })
-    : "";
+     
+    const regForm = async (e) => {
+        e.preventDefault();
+        try{
+            
+            const user = {
+                firstname: firstname,
+                lastname:lastname,
+                pseudo: pseudo,
+                email: mail,
+                password: pwd,
+                techList: techChecked.join(", ") ,
+                studyList: studyChecked.join(", "),
+            }
 
-    //créer une chaine avec toutes les tech cochés
-    var checkedStudyItems = studyChecked.length
-    ? studyChecked.reduce((total, item) => {
-        return total + ", " + item;
-    })
-    : "raida,";
-    
-    
-    console.log({checkedStudyItems})
-    console.log({checkedTechItems})
-    
-    
+            console.log(user)
+            const res = await fetch(`${API_URL}/users`, {
+                headers: { 
+                    "Content-Type": "application/json" 
+                },
+                method: "POST",
+                body: JSON.stringify(user),
+            });
+            
+            const data = await res.json()
+            console.log(data)
+
+        } catch(error) {
+            console.log(error)
+        }
+        
+
+
+    };
     
     return (
         <>
@@ -201,11 +218,12 @@ export const Register = () => {
             <div className="flex flex-wrap content-center -mx-3 mb-6">
             <div>
             <label htmlFor="">
-            {`Items checked are: ${checkedStudyItems}`}
+            
             </label>           
             </div>
             <button 
-            //type="submit"            
+            type="submit"    
+            onClick={regForm}        
             className="inline-block mx-3 px-7 py-3 bg-purple-500 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"           
             >
             S'inscrire

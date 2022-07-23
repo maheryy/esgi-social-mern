@@ -1,7 +1,38 @@
+import { API_URL, STUDY_LIST } from "../../services/constants";
+import React, { useState } from "react";
+
 export const Login = () => {
 
   const [mail, setMail] = useState('');
   const [pwd, setPwd] = useState('');
+
+  const loginForm = async (e) => {
+    e.preventDefault();
+    try{
+        
+        const user = {
+            email: mail,
+            password: pwd,
+        }
+
+        console.log(user)
+
+        const res = await fetch(`${API_URL}/security/login`, {
+            headers: { 
+                "Content-Type": "application/json" 
+            },
+            method: "POST",
+            body: JSON.stringify(user),
+        });
+        
+        const data = await res.json()
+
+        console.log(data)
+
+    } catch(error) {
+        console.log(error)
+    }
+  }
 
   return (
     <>
@@ -54,6 +85,7 @@ export const Login = () => {
           {/* <!-- Submit button --> */}
           <button
             type="submit"
+            onClick={loginForm}
             className="inline-block px-7 py-3 bg-purple-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"
             data-mdb-ripple="true"
             data-mdb-ripple-color="light"
