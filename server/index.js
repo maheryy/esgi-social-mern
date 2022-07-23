@@ -9,6 +9,7 @@ const ChatRouter = require("./routes/Chat");
 const FriendRouter = require("./routes/Friend");
 const UserRouter = require("./routes/User");
 const accessLog = require("./middleware/accessLog");
+const SecurityRouter = require("./routes/Security")
 
 app.use(express.json());
 app.use(cors());
@@ -23,5 +24,6 @@ app.use("/access-logs", AccessLogsRouter);
 app.use("/users", UserRouter);
 app.use("/chat", ChatRouter);
 app.use("/friends", FriendRouter);
+app.use("/security", SecurityRouter);
 
 app.listen(port, () => console.log(`Server started ${port}`));
