@@ -5,6 +5,10 @@ export const fromObjectListToSelectOptions = (object) => (
   }))
 );
 
+export const getLocalStorageItem = (key) => {
+  return (JSON.parse(localStorage.getItem(key)))
+};
+
 
 export const getTimeFromDate = (date) => {
   const d = new Date(date);
