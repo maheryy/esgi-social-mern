@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "./Sidebar";
-import ProtectedProvider from "../../services/contexts/Protected/ProtectedContext";
+import ProtectedProvider from "../../services/contexts/ProtectedContext";
 
 export const ProtectedLayout = () => {
   return (
