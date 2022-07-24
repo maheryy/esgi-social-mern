@@ -72,7 +72,6 @@ router.get("/dashboard", async (req, res, next) => {
         });
     } catch (error) {
         res.sendStatus(500);
-        next();
         console.error(error);
     }
 });
@@ -80,13 +79,12 @@ router.get("/", async (req, res, next) => {
     try {
         const { page = 1, perPage = 10, ...criteria } = req.query;
         const result = await AccessLog.find(criteria)
+            .sort({ timestamp: -1 })
             .limit(perPage)
             .skip((page - 1) * perPage);
         res.json(result);
-        next();
     } catch (error) {
         res.sendStatus(500);
-        next();
     }
 })
 

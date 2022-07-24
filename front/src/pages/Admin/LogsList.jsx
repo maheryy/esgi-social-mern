@@ -10,14 +10,15 @@ function LogsList() {
     useEffect(() => { fetchLogs() }, [])
 
     const fetchLogs = useCallback(() => {
-        fetch(`${API_URL}/access-logs`)
-        .then((res) => res.json())
-        .then((res) => {
-            setLogs(res)
-        })
-        .catch((error) => {
-            console.error(error);
-        });
+        fetch(`${API_URL}/access-logs?perPage=100`)
+            .then((res) => res.json())
+            .then((res) => {
+                console.log(res)
+                setLogs(res)
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }, [])
 
     return (
@@ -26,9 +27,38 @@ function LogsList() {
                 <h2 className="font-bold">Liste des logs</h2>
             </div>
             <div>
-                { logs.length > 0 && <ListComponent logs={ logs } /> }
-                { logs.length == 0 && <p>Aucune donnée trouvée</p> }
-                { !logs && <ArrayLoader /> }
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Method</th>
+                            <th>Status code</th>
+                            <th>URL</th>
+                            <th>Body</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {logs.length > 0 &&
+                            logs.map((log) => {
+                                return (
+                                    <tr>
+                                        <td>{log._id}</td>
+                                        <td>{log.timestamp}</td>
+                                        <td>{log.req.method}</td>
+                                        <td>{log.res.statusCode}</td>
+                                        <td>{log.req.url}</td>
+                                        <td>{log.req?.body ? JSON.stringify(log.req.body, null, 2) :''}</td>
+                                    </tr>
+                                )
+                            })
+                        }
+                    </tbody>
+                </table>
+                {logs.length == 0 && <p>Aucune donnée trouvée</p>}
+                {!logs && <ArrayLoader />}
+
+
             </div>
         </div>
     )
