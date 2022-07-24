@@ -3,6 +3,8 @@ const { User } = require("../models/postgres");
 const { ValidationError } = require("sequelize");
 const bcryptjs = require("bcryptjs");
 const { createToken } = require("../lib/jwt");
+const checkIsAdmin = require("../middleware/checkIsAdmin");
+const checkAuth = require("../middleware/checkAuth");
 const router = new Router();
 
 const formatError = (validationError) => {
@@ -28,6 +30,7 @@ const formatError = (validationError) => {
 
 router.post("/login", async (req, res) => {
   try {
+    console.log(2);
     const result = await User.findOne({
       where: {
         email: req.body.email,
@@ -45,7 +48,7 @@ router.post("/login", async (req, res) => {
       });
       return;
     }
-    res.json({ token: await createToken(result) });
+    res.json({ token: await createToken(result), user: result });
   } catch (error) {
     res.sendStatus(500);
     console.error(error);
