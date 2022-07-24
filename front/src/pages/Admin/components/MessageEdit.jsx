@@ -28,8 +28,8 @@ function MessageEdit() {
     return (
         <>
             <div>
-                <div class="text-left overflow-x-auto relative mx-5 my-5">
-                    <h2 class="font-bold">Message à traiter</h2>
+                <div className="text-left overflow-x-auto relative mx-5 my-5">
+                    <h2 className="font-bold">Message à traiter</h2>
                     <MessageForm/>
                 </div>
             </div>

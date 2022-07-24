@@ -17,11 +17,6 @@ router.get("/", async (req, res) => {
       {
         attributes: ["id", "firstname", "email", "pseudo", "status", "techList", "studyList"],
         order: [["status", "DESC"]],
-        where: {
-          status: {
-            [Op.ne]: -1
-          }
-        }
       },
     );
     res.json(users);

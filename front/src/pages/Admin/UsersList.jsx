@@ -23,15 +23,15 @@ function UsersList() {
 
     return (
         <div>
-            <div class="text-left overflow-x-auto relative mx-5 my-5">
-                <h1 class="font-bold text-xl">Liste des utilisateurs</h1>
+            <div className="text-left overflow-x-auto relative mx-5 my-5">
+                <h1 className="font-bold text-xl">Liste des utilisateurs</h1>
             </div>
-            <div class="flex justify-start">
-                <button class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded ml-5">
+            <div className="flex justify-start">
+                <button className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded ml-5">
                     <a href="/admin/users-list/add">Ajouter un utilisateur</a>
                 </button>
             </div>
-            <div class="ml-5 my-3">
+            <div className="ml-5 my-3">
                 { users.length > 0 && <ListComponent users={ users } /> }
                 { users.length == 0 && <p>Aucune donnée trouvée</p> }
                 { !users && <ArrayLoader /> }

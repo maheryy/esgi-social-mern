@@ -29,31 +29,31 @@ function ListComponent( {users = [], messages = [], logs = []}) {
 
         if(users.length > 0) {
             getProperties(users[0]).map( (property) => {
-                head.push(<th scope="col" class="py-3 px-6">{property}</th>)
+                head.push(<th scope="col" className="py-3 px-6">{property}</th>)
             })
         }
         if(users.length > 0) {
             head.push(
-            <th scope="col" class="py-3 px-6">Editer</th>,
-            <th scope="col" class="py-3 px-6">Supprimer</th>
+            <th scope="col" className="py-3 px-6">Editer</th>,
+            <th scope="col" className="py-3 px-6">Supprimer</th>
             )
         }
         if(messages.length > 0) {
             getProperties(messages[0]).map( (property) => {
-                head.push(<th scope="col" class="py-3 px-6">{property}</th>)
+                head.push(<th scope="col" className="py-3 px-6">{property}</th>)
             })
         }
         if(messages.length > 0) {
-            head.push(<th scope="col" class="py-3 px-6">Editer</th>)
+            head.push(<th scope="col" className="py-3 px-6">Editer</th>)
         }
         if(logs.length > 0) {
             head.push(
-                <th scope="col" class="py-3 px-6">ID</th>,
-                <th scope="col" class="py-3 px-6">Host</th>,
-                <th scope="col" class="py-3 px-6">Method</th>,
-                <th scope="col" class="py-3 px-6">Url</th>,
-                <th scope="col" class="py-3 px-6">Status</th>,
-                <th scope="col" class="py-3 px-6">Date</th>
+                <th scope="col" className="py-3 px-6">ID</th>,
+                <th scope="col" className="py-3 px-6">Host</th>,
+                <th scope="col" className="py-3 px-6">Method</th>,
+                <th scope="col" className="py-3 px-6">Url</th>,
+                <th scope="col" className="py-3 px-6">Status</th>,
+                <th scope="col" className="py-3 px-6">Date</th>
             )
         }
         return head;
@@ -66,7 +66,7 @@ function ListComponent( {users = [], messages = [], logs = []}) {
         if(users.length > 0) {
             users.map( (user) => {
                 body.push(<tr>{getValues(user).map( (value) => {
-                    return <td class="border px-6 py-4">{value}</td>
+                    return <td className="border px-6 py-4">{value}</td>
                 })}</tr>)
             }
             )
@@ -74,7 +74,7 @@ function ListComponent( {users = [], messages = [], logs = []}) {
         if(messages.length > 0) {
             messages.map( (message) => {
                 body.push(<tr>{getValues(message).map( (value) => {
-                    return <td class="border px-6 py-4">{value}</td>
+                    return <td className="border px-6 py-4">{value}</td>
                 })}</tr>)
             }
             )
@@ -83,7 +83,7 @@ function ListComponent( {users = [], messages = [], logs = []}) {
             logs.map( (log) => {
                 body.push(
                     <tr>
-                        <td class="border px-6 py-4">{log[0].timestamp}</td>
+                        <td className="border px-6 py-4">{log[0].timestamp}</td>
                     </tr>
                 )
             })
@@ -92,25 +92,25 @@ function ListComponent( {users = [], messages = [], logs = []}) {
         body.map( (item) => {
             item.props.children.push(
                 users.length > 0 && (
-                    <td class="border px-6 py-4">
+                    <td className="border px-6 py-4">
                     <Link to={`/admin/users-list/${item.props.children[0].props.children}`}>
-                        <button class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
+                        <button className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
                             Editer
                         </button>
                     </Link>
                     </td>
                 ),
                 users.length > 0 && (
-                    <td class="border px-6 py-4">
-                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={ () => hundleDelete(item.props.children[0].props.children) }>
+                    <td className="border px-6 py-4">
+                        <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={ () => hundleDelete(item.props.children[0].props.children) }>
                             Supprimer
                         </button>
                     </td>
                 ),
                 messages.length > 0 && (
-                    <td class="border px-6 py-4">
+                    <td className="border px-6 py-4">
                     <Link to={`/admin/messages-list/${item.props.children[0].props.children}`}>
-                        <button class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
+                        <button className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
                             Editer
                         </button>
                     </Link>
@@ -147,9 +147,9 @@ function ListComponent( {users = [], messages = [], logs = []}) {
     }
 
     return (
-        <div class=" shadow-md sm:rounded-lg mx-5 my-5">
-            <table class="table-auto text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <div className=" shadow-md sm:rounded-lg mx-5 my-5">
+            <table className="table-auto text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     { headTable( users, messages, logs ) }
                 </thead>
                 <tbody>

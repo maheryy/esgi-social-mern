@@ -23,10 +23,10 @@ function MessagesList() {
 
     return (
         <div>
-            <div class="text-left overflow-x-auto relative mx-5 my-5">
-                <h1 class="font-bold text-xl">Liste des messages à traiter</h1>
+            <div className="text-left overflow-x-auto relative mx-5 my-5">
+                <h1 className="font-bold text-xl">Liste des messages à traiter</h1>
             </div>
-            <div class="ml-5">
+            <div className="ml-5">
                 { messages.length > 0 && <ListComponent messages={ messages } /> }
                 { messages.length == 0 && <p>Aucune donnée trouvée</p> }
                 { !messages && <ArrayLoader /> }
