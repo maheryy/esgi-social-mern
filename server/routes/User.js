@@ -1,6 +1,9 @@
 const { Router } = require("express");
 const { User } = require("../models/postgres");
 const { ValidationError } = require("sequelize");
+const checkIsAdmin = require("../middleware/checkIsAdmin");
+const checkAuth = require("../middleware/checkAuth");
+
 
 const router = new Router();
 
@@ -11,7 +14,7 @@ const formatError = (validationError) => {
   }, {});
 };
 
-router.get("/", async (req, res) => {
+router.get("/", checkIsAdmin, async (req, res) => {
   try {
     const { page = 1, perPage = 10, ...criteria } = req.query;
     const result = await User.findAll({
@@ -26,7 +29,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/",async (req, res) => {
   try {
     const result = await User.create(req.body);
     res.status(201).json(result);
@@ -40,7 +43,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id",checkAuth ,async (req, res) => {
   try {
     const result = await User.findByPk(parseInt(req.params.id, 10));
     if (!result) {
@@ -54,7 +57,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", checkAuth ,async (req, res) => {
   try {
     const [nbLines, [result]] = await User.update(req.body, {
       where: {
@@ -79,7 +82,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id",checkAuth ,async (req, res) => {
   try {
     const nbLines = await User.destroy({
       where: {

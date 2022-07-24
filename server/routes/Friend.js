@@ -12,11 +12,12 @@ const {
 } = require("../lib/constants");
 const router = new Router();
 const { Op } = require("sequelize");
+const checkAuth = require("../middleware/checkAuth");
 
 // Todo Authentication
 const userId = 1;
 
-router.get("/", async (req, res) => {
+router.get("/",checkAuth , async (req, res) => {
   const { status, as } = req.query;
 
   let criteria = [
@@ -69,7 +70,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/discover", async (req, res) => {
+router.get("/discover",checkAuth ,async (req, res) => {
   try {
     let criteria = {};
 
@@ -128,7 +129,7 @@ router.get("/discover", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", checkAuth, async (req, res) => {
   try {
     const { targetId } = req.body;
 
@@ -176,7 +177,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", checkAuth, async (req, res) => {
   try {
     const { status } = req.body;
 
@@ -211,7 +212,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", checkAuth, async (req, res) => {
   try {
     const [affectedRows] = await UserFriend.update(
       {

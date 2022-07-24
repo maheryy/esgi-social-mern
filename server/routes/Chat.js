@@ -7,11 +7,12 @@ const {
 } = require("../models/postgres");
 const router = new Router();
 const { Op } = require("sequelize");
+const checkAuth = require("../middleware/checkAuth");
 
 // Todo Authentication
 const userId = 1;
 
-router.get("/", async (req, res) => {
+router.get("/", checkAuth, async (req, res) => {
   try {
     let result = await Conversation.findAll({
       order: [["updatedAt", "DESC"]],
@@ -61,7 +62,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", checkAuth, async (req, res) => {
   try {
     const { receiverId } = req.body;
 
@@ -145,7 +146,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", checkAuth, async (req, res) => {
   try {
     const result = await Conversation.findOne({
       where: {
@@ -242,7 +243,7 @@ router.post("/message", async (req, res) => {
   }
 });
 
-router.put("/message/:id", async (req, res) => {
+router.put("/message/:id", checkAuth, async (req, res) => {
   try {
     if (!req.body?.content?.length) {
       return res.sendStatus(400);
@@ -272,7 +273,7 @@ router.put("/message/:id", async (req, res) => {
   }
 });
 
-router.delete("/message/:id", async (req, res) => {
+router.delete("/message/:id", checkAuth, async (req, res) => {
   try {
     const [affectedRows, [result]] = await Message.update(
       {
