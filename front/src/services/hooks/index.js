@@ -1,6 +1,7 @@
 import { useContext, useEffect, useRef } from "react";
 import { ProtectedContext } from "../contexts/ProtectedContext";
 import { AuthContext } from "../contexts/AuthContext";
+import {AdminContext} from "../contexts/AdminContext";
  
 export const useProtectedContext = () => {
   const context = useContext(ProtectedContext);
@@ -18,13 +19,13 @@ export const useAuthContext = () => {
   return context;
 };
 
-// export const useAdminContext = () => {
-//   const context = useContext(AdminContext);
-//   if (context === undefined) {
-//     throw new Error("useAdminContext must be used within a AdminProvider");
-//   }
-//   return context;
-// };
+export const useAdminContext = () => {
+  const context = useContext(AdminContext);
+  if (context === undefined) {
+    throw new Error("useAdminContext must be used within a AdminProvider");
+  }
+  return context;
+};
 
 export const usePrevious = (value) => {
   const ref = useRef();

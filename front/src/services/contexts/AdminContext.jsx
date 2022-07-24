@@ -1,4 +1,6 @@
-import { useReducer, useState, createContext } from "react";
+import { useReducer, useState, useEffect, createContext } from "react";
+import { useAuthContext } from "../hooks";
+import { useNavigate } from "react-router-dom";
 
 export const AdminContext = createContext();
 
@@ -6,7 +8,6 @@ const AdminProvider = ({ children }) => {
 
   const {loggedUser, token} = useAuthContext();
   const navigate = useNavigate();
-
 
   useEffect(()=> {
     if(JSON.parse(localStorage.getItem('userInfo')) == null){

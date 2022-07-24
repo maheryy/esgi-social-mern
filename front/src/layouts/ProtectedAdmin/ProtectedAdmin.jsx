@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
 
-import UserProvider from "../../services/contexts/Protected/UserContext";
+import UserProvider from "../../services/contexts/AdminContext";
 
 
-export const ProtectedUser = () => {
+export const ProtectedAdmin = () => {
   return (
     <UserProvider>
       <Outlet/>

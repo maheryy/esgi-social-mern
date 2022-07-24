@@ -4,6 +4,7 @@ const {
     User
 } = require("../models/postgres");
 const { ValidationError } = require("sequelize");
+const checkAuth = require("../middleware/checkAuth");
 
 const router = new Router();
 
@@ -14,7 +15,7 @@ const formatError = (validationError) => {
     }, {});
 };
 
-router.get("/", async (req, res, next) => {
+router.get("/",checkAuth , async (req, res, next) => {
     try {
         const { page = 1, perPage = 10, ...criteria } = req.query;
         const result = await Message.findAll({
@@ -35,7 +36,7 @@ router.get("/", async (req, res, next) => {
     }
 });
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:id",checkAuth , async (req, res, next) => {
     try {
         const { id } = req.params;
         const result = await Message.findByPk(id);
@@ -48,7 +49,7 @@ router.get("/:id", async (req, res, next) => {
     }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/:id",checkAuth , async (req, res, next) => {
     try {
         const [nbLines, [result]] = await Message.update(req.body, {
             where: {

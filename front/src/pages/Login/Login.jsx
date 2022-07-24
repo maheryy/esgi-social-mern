@@ -23,7 +23,6 @@ export const Login = () => {
             password: pwd,
         }
         
-        console.log(user)
         console.log("AVANT fetch");
 
         const res = await fetch(`${API_URL}/security/login`, {
@@ -56,36 +55,6 @@ export const Login = () => {
         console.log(error)
     }
   }
-
-  const getUser = async (e) => {
-    e.preventDefault();
-    try{
-        
-        const user = {
-            email: mail,
-            password: pwd,
-        }
-
-        console.log(token)
-        console.log(loggedUser)
-        console.log((JSON.parse(localStorage.getItem('userInfo'))).user)
-
-
-
-        // if(data.token != "" )
-        // {
-        //   //localStorage.setItem('userInfo', JSON.stringify(data));
-        //   setLoggedUser(data.user);
-        //   setToken(data.token);
-        //   console.log(data);
-        //   navigate('/friends', {replace : true});
-
-        // }
-    } catch(error) {
-        console.log(error)
-    }
-  }
-
 
   return (
     <>
@@ -144,15 +113,6 @@ export const Login = () => {
                 data-mdb-ripple-color="light"
               >
                 Connexion
-              </button>
-              <button
-                type="submit"
-                onClick={getUser}
-                className="inline-block px-7 py-3 bg-purple-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"
-                data-mdb-ripple="true"
-                data-mdb-ripple-color="light"
-              >
-                Detruire
               </button>
               <p class="text-sm font-semibold mt-2 pt-1 mb-0">
                   Pas encore de compte ?
