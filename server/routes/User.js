@@ -11,7 +11,7 @@ const formatError = (validationError) => {
   }, {});
 };
 
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   try {
     const users = await User.findAll(
       {
@@ -20,42 +20,50 @@ router.get("/", async (req, res) => {
       },
     );
     res.json(users);
+    next();
   }
   catch (error) {
     res.status(500).json({ message: error.message });
+    next();
   }
 }
 );
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   try {
     const result = await User.create(req.body);
     res.status(201).json(result);
+    next();
   } catch (error) {
     if (error instanceof ValidationError) {
       res.status(422).json(formatError(error));
+      next();
     } else {
       res.sendStatus(500);
+      next();
       console.error(error);
     }
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res, next) => {
   try {
     const result = await User.findByPk(parseInt(req.params.id, 10));
     if (!result) {
       res.sendStatus(404);
+      next();
     } else {
       res.json(result);
+      next();
     }
   } catch (error) {
     console.error(error);
     res.sendStatus(500);
+    next();
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", async (req, res, next) => {
   try {
     const [nbLines, [result]] = await User.update(req.body, {
       where: {
@@ -65,22 +73,26 @@ router.put("/:id", async (req, res) => {
     });
     if (!nbLines) {
       res.sendStatus(404);
+      next();
     } else {
       res.json(result);
+      next();
     }
   } catch (error) {
     console.log(error);
 
     if (error instanceof ValidationError) {
       res.status(422).json(formatError(error));
+      next();
     } else {
       res.sendStatus(500);
+      next();
       console.error(error);
     }
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", async (req, res, next) => {
   try {
     const nbLines = await User.destroy({
       where: {
@@ -89,11 +101,14 @@ router.delete("/:id", async (req, res) => {
     });
     if (!nbLines) {
       res.sendStatus(404);
+      next();
     } else {
       res.sendStatus(204);
+      next();
     }
   } catch (error) {
     res.sendStatus(500);
+    next();
     console.error(error);
   }
 });
