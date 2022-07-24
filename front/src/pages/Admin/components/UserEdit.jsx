@@ -30,8 +30,8 @@ function UserEdit() {
     return (
         <>
             <div>
-                <div class="text-left overflow-x-auto relative mx-5 my-5">
-                    <h2 class="font-bold">Profil de l'utilisateurs</h2>
+                <div className="text-left overflow-x-auto relative mx-5 my-5">
+                    <h2 className="font-bold">Profil de l'utilisateurs</h2>
                     <AlertMessages response={ response }/>
                     <UserForm response={ response } setResponse={ setResponse }/>
                 </div>
