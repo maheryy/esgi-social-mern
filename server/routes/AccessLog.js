@@ -10,6 +10,41 @@ const formatError = (validationError) => {
     }, {});
 };
 
+router.get("/dashboard", async (req, res, next) => {
+    try {
+        const statusCodes = await AccessLog.aggregate([
+            {
+                $group: {
+                    _id: "$res.statusCode",
+                    totalReq: { $sum: 1 },
+                }
+            }
+        ]);
+        const methods = await AccessLog.aggregate([
+            {
+                $group: {
+                    _id: "$req.method",
+                    totalReq: { $sum: 1 },
+                }
+            }
+        ]);
+
+        statusCodes.sort((a, b) => {
+            return b.totalReq - a.totalReq
+        })
+        methods.sort((a, b) => {
+            return b.totalReq - a.totalReq
+        })
+        res.json({
+            statusCodes,
+            methods
+        });
+    } catch (error) {
+        res.sendStatus(500);
+        next();
+        console.error(error);
+    }
+});
 router.get("/", async (req, res, next) => {
     try {
         const { page = 1, perPage = 10, ...criteria } = req.query;
@@ -22,11 +57,11 @@ router.get("/", async (req, res, next) => {
         res.sendStatus(500);
         next();
     }
-});
+})
 
 router.post("/", async (req, res) => {
     try {
-        const result = await AccessLog.create({...req.body, timestamp: new Date()});
+        const result = await AccessLog.create({ ...req.body, timestamp: new Date() });
         res.status(201).json(result);
     } catch (error) {
         if (error instanceof mongoose.Error.ValidationError) {
