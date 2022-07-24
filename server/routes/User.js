@@ -32,6 +32,7 @@ router.get("/", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     const result = await User.create(req.body);
+    req.body.password = result.dataValues.password;
     res.status(201).json(result);
     next();
   } catch (error) {
@@ -76,6 +77,7 @@ router.put("/:id", async (req, res, next) => {
       next();
     } else {
       res.json(result);
+      console.log(result);
       next();
     }
   } catch (error) {
