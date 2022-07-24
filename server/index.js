@@ -18,13 +18,12 @@ app.get("/", (req, res, next) => {
   res.send("Hello world!");
 });
 
-app.use(accessLog);
 app.use("/client-errors", ClientErrorsRouter);
 app.use("/access-logs", AccessLogsRouter);
 app.use("/users", UserRouter);
 app.use("/chat", ChatRouter);
 app.use("/friends", FriendRouter);
-
 app.use("/messages", MessageRouter);
+app.use(accessLog);
 
 app.listen(port, () => console.log(`Server started ${port}`));

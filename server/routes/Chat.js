@@ -11,7 +11,7 @@ const { Op } = require("sequelize");
 // Todo Authentication
 const userId = 1;
 
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   try {
     let result = await Conversation.findAll({
       order: [["updatedAt", "DESC"]],
@@ -55,23 +55,27 @@ router.get("/", async (req, res) => {
     }));
 
     res.status(200).json(result);
+    next();
   } catch (error) {
     res.sendStatus(500);
+    next();
     console.error(error);
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   try {
     const { receiverId } = req.body;
 
     if (!receiverId) {
-      return res.sendStatus(400);
+      res.sendStatus(400);
+      next();
     }
 
     const receiver = await User.findByPk(receiverId);
     if (!receiver) {
-      return res.sendStatus(404);
+      res.sendStatus(404);
+      next();
     }
 
     // Check if a conversation doesn't exxist yet
@@ -117,10 +121,11 @@ router.post("/", async (req, res) => {
         );
       }
 
-      return res.status(userConversation.isDeleted ? 201 : 200).json({
+      res.status(userConversation.isDeleted ? 201 : 200).json({
         id: userConversation.conversationId,
         user: result.userParticipants[0].user,
       });
+      next();
     }
 
     // Create new conversation
@@ -139,13 +144,15 @@ router.post("/", async (req, res) => {
       id: conversationId,
       user: receiver,
     });
+    next();
   } catch (error) {
     res.sendStatus(500);
+    next();
     console.error(error);
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res, next) => {
   try {
     const result = await Conversation.findOne({
       where: {
@@ -172,7 +179,8 @@ router.get("/:id", async (req, res) => {
     });
 
     if (!result) {
-      return res.sendStatus(404);
+      res.sendStatus(404);
+      next();
     }
 
     // Update messages not read yet  by current user
@@ -192,13 +200,15 @@ router.get("/:id", async (req, res) => {
     }
 
     res.status(200).json(result);
+    next();
   } catch (error) {
     res.sendStatus(500);
+    next();
     console.error(error);
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", async (req, res, next) => {
   try {
     const [affectedRows] = await UserConversation.update(
       {
@@ -214,6 +224,7 @@ router.delete("/:id", async (req, res) => {
 
     if (!affectedRows) {
       res.sendStatus(404);
+      next();
     } else {
       res.json({
         success: true,
@@ -221,11 +232,12 @@ router.delete("/:id", async (req, res) => {
     }
   } catch (error) {
     res.sendStatus(500);
+    next();
     console.error(error);
   }
 });
 
-router.post("/message", async (req, res) => {
+router.post("/message", async (req, res, next) => {
   try {
     let { conversationId } = req.body;
 
@@ -236,16 +248,19 @@ router.post("/message", async (req, res) => {
     });
 
     res.status(201).json(result);
+    next();
   } catch (error) {
     res.sendStatus(500);
+    next();
     console.error(error);
   }
 });
 
-router.put("/message/:id", async (req, res) => {
+router.put("/message/:id", async (req, res, next) => {
   try {
     if (!req.body?.content?.length) {
-      return res.sendStatus(400);
+      res.sendStatus(400);
+      next();
     }
 
     const [affectedRows, [result]] = await Message.update(
@@ -263,16 +278,19 @@ router.put("/message/:id", async (req, res) => {
 
     if (!affectedRows) {
       res.sendStatus(404);
+      next();
     } else {
       res.json(result);
+      next();
     }
   } catch (error) {
     res.sendStatus(500);
+    next();
     console.error(error);
   }
 });
 
-router.delete("/message/:id", async (req, res) => {
+router.delete("/message/:id", async (req, res, next) => {
   try {
     const [affectedRows, [result]] = await Message.update(
       {
@@ -288,11 +306,14 @@ router.delete("/message/:id", async (req, res) => {
 
     if (!affectedRows) {
       res.sendStatus(404);
+      next();
     } else {
       res.json(result);
+      next();
     }
   } catch (error) {
     res.sendStatus(500);
+    next();
     console.error(error);
   }
 });

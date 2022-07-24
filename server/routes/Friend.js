@@ -16,7 +16,7 @@ const { Op } = require("sequelize");
 // Todo Authentication
 const userId = 1;
 
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   const { status, as } = req.query;
 
   let criteria = [
@@ -63,13 +63,15 @@ router.get("/", async (req, res) => {
     });
 
     res.status(200).json(result);
+    next();
   } catch (error) {
     res.sendStatus(500);
+    next();
     console.error(error);
   }
 });
 
-router.get("/discover", async (req, res) => {
+router.get("/discover", async (req, res, next) => {
   try {
     let criteria = {};
 
@@ -122,13 +124,15 @@ router.get("/discover", async (req, res) => {
     }));
 
     res.json(result);
+    next();
   } catch (error) {
     res.sendStatus(500);
+    next();
     console.error(error);
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   try {
     const { targetId } = req.body;
 
@@ -160,7 +164,8 @@ router.post("/", async (req, res) => {
         friendship = updated;
       }
 
-      return res.status(isRenewal ? 201 : 200).json(friendship);
+      res.status(isRenewal ? 201 : 200).json(friendship);
+      next();
     }
 
     const result = await UserFriend.create({
@@ -170,18 +175,21 @@ router.post("/", async (req, res) => {
     });
 
     res.status(201).json(result);
+    next();
   } catch (error) {
     res.sendStatus(500);
+    next();
     console.error(error);
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", async (req, res, next) => {
   try {
     const { status } = req.body;
 
     if (![STATUS_ACCEPTED, STATUS_REJECTED, STATUS_CANCELLED].includes(status)) {
-      return res.sendStatus(400);
+      res.sendStatus(400);
+      next();
     }
 
     // Make sure the update is requested by the right user
@@ -202,16 +210,19 @@ router.put("/:id", async (req, res) => {
 
     if (!affectedRows) {
       res.sendStatus(404);
+      next();
     } else {
       res.json(result);
+      next();
     }
   } catch (error) {
     res.sendStatus(500);
+    next();
     console.error(error);
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", async (req, res, next) => {
   try {
     const [affectedRows] = await UserFriend.update(
       {
@@ -227,11 +238,14 @@ router.delete("/:id", async (req, res) => {
 
     if (!affectedRows) {
       res.sendStatus(404);
+      next();
     } else {
       res.sendStatus(200);
+      next();
     }
   } catch (error) {
     res.sendStatus(500);
+    next();
     console.error(error);
   }
 });
