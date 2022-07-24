@@ -28,16 +28,47 @@ router.get("/dashboard", async (req, res, next) => {
                 }
             }
         ]);
+        const urls = await AccessLog.aggregate([
+            {
+                $group: {
+                    _id: "$req.url",
+                    totalReq: { $sum: 1 },
+                }
+            },
+            {
+                $sort: { totalReq: -1 }
+            },
+            {
+                $limit: 5
+            }
+        ]);
 
-        statusCodes.sort((a, b) => {
-            return b.totalReq - a.totalReq
-        })
-        methods.sort((a, b) => {
-            return b.totalReq - a.totalReq
-        })
+        const days = await AccessLog.aggregate([
+            {
+                $group: {
+                    _id: {
+                        $arrayElemAt: [
+                            {
+                                $split: [{$toString: "$timestamp"}, "T"],
+                            },
+                            0,
+                        ],
+                    },
+                    totalReq: {
+                        $sum: 1,
+                    },
+                },
+            },
+        ]);
+        days.sort((a, b) => b.totalReq - a.totalReq);
+        urls.sort((a, b) => b.totalReq - a.totalReq);
+        statusCodes.sort((a, b) => b.totalReq - a.totalReq)
+        methods.sort((a, b) => b.totalReq - a.totalReq)
         res.json({
             statusCodes,
-            methods
+            methods,
+            urls,
+            days
         });
     } catch (error) {
         res.sendStatus(500);
