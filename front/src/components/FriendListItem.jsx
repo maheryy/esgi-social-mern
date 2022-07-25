@@ -12,7 +12,7 @@ const FriendListItem = ({ data, children }) => {
           </span>
           <div className="px-2 flex flex-col leading-6 justify-start items-start w-full">
             <span className="font-semibold">
-              {data.firstname}
+              {data.pseudo}
             </span>
             <span className="hidden sm:block text-xs font-thin truncate w-32 sm:w-64 hover:text-clip">
                 Lorem ipsum dolor sit amet

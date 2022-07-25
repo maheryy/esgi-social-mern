@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_URL } from "../../services/constants";
-import { usePrevious, useProtectedContext } from "../../services/hooks";
+import { useAuthContext, usePrevious, useProtectedContext } from "../../services/hooks";
 import messageReducer, { MessageActions } from "../../services/reducers/message";
 import { Header } from "../../layouts/ProtectedLayout/Header";
 import { UserMessage } from "./UserMessage";
@@ -18,16 +18,19 @@ export const Chat = () => {
   const countOldMessages = usePrevious(messages.length);
   const [title, setTitle] = useState("");
   const [emojiPanel, setEmojiPanel] = useState(false);
+  const { token, loggedUser } = useAuthContext();
 
   useEffect(() => {
     message.current.value = "";
     message.current.focus();
     setSelectedChat(parseInt(chatId, 10));
 
-    fetch(`${API_URL}/chat/${chatId}`)
+    fetch(`${API_URL}/chat/${chatId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((res) => res.json())
       .then((res) => {
-        setTitle(res.userParticipants.map((el) => el.user.firstname).join(", "));
+        setTitle(res.userParticipants.map((el) => el.user.pseudo).join(", "));
         dispatch({ type: MessageActions.LOAD, payload: res.messages });
       })
       .catch((error) => {
@@ -59,7 +62,10 @@ export const Chat = () => {
       };
 
       fetch(`${API_URL}/chat/message`, {
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         method: "POST",
         body: JSON.stringify(data),
       })
@@ -91,8 +97,7 @@ export const Chat = () => {
 
   };
 
-  // TODO : change this when auth works
-  const isUserMessage = useCallback((userId) => userId === 1, []);
+  const isUserMessage = useCallback((userId) => userId === loggedUser.id, [loggedUser]);
 
   return (
     <div className="flex flex-col h-screen border-l border-gray-700 text-gray-300">

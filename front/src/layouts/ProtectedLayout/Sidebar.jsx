@@ -6,13 +6,12 @@ import { ChatList } from "./ChatList";
 
 export const Sidebar = () => {
   const navigate = useNavigate();
-    const logout = ()=>{
+  const { extendedSidebar, setExtendedSidebar } = useProtectedContext();
 
-        localStorage.clear()
-        navigate(navigate('/Login', {replace:true}));
-
-    }
-  const {extendedSidebar, setExtendedSidebar} = useProtectedContext();
+  const logout = () => {
+    localStorage.clear();
+    navigate("/Login", { replace: true });
+  };
   return (
     <div
       className={"text-sm relative bg-gray-800 shadow p-4 h-full max-h-max justify-between sm:flex flex-col " + (extendedSidebar ? "flex basis-72 w-72" : "hidden basis-24 w-24")}>
@@ -60,8 +59,9 @@ export const Sidebar = () => {
         </ul>
       </div>
       <div className="h-5/6 overflow-hidden border-t border-gray-700 py-2">
-        <span className={"text-sm font-semibold text-gray-300 block w-full pt-1 pb-3 " + (extendedSidebar ? "" : "hidden")}>Conversations récentes</span>
-        <ChatList />
+        <span
+          className={"text-sm font-semibold text-gray-300 block w-full pt-1 pb-3 " + (extendedSidebar ? "" : "hidden")}>Conversations récentes</span>
+        <ChatList/>
       </div>
       <div className="sm:block border-t border-gray-700">
         <ul className="w-full flex items-center justify-around pt-4 text-gray-300">
@@ -72,8 +72,8 @@ export const Sidebar = () => {
                     clipRule="evenodd"/>
             </svg>
           </li>
-          <li onClick={logout}  
-          className={"cursor-pointer px-2 hover:text-gray-500 " + (extendedSidebar ? "" : "hidden")}>
+          <li onClick={logout}
+              className={"cursor-pointer px-2 hover:text-gray-500 " + (extendedSidebar ? "" : "hidden")}>
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path fillRule="evenodd"
                     d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"

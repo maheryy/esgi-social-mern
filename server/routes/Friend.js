@@ -12,23 +12,19 @@ const {
 } = require("../lib/constants");
 const router = new Router();
 const { Op } = require("sequelize");
-const checkAuth = require("../middleware/checkAuth");
 
-// Todo Authentication
-const userId = 1;
-
-router.get("/",checkAuth , async (req, res) => {
+router.get("/", async (req, res, next) => {
   const { status, as } = req.query;
 
   let criteria = [
-    { requestorId: userId },
-    { targetId: userId },
+    { requestorId: req.user.id },
+    { targetId: req.user.id },
   ];
 
   if (as === "requestor") {
-    criteria = [{ requestorId: userId }];
+    criteria = [{ requestorId: req.user.id }];
   } else if (as === "target") {
-    criteria = [{ targetId: userId }];
+    criteria = [{ targetId: req.user.id }];
   }
 
   try {
@@ -50,10 +46,12 @@ router.get("/",checkAuth , async (req, res) => {
     });
 
     result = result.map((row) => {
-      let user = row.requestorId === userId ? row.target : row.requestor;
+      let user = row.requestorId === req.user.id ? row.target : row.requestor;
       return {
         id: user.id,
         firstname: user.firstname,
+        lastname: user.lastname,
+        pseudo: user.pseudo,
         email: user.email,
         status: user.status,
         relationship: {
@@ -67,17 +65,17 @@ router.get("/",checkAuth , async (req, res) => {
     next();
   } catch (error) {
     res.sendStatus(500);
-    next();
     console.error(error);
+    next();
   }
 });
 
-router.get("/discover",checkAuth ,async (req, res) => {
+router.get("/discover", async (req, res, next) => {
   try {
     let criteria = {};
 
     if (req.query.query) {
-      criteria.firstname = {
+      criteria.pseudo = {
         [Op.iLike]: `%${req.query.query}%`
       };
     }
@@ -85,7 +83,7 @@ router.get("/discover",checkAuth ,async (req, res) => {
     let result = await User.findAll({
       where: {
         id: {
-          [Op.not]: userId
+          [Op.not]: req.user.id
         },
         ...criteria
       },
@@ -95,7 +93,7 @@ router.get("/discover",checkAuth ,async (req, res) => {
           required: false,
           as: "requestors",
           where: {
-            targetId: userId,
+            targetId: req.user.id,
             status: {
               [Op.in]: [STATUS_HOLD, STATUS_ACCEPTED]
             }
@@ -106,7 +104,7 @@ router.get("/discover",checkAuth ,async (req, res) => {
           required: false,
           as: "targets",
           where: {
-            requestorId: userId,
+            requestorId: req.user.id,
             status: {
               [Op.in]: [STATUS_HOLD, STATUS_ACCEPTED]
             }
@@ -119,6 +117,8 @@ router.get("/discover",checkAuth ,async (req, res) => {
       id: row.id,
       email: row.email,
       firstname: row.firstname,
+      lastname: row.lastname,
+      pseudo: row.pseudo,
       relationship: row.requestors.length
         ? (row.requestors[0])
         : (row.targets.length ? row.targets[0] : null)
@@ -133,7 +133,7 @@ router.get("/discover",checkAuth ,async (req, res) => {
   }
 });
 
-router.post("/", checkAuth, async (req, res) => {
+router.post("/", async (req, res, next) => {
   try {
     const { targetId } = req.body;
 
@@ -141,7 +141,7 @@ router.post("/", checkAuth, async (req, res) => {
       return res.sendStatus(400);
     }
 
-    let friendship = await getFriendship(userId, targetId);
+    let friendship = await getFriendship(req.user.id, targetId);
 
     // A friendship already exist between 2 users
     if (friendship) {
@@ -152,7 +152,7 @@ router.post("/", checkAuth, async (req, res) => {
           {
             status: STATUS_HOLD,
             targetId: targetId,
-            requestorId: userId,
+            requestorId: req.user.id,
           },
           {
             where: {
@@ -166,11 +166,11 @@ router.post("/", checkAuth, async (req, res) => {
       }
 
       res.status(isRenewal ? 201 : 200).json(friendship);
-      next();
+      return next();
     }
 
     const result = await UserFriend.create({
-      requestorId: userId,
+      requestorId: req.user.id,
       targetId: targetId,
       status: STATUS_HOLD
     });
@@ -184,19 +184,19 @@ router.post("/", checkAuth, async (req, res) => {
   }
 });
 
-router.put("/:id", checkAuth, async (req, res) => {
+router.put("/:id", async (req, res, next) => {
   try {
     const { status } = req.body;
 
     if (![STATUS_ACCEPTED, STATUS_REJECTED, STATUS_CANCELLED].includes(status)) {
       res.sendStatus(400);
-      next();
+      return next();
     }
 
     // Make sure the update is requested by the right user
     const userVerification = status === STATUS_CANCELLED
-      ? { requestorId: userId }
-      : { targetId: userId };
+      ? { requestorId: req.user.id }
+      : { targetId: req.user.id };
 
     const [affectedRows, [result]] = await UserFriend.update(
       { status },
@@ -223,7 +223,7 @@ router.put("/:id", checkAuth, async (req, res) => {
   }
 });
 
-router.delete("/:id", checkAuth, async (req, res) => {
+router.delete("/:id", async (req, res, next) => {
   try {
     const [affectedRows] = await UserFriend.update(
       {

@@ -6,24 +6,19 @@ export const AdminContext = createContext();
 
 const AdminProvider = ({ children }) => {
 
-  const {loggedUser, token} = useAuthContext();
+  const { loggedUser, token } = useAuthContext();
   const navigate = useNavigate();
 
-  useEffect(()=> {
-    if(JSON.parse(localStorage.getItem('userInfo')) == null){
-      navigate('/login', {replace:true});
-    }else if(loggedUser?.isAdmin == false){
-      navigate('/friends', {replace:true});
-    }else{
-      navigate('/admin', {replace: true});
+  useEffect(() => {
+    if (!loggedUser || !loggedUser.isAdmin) {
+      navigate("/login", { replace: true });
     }
-  },
-  [])
+  }, []);
 
   return (
     <AdminContext.Provider
       value={{
-        loggedUser,        
+        loggedUser,
         token,
       }}
     >

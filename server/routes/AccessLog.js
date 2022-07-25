@@ -88,7 +88,7 @@ router.get("/", async (req, res, next) => {
     }
 })
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
     try {
         const result = await AccessLog.create({ ...req.body, timestamp: new Date() });
         res.status(201).json(result);
@@ -103,7 +103,7 @@ router.post("/", async (req, res) => {
     }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res, next) => {
     try {
         const result = await AccessLog.findOne({
             _id: req.params.id,
@@ -121,7 +121,7 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", async (req, res, next) => {
     try {
         const result = await AccessLog.findOneAndUpdate(
             {
@@ -147,7 +147,7 @@ router.put("/:id", async (req, res) => {
     }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", async (req, res, next) => {
     try {
         const result = await AccessLog.findOneAndRemove({
             _id: req.params.id,
