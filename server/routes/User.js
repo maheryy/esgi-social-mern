@@ -14,7 +14,7 @@ const formatError = (validationError) => {
   }, {});
 };
 
-router.get("/", checkIsAdmin, async (req, res) => {
+router.get("/", checkIsAdmin, async (req, res, next) => {
   try {
     const users = await User.findAll(
       {
@@ -32,7 +32,7 @@ router.get("/", checkIsAdmin, async (req, res) => {
 }
 );
 
-router.post("/",async (req, res) => {
+router.post("/",async (req, res, next) => {
   try {
     const result = await User.create(req.body);
     req.body.password = result.dataValues.password;
@@ -50,7 +50,7 @@ router.post("/",async (req, res) => {
   }
 });
 
-router.get("/:id",checkAuth ,async (req, res) => {
+router.get("/:id",checkAuth ,async (req, res, next) => {
   try {
     const result = await User.findByPk(parseInt(req.params.id, 10));
     if (!result) {
@@ -67,7 +67,7 @@ router.get("/:id",checkAuth ,async (req, res) => {
   }
 });
 
-router.put("/:id", checkAuth ,async (req, res) => {
+router.put("/:id", checkAuth ,async (req, res, next) => {
   try {
     const [nbLines, [result]] = await User.update(req.body, {
       where: {
@@ -96,7 +96,7 @@ router.put("/:id", checkAuth ,async (req, res) => {
   }
 });
 
-router.delete("/:id",checkAuth ,async (req, res) => {
+router.delete("/:id",checkAuth ,async (req, res, next) => {
   try {
     const nbLines = await User.destroy({
       where: {

@@ -25,7 +25,7 @@ app.use("/users", UserRouter);
 app.use("/chat", ChatRouter);
 app.use("/friends", FriendRouter);
 app.use("/messages", MessageRouter);
-app.use(accessLog);
 app.use("/security", SecurityRouter);
+app.use(accessLog);
 
 app.listen(port, () => console.log(`Server started ${port}`));

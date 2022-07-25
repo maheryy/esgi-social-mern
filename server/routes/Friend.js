@@ -17,7 +17,7 @@ const checkAuth = require("../middleware/checkAuth");
 // Todo Authentication
 const userId = 1;
 
-router.get("/",checkAuth , async (req, res) => {
+router.get("/", checkAuth, async (req, res, next) => {
   const { status, as } = req.query;
 
   let criteria = [
@@ -67,12 +67,12 @@ router.get("/",checkAuth , async (req, res) => {
     next();
   } catch (error) {
     res.sendStatus(500);
-    next();
     console.error(error);
+    next();
   }
 });
 
-router.get("/discover",checkAuth ,async (req, res) => {
+router.get("/discover", checkAuth, async (req, res, next) => {
   try {
     let criteria = {};
 
@@ -133,7 +133,7 @@ router.get("/discover",checkAuth ,async (req, res) => {
   }
 });
 
-router.post("/", checkAuth, async (req, res) => {
+router.post("/", checkAuth, async (req, res, next) => {
   try {
     const { targetId } = req.body;
 
@@ -166,7 +166,7 @@ router.post("/", checkAuth, async (req, res) => {
       }
 
       res.status(isRenewal ? 201 : 200).json(friendship);
-      next();
+      return next();
     }
 
     const result = await UserFriend.create({
@@ -184,13 +184,13 @@ router.post("/", checkAuth, async (req, res) => {
   }
 });
 
-router.put("/:id", checkAuth, async (req, res) => {
+router.put("/:id", checkAuth, async (req, res, next) => {
   try {
     const { status } = req.body;
 
     if (![STATUS_ACCEPTED, STATUS_REJECTED, STATUS_CANCELLED].includes(status)) {
       res.sendStatus(400);
-      next();
+      return next();
     }
 
     // Make sure the update is requested by the right user
@@ -223,7 +223,7 @@ router.put("/:id", checkAuth, async (req, res) => {
   }
 });
 
-router.delete("/:id", checkAuth, async (req, res) => {
+router.delete("/:id", checkAuth, async (req, res, next) => {
   try {
     const [affectedRows] = await UserFriend.update(
       {

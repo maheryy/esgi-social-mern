@@ -12,7 +12,7 @@ const checkAuth = require("../middleware/checkAuth");
 // Todo Authentication
 const userId = 1;
 
-router.get("/", checkAuth, async (req, res) => {
+router.get("/", checkAuth, async (req, res, next) => {
   try {
     let result = await Conversation.findAll({
       order: [["updatedAt", "DESC"]],
@@ -64,19 +64,19 @@ router.get("/", checkAuth, async (req, res) => {
   }
 });
 
-router.post("/", checkAuth, async (req, res) => {
+router.post("/", checkAuth, async (req, res, next) => {
   try {
     const { receiverId } = req.body;
 
     if (!receiverId) {
       res.sendStatus(400);
-      next();
+      return next();
     }
 
     const receiver = await User.findByPk(receiverId);
     if (!receiver) {
       res.sendStatus(404);
-      next();
+      return next();
     }
 
     // Check if a conversation doesn't exxist yet
@@ -126,7 +126,7 @@ router.post("/", checkAuth, async (req, res) => {
         id: userConversation.conversationId,
         user: result.userParticipants[0].user,
       });
-      next();
+      return next();
     }
 
     // Create new conversation
@@ -153,7 +153,7 @@ router.post("/", checkAuth, async (req, res) => {
   }
 });
 
-router.get("/:id", checkAuth, async (req, res) => {
+router.get("/:id", checkAuth, async (req, res, next) => {
   try {
     const result = await Conversation.findOne({
       where: {
@@ -181,7 +181,7 @@ router.get("/:id", checkAuth, async (req, res) => {
 
     if (!result) {
       res.sendStatus(404);
-      next();
+      return next();
     }
 
     // Update messages not read yet  by current user
@@ -257,11 +257,11 @@ router.post("/message", async (req, res, next) => {
   }
 });
 
-router.put("/message/:id", checkAuth, async (req, res) => {
+router.put("/message/:id", checkAuth, async (req, res, next) => {
   try {
     if (!req.body?.content?.length) {
       res.sendStatus(400);
-      next();
+      return next();
     }
 
     const [affectedRows, [result]] = await Message.update(
@@ -291,7 +291,7 @@ router.put("/message/:id", checkAuth, async (req, res) => {
   }
 });
 
-router.delete("/message/:id", checkAuth, async (req, res) => {
+router.delete("/message/:id", checkAuth, async (req, res, next) => {
   try {
     const [affectedRows, [result]] = await Message.update(
       {

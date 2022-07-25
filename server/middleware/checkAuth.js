@@ -13,8 +13,8 @@ module.exports = async (req, res, next) => {
   const user = await checkToken(token);
   if (user) {
     req.user = await User.findByPk(user.id);
-    next();
   } else {
     res.sendStatus(401);
   }
+  next();
 };
