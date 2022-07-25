@@ -49,8 +49,8 @@ function Dashboard() {
 
     return (
         <div>
-            <div class="text-left overflow-x-auto relative mx-5 my-5">
-                <h2 class="font-bold">Dashboard</h2>
+            <div className="text-left overflow-x-auto relative mx-5 my-5">
+                <h2 className="font-bold">Dashboard</h2>
 
                 <div>
                     <p>Requests by status code:</p>
