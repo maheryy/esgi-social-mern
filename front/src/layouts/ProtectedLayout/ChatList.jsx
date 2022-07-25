@@ -20,7 +20,7 @@ export const ChatList = () => {
           type: ChatActions.LOAD,
           payload: res.map((item) => ({
             id: item.id,
-            label: item.users.map((user) => user.firstname).join(", "),
+            label: item.users.map((user) => user.pseudo).join(", "),
           }))
         });
       })

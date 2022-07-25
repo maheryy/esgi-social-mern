@@ -50,6 +50,8 @@ router.get("/", async (req, res, next) => {
       return {
         id: user.id,
         firstname: user.firstname,
+        lastname: user.lastname,
+        pseudo: user.pseudo,
         email: user.email,
         status: user.status,
         relationship: {
@@ -73,7 +75,7 @@ router.get("/discover", async (req, res, next) => {
     let criteria = {};
 
     if (req.query.query) {
-      criteria.firstname = {
+      criteria.pseudo = {
         [Op.iLike]: `%${req.query.query}%`
       };
     }
@@ -115,6 +117,8 @@ router.get("/discover", async (req, res, next) => {
       id: row.id,
       email: row.email,
       firstname: row.firstname,
+      lastname: row.lastname,
+      pseudo: row.pseudo,
       relationship: row.requestors.length
         ? (row.requestors[0])
         : (row.targets.length ? row.targets[0] : null)

@@ -57,7 +57,7 @@ export const FriendList = () => {
           type: ChatActions.CREATE,
           payload: {
             id: data.id,
-            label: data.user.firstname,
+            label: data.user.pseudo,
           }
         });
       }

@@ -18,7 +18,7 @@ export const Chat = () => {
   const countOldMessages = usePrevious(messages.length);
   const [title, setTitle] = useState("");
   const [emojiPanel, setEmojiPanel] = useState(false);
-  const { token } = useAuthContext();
+  const { token, loggedUser } = useAuthContext();
 
   useEffect(() => {
     message.current.value = "";
@@ -30,7 +30,7 @@ export const Chat = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        setTitle(res.userParticipants.map((el) => el.user.firstname).join(", "));
+        setTitle(res.userParticipants.map((el) => el.user.pseudo).join(", "));
         dispatch({ type: MessageActions.LOAD, payload: res.messages });
       })
       .catch((error) => {
@@ -97,8 +97,7 @@ export const Chat = () => {
 
   };
 
-  // TODO : change this when auth works
-  const isUserMessage = useCallback((userId) => userId === 1, []);
+  const isUserMessage = useCallback((userId) => userId === loggedUser.id, [loggedUser]);
 
   return (
     <div className="flex flex-col h-screen border-l border-gray-700 text-gray-300">
