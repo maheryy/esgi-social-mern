@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import { API_URL, STATUS_CANCELLED, STATUS_HOLD } from "../../services/constants";
 import FriendListItem from "../../components/FriendListItem";
 import { renderTabs } from "./Friend";
+import { useAuthContext } from "../../services/hooks";
 
 export const RequestList = () => {
   const [users, setUsers] = useState([]);
+  const {token} = useAuthContext();
 
   useEffect(() => {
-    fetch(`${API_URL}/friends?status=${STATUS_HOLD}&as=requestor`)
+    fetch(`${API_URL}/friends?status=${STATUS_HOLD}&as=requestor`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((res) => res.json())
       .then((res) => {
         setUsers(res);
@@ -20,7 +24,10 @@ export const RequestList = () => {
 
   const cancelRequest = (relationshipId) => {
     fetch(`${API_URL}/friends/${relationshipId}`, {
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
       method: "PUT",
       body: JSON.stringify({ status: STATUS_CANCELLED })
     })

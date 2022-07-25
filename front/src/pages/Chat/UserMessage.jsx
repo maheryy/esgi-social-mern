@@ -15,10 +15,11 @@ export const UserMessage = ({ data, dispatch }) => {
     }
 
     fetch(`${API_URL}/chat/message/${data.id}`, {
-      method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
+      method: "PUT",
       body: JSON.stringify({ content: text.current.value.trim() }),
     })
       .then((res) => res.json())
@@ -36,6 +37,7 @@ export const UserMessage = ({ data, dispatch }) => {
 
   const removeMessage = useCallback(() => {
     fetch(`${API_URL}/chat/message/${data.id}`, {
+      headers: { Authorization: `Bearer ${token}` },
       method: "DELETE",
     })
       .then((res) => res.json())

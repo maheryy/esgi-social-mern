@@ -3,16 +3,19 @@ import { useEffect, useState } from "react";
 import { API_URL } from "../../services/constants";
 import FriendListItem from "../../components/FriendListItem";
 import { renderTabs } from "./Friend";
-import { useProtectedContext } from "../../services/hooks";
+import { useAuthContext, useProtectedContext } from "../../services/hooks";
 import { ChatActions } from "../../services/reducers/chat";
 
 export const FriendList = () => {
   const [friends, setFriends] = useState([]);
   const { dispatchChats } = useProtectedContext();
+  const { token } = useAuthContext();
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`${API_URL}/friends`)
+    fetch(`${API_URL}/friends`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((res) => res.json())
       .then((res) => {
         setFriends(res);
@@ -24,6 +27,7 @@ export const FriendList = () => {
 
   const removeFriend = (relationshipId) => {
     fetch(`${API_URL}/friends/${relationshipId}`, {
+      headers: { Authorization: `Bearer ${token}` },
       method: "DELETE"
     })
       .then((res) => {
@@ -37,7 +41,10 @@ export const FriendList = () => {
   const startConversation = async (friendId) => {
     try {
       const response = await fetch(`${API_URL}/chat`, {
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         method: "POST",
         body: JSON.stringify({ receiverId: friendId }),
       });

@@ -5,15 +5,19 @@ import Searchbar from "../../components/Searchbar";
 import MultiSelectFilter from "../../components/MultiSelectFilter";
 import FriendListItem from "../../components/FriendListItem";
 import { ActionButton } from "./ActionButton";
+import { useAuthContext } from "../../services/hooks";
 
 export const StudentList = () => {
   const [students, setStudents] = useState([]);
   const [term, setTerm] = useState("");
   const [filterTech, setFilterTech] = useState([]);
   const [filterStudy, setFilterStudy] = useState([]);
+  const { token } = useAuthContext();
 
   useEffect(() => {
-    fetch(`${API_URL}/friends/discover?query=${term.trim()}`)
+    fetch(`${API_URL}/friends/discover?query=${term.trim()}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((res) => res.json())
       .then((res) => {
         setStudents(res);
@@ -25,7 +29,10 @@ export const StudentList = () => {
 
   const sendFriendRequest = useCallback((id) => {
     fetch(`${API_URL}/friends`, {
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
       method: "POST",
       body: JSON.stringify({ targetId: id }),
     })
@@ -37,7 +44,6 @@ export const StudentList = () => {
         console.error(error);
       });
   }, []);
-
 
   return (
     <div className="w-11/12 mx-auto px-4 h-full flex flex-col items-center">

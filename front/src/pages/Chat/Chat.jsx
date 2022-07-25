@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_URL } from "../../services/constants";
-import { usePrevious, useProtectedContext } from "../../services/hooks";
+import { useAuthContext, usePrevious, useProtectedContext } from "../../services/hooks";
 import messageReducer, { MessageActions } from "../../services/reducers/message";
 import { Header } from "../../layouts/ProtectedLayout/Header";
 import { UserMessage } from "./UserMessage";
@@ -18,13 +18,16 @@ export const Chat = () => {
   const countOldMessages = usePrevious(messages.length);
   const [title, setTitle] = useState("");
   const [emojiPanel, setEmojiPanel] = useState(false);
+  const { token } = useAuthContext();
 
   useEffect(() => {
     message.current.value = "";
     message.current.focus();
     setSelectedChat(parseInt(chatId, 10));
 
-    fetch(`${API_URL}/chat/${chatId}`)
+    fetch(`${API_URL}/chat/${chatId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((res) => res.json())
       .then((res) => {
         setTitle(res.userParticipants.map((el) => el.user.firstname).join(", "));
@@ -59,7 +62,10 @@ export const Chat = () => {
       };
 
       fetch(`${API_URL}/chat/message`, {
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         method: "POST",
         body: JSON.stringify(data),
       })

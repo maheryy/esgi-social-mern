@@ -3,8 +3,6 @@ import { Header } from "../../layouts/ProtectedLayout/Header";
 import { Link, Route, Routes } from "react-router-dom";
 import { RequestList } from "./RequestList";
 import { InvitationList } from "./InvitationList";
-import { useProtectedContext } from "../../services/hooks";
-
 
 export const Friend = () => {
   

@@ -1,17 +1,19 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../services/constants";
-import { useProtectedContext } from "../../services/hooks";
+import { useAuthContext, useProtectedContext } from "../../services/hooks";
 import { ChatActions } from "../../services/reducers/chat";
 import { SidebarChatItem } from "./SidebarChatItem";
 
 export const ChatList = () => {
   const { chats, dispatchChats, selectedChat, extendedSidebar } = useProtectedContext();
   const navigate = useNavigate();
-
+  const { token } = useAuthContext();
 
   useEffect(() => {
-    fetch(`${API_URL}/chat`)
+    fetch(`${API_URL}/chat`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((res) => res.json())
       .then((res) => {
         dispatchChats({
@@ -29,6 +31,7 @@ export const ChatList = () => {
 
   const removeChat = (chatId) => {
     fetch(`${API_URL}/chat/${chatId}`, {
+      headers: { Authorization: `Bearer ${token}` },
       method: "DELETE",
     })
       .then((res) => {

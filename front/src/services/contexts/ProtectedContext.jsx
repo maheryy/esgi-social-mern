@@ -3,27 +3,20 @@ import chatReducer from "../reducers/chat";
 import { useAuthContext } from "../hooks";
 import { useNavigate } from "react-router-dom";
 
-
 export const ProtectedContext = createContext();
 
 const ProtectedProvider = ({ children }) => {
   const [chats, dispatchChats] = useReducer(chatReducer, []);
   const [extendedSidebar, setExtendedSidebar] = useState(true);
   const [selectedChat, setSelectedChat] = useState(0);
-  const {loggedUser, token} = useAuthContext();
+  const { loggedUser } = useAuthContext();
   const navigate = useNavigate();
 
-
-  useEffect(()=> {
-    if(JSON.parse(localStorage.getItem('userInfo')) == null){
-      navigate('/login', {replace:true});
-    }else{
-      navigate('/friends', {replace: true});
+  useEffect(() => {
+    if (!loggedUser || loggedUser.isAdmin) {
+      navigate("/login", { replace: true });
     }
-  },
-  [])
-  
-  
+  }, []);
 
   return (
     <ProtectedContext.Provider
@@ -34,9 +27,6 @@ const ProtectedProvider = ({ children }) => {
         setExtendedSidebar,
         selectedChat,
         setSelectedChat,
-        loggedUser,
-        token,
-        
       }}
     >
       {children}
