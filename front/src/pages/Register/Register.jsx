@@ -54,7 +54,6 @@ export const Register = () => {
                 studyList: studyChecked.join(", "),
             }
 
-            console.log(user)
             const res = await fetch(`${API_URL}/users`, {
                 headers: { 
                     "Content-Type": "application/json" 
@@ -64,7 +63,6 @@ export const Register = () => {
             });
             
             const data = await res.json()
-            console.log(data)
 
         } catch(error) {
             console.log(error)

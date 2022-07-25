@@ -12,6 +12,8 @@ const AdminProvider = ({ children }) => {
   useEffect(()=> {
     if(JSON.parse(localStorage.getItem('userInfo')) == null){
       navigate('/login', {replace:true});
+    }else if(loggedUser?.isAdmin == false){
+      navigate('/friends', {replace:true});
     }else{
       navigate('/admin', {replace: true});
     }

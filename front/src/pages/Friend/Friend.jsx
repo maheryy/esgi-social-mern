@@ -7,11 +7,6 @@ import { useProtectedContext } from "../../services/hooks";
 
 
 export const Friend = () => {
-
-  const { loggedUser, token } = useProtectedContext();
-  console.log("token: ", token);
-  console.log("user: ", loggedUser);
-
   
   return (
     <div className="flex flex-col h-screen border-l border-gray-700 text-gray-300">

@@ -35,7 +35,6 @@ function UserForm( { response, setResponse } ) {
         <Formik
             initialValues={{ email: user.email, password: user.password, firstname: user.firstname, status: user.status }}
             onSubmit={(values, { setSubmitting }) => {
-                console.log(values)
                 setSubmitting(true);
                 fetch(`${API_URL}/users/${params.id}`, {
                     method: 'PUT',

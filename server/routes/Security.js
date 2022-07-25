@@ -30,7 +30,6 @@ const formatError = (validationError) => {
 
 router.post("/login", async (req, res) => {
   try {
-    console.log(2);
     const result = await User.findOne({
       where: {
         email: req.body.email,

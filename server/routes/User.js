@@ -80,7 +80,6 @@ router.put("/:id", checkAuth ,async (req, res) => {
       next();
     } else {
       res.json(result);
-      console.log(result);
       next();
     }
   } catch (error) {

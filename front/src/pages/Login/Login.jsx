@@ -23,7 +23,6 @@ export const Login = () => {
             password: pwd,
         }
         
-        console.log("AVANT fetch");
 
         const res = await fetch(`${API_URL}/security/login`, {
           headers: { 
@@ -32,8 +31,6 @@ export const Login = () => {
           method: "POST",
           body: JSON.stringify(user),
       });
-
-        console.log("APRES fetch")
         
         const data = await res.json();
 
@@ -43,7 +40,7 @@ export const Login = () => {
           localStorage.setItem('userInfo', JSON.stringify(data));
           setLoggedUser(data.user);
           setToken(data.token);
-          if(loggedUser.isAdmin == true)
+          if(data.user.isAdmin == true)
           {
             navigate('/admin', {replace:true});
           }else{
