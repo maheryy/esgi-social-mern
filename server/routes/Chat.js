@@ -7,12 +7,8 @@ const {
 } = require("../models/postgres");
 const router = new Router();
 const { Op } = require("sequelize");
-const checkAuth = require("../middleware/checkAuth");
 
-// Todo Authentication
-const userId = 1;
-
-router.get("/", checkAuth, async (req, res, next) => {
+router.get("/",  async (req, res, next) => {
   try {
     let result = await Conversation.findAll({
       order: [["updatedAt", "DESC"]],
@@ -22,7 +18,7 @@ router.get("/", checkAuth, async (req, res, next) => {
           as: "userTargets",
           required: true,
           where: {
-            userId: userId,
+            userId: req.user.id,
             isDeleted: false,
           },
           include: User,
@@ -32,7 +28,7 @@ router.get("/", checkAuth, async (req, res, next) => {
           as: "userParticipants",
           where: {
             userId: {
-              [Op.not]: userId,
+              [Op.not]: req.user.id,
             },
           },
           include: User,
@@ -59,12 +55,12 @@ router.get("/", checkAuth, async (req, res, next) => {
     next();
   } catch (error) {
     res.sendStatus(500);
-    next();
     console.error(error);
+    next();
   }
 });
 
-router.post("/", checkAuth, async (req, res, next) => {
+router.post("/",  async (req, res, next) => {
   try {
     const { receiverId } = req.body;
 
@@ -90,7 +86,7 @@ router.post("/", checkAuth, async (req, res, next) => {
           as: "userTargets",
           required: true,
           where: {
-            userId: userId,
+            userId: req.user.id,
           },
           include: User,
         },
@@ -131,9 +127,9 @@ router.post("/", checkAuth, async (req, res, next) => {
 
     // Create new conversation
     const newConversation = await Conversation.create();
-    conversationId = newConversation.id;
+    const conversationId = newConversation.id;
 
-    const users = [userId, receiverId];
+    const users = [req.user.id, receiverId];
     for (let i = 0; i < users.length; i++) {
       await UserConversation.create({
         conversationId: conversationId,
@@ -153,7 +149,7 @@ router.post("/", checkAuth, async (req, res, next) => {
   }
 });
 
-router.get("/:id", checkAuth, async (req, res, next) => {
+router.get("/:id",  async (req, res, next) => {
   try {
     const result = await Conversation.findOne({
       where: {
@@ -171,7 +167,7 @@ router.get("/:id", checkAuth, async (req, res, next) => {
           as: "userParticipants",
           where: {
             userId: {
-              [Op.not]: userId,
+              [Op.not]: req.user.id,
             }
           },
           include: User,
@@ -192,7 +188,7 @@ router.get("/:id", checkAuth, async (req, res, next) => {
           where: {
             conversationId: req.params.id,
             userId: {
-              [Op.not]: userId,
+              [Op.not]: req.user.id,
             },
             readAt: null,
           },
@@ -217,7 +213,7 @@ router.delete("/:id", async (req, res, next) => {
       },
       {
         where: {
-          userId: userId,
+          userId: req.user.id,
           conversationId: parseInt(req.params.id, 10),
         },
       }
@@ -245,7 +241,7 @@ router.post("/message", async (req, res, next) => {
     const result = await Message.create({
       content: req.body.content,
       conversationId: conversationId,
-      userId: userId,
+      userId: req.user.id,
     });
 
     res.status(201).json(result);
@@ -257,7 +253,7 @@ router.post("/message", async (req, res, next) => {
   }
 });
 
-router.put("/message/:id", checkAuth, async (req, res, next) => {
+router.put("/message/:id",  async (req, res, next) => {
   try {
     if (!req.body?.content?.length) {
       res.sendStatus(400);
@@ -291,7 +287,7 @@ router.put("/message/:id", checkAuth, async (req, res, next) => {
   }
 });
 
-router.delete("/message/:id", checkAuth, async (req, res, next) => {
+router.delete("/message/:id",  async (req, res, next) => {
   try {
     const [affectedRows, [result]] = await Message.update(
       {

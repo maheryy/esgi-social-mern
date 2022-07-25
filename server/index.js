@@ -11,6 +11,7 @@ const FriendRouter = require("./routes/Friend");
 const UserRouter = require("./routes/User");
 const accessLog = require("./middleware/accessLog");
 const SecurityRouter = require("./routes/Security")
+const checkAuth = require("./middleware/checkAuth");
 
 app.use(express.json());
 app.use(cors());
@@ -22,8 +23,8 @@ app.get("/", (req, res, next) => {
 app.use("/client-errors", ClientErrorsRouter);
 app.use("/access-logs", AccessLogsRouter);
 app.use("/users", UserRouter);
-app.use("/chat", ChatRouter);
-app.use("/friends", FriendRouter);
+app.use("/chat", checkAuth, ChatRouter);
+app.use("/friends", checkAuth, FriendRouter);
 app.use("/messages", MessageRouter);
 app.use("/security", SecurityRouter);
 app.use(accessLog);
