@@ -13,39 +13,48 @@ import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import ProtectedLayout from "./layouts/ProtectedLayout";
+import ProtectedAdmin from "./layouts/ProtectedAdmin";
+import AuthProvider from "./services/contexts/AuthContext";
 import Friend from "./pages/Friend";
 import Discover from "./pages/Discover";
 import UserEdit from "./pages/Admin/components/UserEdit";
 import UserCreate from "./pages/Admin/components/UserCreate";
 import MessageEdit from "./pages/Admin/components/MessageEdit";
 import Dashboard from "./pages/Admin/Dashboard";
+import AdminProvider from "./services/contexts/AdminContext";
 
 const App = () => { 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/analytics" element={<Analytic />} />
-        <Route path="/logs" element={<Log />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route element={<ProtectedLayout />}>
-          <Route path="/discover" element={<Discover />} />
-          <Route path="/friends/*" element={<Friend />} />
-          <Route path="/chat/:chatId" element={<Chat />} />
-        </Route>
-        <Route path="/admin" element={<Admin />}>
-          <Route path="/admin/dashboard" element={<Dashboard />} />
-          <Route path="users-list" element={<UsersList />} />
-          <Route path="users-list/:id" element={<UserEdit />} />
-          <Route path="users-list/add" element={<UserCreate />} />
-          <Route path="messages-list" element={<MessagesList />} />
-          <Route path="messages-list/:id" element={<MessageEdit />} />
-          <Route path="logs-list" element={<LogsList />} />
-        </Route>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/analytics" element={<Analytic/>}/>
+          <Route path="/register" element={<Register/>}/>
+          <Route path="/login" element={<Login/>}/>
+          
+          <Route element={<ProtectedLayout/>}>
+            <Route path="/profile" element={<Profile/>}/>
+            <Route path="/discover" element={<Discover/>}/>
+            <Route path="/friends/*" element={<Friend/>}/>
+            <Route path="/chat/:chatId" element={<Chat/>}/>
+          </Route>
+
+          <Route element={<ProtectedAdmin/>}>
+              <Route path="/admin" element={<Admin />}/>
+              <Route path="/admin/dashboard" element={<Dashboard />} />
+              <Route path="users-list" element={<UsersList />} />
+              <Route path="users-list/:id" element={<UserEdit />} />
+              <Route path="users-list/add" element={<UserCreate />} />
+              <Route path="messages-list" element={<MessagesList />} />
+              <Route path="messages-list/:id" element={<MessageEdit />} />
+              <Route path="logs-list" element={<LogsList />} />
+            
+          </Route>
+        
+          
       </Routes>
-    </BrowserRouter>
+      </BrowserRouter>
+    </AuthProvider>
   );
 };
 

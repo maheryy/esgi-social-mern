@@ -3,8 +3,11 @@ import { Header } from "../../layouts/ProtectedLayout/Header";
 import { Link, Route, Routes } from "react-router-dom";
 import { RequestList } from "./RequestList";
 import { InvitationList } from "./InvitationList";
+import { useProtectedContext } from "../../services/hooks";
+
 
 export const Friend = () => {
+  
   return (
     <div className="flex flex-col h-screen border-l border-gray-700 text-gray-300">
       <Header title={"Mes amis"}>

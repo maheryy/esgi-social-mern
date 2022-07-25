@@ -1,6 +1,9 @@
 const { Router } = require("express");
 const { User } = require("../models/postgres");
 const { ValidationError } = require("sequelize");
+const checkIsAdmin = require("../middleware/checkIsAdmin");
+const checkAuth = require("../middleware/checkAuth");
+
 
 const router = new Router();
 
@@ -11,7 +14,7 @@ const formatError = (validationError) => {
   }, {});
 };
 
-router.get("/", async (req, res, next) => {
+router.get("/", checkIsAdmin, async (req, res) => {
   try {
     const users = await User.findAll(
       {
@@ -29,7 +32,7 @@ router.get("/", async (req, res, next) => {
 }
 );
 
-router.post("/", async (req, res, next) => {
+router.post("/",async (req, res) => {
   try {
     const result = await User.create(req.body);
     req.body.password = result.dataValues.password;
@@ -47,7 +50,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:id",checkAuth ,async (req, res) => {
   try {
     const result = await User.findByPk(parseInt(req.params.id, 10));
     if (!result) {
@@ -64,7 +67,7 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", checkAuth ,async (req, res) => {
   try {
     const [nbLines, [result]] = await User.update(req.body, {
       where: {
@@ -77,7 +80,6 @@ router.put("/:id", async (req, res, next) => {
       next();
     } else {
       res.json(result);
-      console.log(result);
       next();
     }
   } catch (error) {
@@ -94,7 +96,7 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id",checkAuth ,async (req, res) => {
   try {
     const nbLines = await User.destroy({
       where: {

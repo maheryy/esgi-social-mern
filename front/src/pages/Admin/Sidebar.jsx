@@ -4,10 +4,18 @@ import {
     Route,
     Routes,
     Outlet,
-    Link
+    Link,
+    useNavigate
 } from "react-router-dom";
 
 function Sidebar() {
+    const navigate = useNavigate();
+    const logout = ()=>{
+
+        localStorage.clear()
+        navigate(navigate('/Login', {replace:true}));
+
+    }
 
     return (
         <>
@@ -43,7 +51,7 @@ function Sidebar() {
                     </ul>
                     <ul className="pt-4 mt-4 space-y-2 border-t border-gray-200 dark:border-gray-700">
                         <li>
-                            <a href="#" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <a href="#" onClick={logout} className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                                 <span className="flex-1 ml-3 whitespace-nowrap">Déconnexion</span>
                             </a>
                         </li>
