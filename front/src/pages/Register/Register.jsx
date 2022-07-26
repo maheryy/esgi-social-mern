@@ -12,7 +12,7 @@ export const Register = () => {
   const [studyChecked, setStudyReg] = useState([]);
   const [state, setState] = useState("");
   const [response, setResponse] = useState("");
-  const navigate = useNavigate();
+
 
   const handleCheckTech = (event) => {
     let updatedList = [...techChecked];
@@ -48,8 +48,6 @@ export const Register = () => {
         studyList: studyChecked.join(", "),
       };
 
-      console.log(user)
-
       const res = await fetch(`${API_URL}/users`, {
         headers: {
           "Content-Type": "application/json"
@@ -62,10 +60,9 @@ export const Register = () => {
 
       setResponse(res)
       setState(data);
-      console.log(response)
 
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(" " + err);
     }
   };
 
@@ -225,7 +222,7 @@ export const Register = () => {
                   <p className="text-green-500 text-lg italic mx-4 mb-3" > 
                     {"Inscris avec succès vous allez être redirigé"}
                   </p>}
-                  { response?.status != 201 &&
+                  { response?.status != 201 && response!= "" &&
                   <p className="text-red-500 text-lg bold italic mx-4 mb-3" > 
                     {"Assurez-vous que tout les champs soient correctement remplis svp"}
                   </p>}
