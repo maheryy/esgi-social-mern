@@ -1,6 +1,8 @@
 import { API_URL, STUDY_LIST, TECH_LIST } from "../../services/constants";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import MultiSelectFilter from "../../components/MultiSelectFilter";
+import { fromObjectListToSelectOptions } from "../../services/helpers";
 
 export const Register = () => {
 
@@ -9,7 +11,7 @@ export const Register = () => {
   const [mail, setMailReg] = useState("");
   const [pwd, setPwdReg] = useState("");
   const [techChecked, setTechReg] = useState([]);
-  const [studyChecked, setStudyReg] = useState([]);
+  const [studyChecked, setStudyReg] = useState("");
   const [state, setState] = useState("");
   const [response, setResponse] = useState("");
 
@@ -24,15 +26,10 @@ export const Register = () => {
     setTechReg(updatedList);
   };
 
-  const handleCheckStudy = (event) => {
-    let updatedList2 = [...studyChecked];
-    if (event.target.checked) {
-      updatedList2 = [...studyChecked, event.target.value];
-    } else {
-      updatedList2.splice(studyChecked.indexOf(event.target.value), 1);
-    }
-    setStudyReg(updatedList2);
+  const handleCheckStudy = (e) => {
+    setStudyReg(e.target.value);
   };
+
 
   const regForm = async (e) => {
     e.preventDefault();
@@ -45,8 +42,11 @@ export const Register = () => {
         password: pwd,
         pseudo: pseudo,
         techList: techChecked.join(", "),
-        studyList: studyChecked.join(", "),
+        studyList: studyChecked,
       };
+
+      console.log(user)
+
 
       const res = await fetch(`${API_URL}/users`, {
         headers: {
@@ -62,7 +62,7 @@ export const Register = () => {
       setState(data);
 
     } catch (err) {
-      console.log(" " + err);
+      console.log(err);
     }
   };
 
@@ -161,23 +161,15 @@ export const Register = () => {
                   htmlFor="grid-techList">
                   Choisis tes technos préférées
                 </label>
-                <div className="grid grid-flow-col grid-col-rows auto-cols-max">
+                <div className="grid grid-rows-{n} auto-cols-max">
 
-                  {Object.keys(TECH_LIST).map((item, index) => (
-                    <div key={`tech-${index}`} className="flex items-center mr-4 pl-4 rounded border border-purple-200 ">
-                      <input
-                        id={`tech-${index}`}
-                        type="checkbox"
-                        value={item}
-                        onChange={handleCheckTech}
-                        name="bordered-checkbox"
-                        className="w-4 h-4 text-purple-600 bg-purple-100 rounded border-gray-300 focus:ring-purple-500"/>
-                      <label
-                        htmlFor={`tech-${index}`}
-                        className="py-4 ml-2 mr-2 w-3/5 text-sm font-medium text-gray-900 ">{TECH_LIST[item]}
-                      </label>
-                    </div>
-                  ))}
+                <MultiSelectFilter
+            className={"text-xs w-full"}
+            items={fromObjectListToSelectOptions(TECH_LIST)}
+            selected={techChecked}
+            setSelected={setTechReg}
+            placeholder={"Technologies"}
+          />
                 </div>
               </div>
             </div>
@@ -189,35 +181,59 @@ export const Register = () => {
                 <label
                   className="block uppercase mb-4 text-gray-700 text-xs font-bold mb-2"
                   htmlFor="grid-techList">
-                  Choisis ta filiaire
+                  Choisis ta filière
                 </label>
                 <div className="grid grid-flow-col grid-col-rows auto-cols-max">
-
+                  <select defaultValue={"Filière"} onChange={handleCheckStudy}>
+                    <option> Filière </option>
                   {Object.keys(STUDY_LIST).map((item, index) => (
-                    <div key={`study-${index}`} className="flex items-center mr-4 pl-4 rounded border border-purple-200 ">
-                      <input
-                        id={`study-${index}`}
-                        type="checkbox"
-                        value={item}
-                        onChange={handleCheckStudy}
-                        name="bordered-checkbox"
-                        className="w-4 h-4 text-purple-600 bg-purple-100 rounded border-gray-300 focus:ring-purple-500"/>
-                      <label
-                        htmlFor={`study-${index}`}
-                        className="py-4 ml-2 mr-2 w-3/5 text-sm font-medium text-gray-900 ">{STUDY_LIST[item]}
-                      </label>
-                    </div>
+                    <option key={index} valule={STUDY_LIST[item]}>
+                      {STUDY_LIST[item]}
+                    </option>
                   ))}
+                  </select>
+                  
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-wrap content-center -mx-3 mb-6">
-              <div>
-                <label htmlFor="">
 
+            <div
+              className="flex flex-wrap -mx-3 mb-6">
+              <div
+                className="w-full md:w-1/2 px-3 mb-6 md:mb-0x">
+                <label
+                  className="block uppercase mb-4 text-gray-700 text-xs font-bold mb-2"
+                  htmlFor="grid-techList">
+                  Choisis ta photo de profil
                 </label>
+                <div className="grid grid-cols-3 gap-4">
+                    
+                <div className=" flex w-16 h-16">
+                <img
+                  src="/images/1.png" 
+                />
+                </div>
+                <div className="w-16 h-16">
+                <img
+                  src="/images/2.png" 
+                />
+                </div>
+                <div className="w-16 h-16">
+                <img
+                  src="/images/3.png" 
+                />
+                </div>
+                      
+                  
+                </div>
               </div>
+            </div>
+
+
+
+            <div className="flex flex-wrap content-center -mx-3 mb-6">
+              
               { response?.status == 201 &&
                   <p className="text-green-500 text-lg italic mx-4 mb-3" > 
                     {"Inscris avec succès vous allez être redirigé"}
