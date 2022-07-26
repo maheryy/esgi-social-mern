@@ -5,7 +5,6 @@ const { createToken } = require("../lib/jwt");
 const router = new Router();
 
 router.post("/login", async (req, res, next) => {
-  console.log(12)
   try {
     const result = await User.findOne({
       where: {

@@ -16,16 +16,7 @@ export const Register = () => {
   const [response, setResponse] = useState("");
 
 
-  const handleCheckTech = (event) => {
-    let updatedList = [...techChecked];
-    if (event.target.checked) {
-      updatedList = [...techChecked, event.target.value];
-    } else {
-      updatedList.splice(techChecked.indexOf(event.target.value), 1);
-    }
-    setTechReg(updatedList);
-  };
-
+  
   const handleCheckStudy = (e) => {
     setStudyReg(e.target.value);
   };
@@ -44,9 +35,6 @@ export const Register = () => {
         techList: techChecked.join(", "),
         studyList: studyChecked,
       };
-
-      console.log(user)
-
 
       const res = await fetch(`${API_URL}/users`, {
         headers: {
@@ -201,7 +189,7 @@ export const Register = () => {
               
               { response?.status == 201 &&
                   <p className="text-green-500 text-lg italic mx-4 mb-3" > 
-                    {"Inscris avec succès vous allez être redirigé"}
+                    {"Inscrit avec succès"}
                   </p>}
                   { response?.status != 201 && response!= "" &&
                   <p className="text-red-500 text-lg bold italic mx-4 mb-3" > 
