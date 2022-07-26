@@ -13,7 +13,7 @@ router.post("/login", async (req, res, next) => {
     });
     if (!result) {
       res.status(401).json({
-        email: "Email inexistant",
+        email: "Identifiant incorrect",
       });
       return next();
     }

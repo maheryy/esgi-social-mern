@@ -1,48 +1,39 @@
 import { API_URL, STUDY_LIST, TECH_LIST } from "../../services/constants";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import MultiSelectFilter from "../../components/MultiSelectFilter";
+import { fromObjectListToSelectOptions } from "../../services/helpers";
 
 export const Register = () => {
 
   const [firstname, setFirstnameReg] = useState("");
-  const [lastname, setLastnameReg] = useState("");
   const [pseudo, setPseudoReg] = useState("");
   const [mail, setMailReg] = useState("");
   const [pwd, setPwdReg] = useState("");
   const [techChecked, setTechReg] = useState([]);
-  const [studyChecked, setStudyReg] = useState([]);
+  const [studyChecked, setStudyReg] = useState("");
+  const [state, setState] = useState("");
+  const [response, setResponse] = useState("");
 
-  const handleCheckTech = (event) => {
-    let updatedList = [...techChecked];
-    if (event.target.checked) {
-      updatedList = [...techChecked, event.target.value];
-    } else {
-      updatedList.splice(techChecked.indexOf(event.target.value), 1);
-    }
-    setTechReg(updatedList);
+
+  
+  const handleCheckStudy = (e) => {
+    setStudyReg(e.target.value);
   };
 
-  const handleCheckStudy = (event) => {
-    let updatedList2 = [...studyChecked];
-    if (event.target.checked) {
-      updatedList2 = [...studyChecked, event.target.value];
-    } else {
-      updatedList2.splice(studyChecked.indexOf(event.target.value), 1);
-    }
-    setStudyReg(updatedList2);
-  };
 
   const regForm = async (e) => {
     e.preventDefault();
     try {
 
+      
       const user = {
         firstname: firstname,
-        lastname: lastname,
-        pseudo: pseudo,
         email: mail,
         password: pwd,
+        pseudo: pseudo,
         techList: techChecked.join(", "),
-        studyList: studyChecked.join(", "),
+        studyList: studyChecked,
       };
 
       const res = await fetch(`${API_URL}/users`, {
@@ -53,12 +44,18 @@ export const Register = () => {
         body: JSON.stringify(user),
       });
 
-      // const data = await res.json();
+      const data = await res.json();
 
-    } catch (error) {
-      console.log(error);
+      setResponse(res)
+      setState(data);
+
+    } catch (err) {
+      console.log(err);
     }
   };
+
+  
+
 
   return (
     <>
@@ -75,7 +72,7 @@ export const Register = () => {
         <div className="w-full px-6 py-4 mt-6 overflow-hidden bg-white shadow-md sm:w-3/5 sm:rounded-lg">
           <form>
             <div className="flex flex-wrap -mx-3 mb-6 mt-3 ">
-              <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <div className="w-full px-3">
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                        htmlFor="grid-firstname">
                   Prenom
@@ -86,20 +83,11 @@ export const Register = () => {
                   type="text"
                   placeholder="firstname"
                   onChange={(e) => setFirstnameReg(e.target.value)}/>
-
+                  { state?.firstname == "Validation len on firstname failed" &&
+                  <p className="text-red-500 text-xs italic"> 
+                    { "Veuillez saisir un prenom valide de plus de 3 caracteres" }
+                  </p>}
                 {/* <p className="text-red-500 text-xs italic">Veuillez remplir ce champs s'il vous plaît.</p> */}
-              </div>
-              <div className="w-full md:w-1/2 px-3">
-                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                       htmlFor="grid-last-name">
-                  Nom
-                </label>
-                <input
-                  className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="grid-last-name"
-                  type="text"
-                  placeholder="Skrzypczyk"
-                  onChange={(e) => setLastnameReg(e.target.value)}/>
               </div>
             </div>
             <div
@@ -116,6 +104,10 @@ export const Register = () => {
                   type="text"
                   placeholder="pseudo"
                   onChange={(e) => setPseudoReg(e.target.value)}/>
+                  { state.pseudo == "Validation len on pseudo failed" &&
+                  <p className="text-red-500 text-xs italic"> 
+                    { "Veuillez renseigner un pseudo valide de plus 3 caractères" }
+                  </p>}
                 <label
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mt-6 mb-2"
                   htmlFor="grid-pseudo">
@@ -127,6 +119,10 @@ export const Register = () => {
                   type="email"
                   placeholder=""
                   onChange={(e) => setMailReg(e.target.value)}/>
+                  { state.email == "Validation isEmail on email failed" &&
+                  <p className="text-red-500 text-xs italic"> 
+                    { "Veuillez renseigner un email valide" }
+                  </p>}
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mt-6 mb-2"
                        htmlFor="grid-password">
                   Mot de passe
@@ -137,7 +133,11 @@ export const Register = () => {
                   type="password"
                   placeholder="******************"
                   onChange={(e) => setPwdReg(e.target.value)}/>
-                {/* <p className="text-gray-600 text-xs italic">Make it as long and as crazy as you'd like</p> */}
+                  { state?.password == "Validation len on password failed" &&
+                  <p className="text-red-500 text-xs italic"> 
+                    { "Veuillez renseigner un mot de passe de plus de 8 caractères" }
+                  </p>}
+                {/* <p className="text-gray-600 text-xs italic">  */}
               </div>
             </div>
             <div
@@ -149,23 +149,15 @@ export const Register = () => {
                   htmlFor="grid-techList">
                   Choisis tes technos préférées
                 </label>
-                <div className="grid grid-flow-col grid-col-rows auto-cols-max">
+                <div className="grid grid-rows-{n} auto-cols-max">
 
-                  {Object.values(TECH_LIST).map((item, index) => (
-                    <div key={`tech-${index}`} className="flex items-center mr-4 pl-4 rounded border border-purple-200 ">
-                      <input
-                        id={`tech-${index}`}
-                        type="checkbox"
-                        value={item}
-                        onChange={handleCheckTech}
-                        name="bordered-checkbox"
-                        className="w-4 h-4 text-purple-600 bg-purple-100 rounded border-gray-300 focus:ring-purple-500"/>
-                      <label
-                        htmlFor={`tech-${index}`}
-                        className="py-4 ml-2 mr-2 w-3/5 text-sm font-medium text-gray-900 ">{item}
-                      </label>
-                    </div>
-                  ))}
+                <MultiSelectFilter
+            className={"text-xs w-full"}
+            items={fromObjectListToSelectOptions(TECH_LIST)}
+            selected={techChecked}
+            setSelected={setTechReg}
+            placeholder={"Technologies"}
+          />
                 </div>
               </div>
             </div>
@@ -177,42 +169,40 @@ export const Register = () => {
                 <label
                   className="block uppercase mb-4 text-gray-700 text-xs font-bold mb-2"
                   htmlFor="grid-techList">
-                  Choisis ta filiaire
+                  Choisis ta filière
                 </label>
                 <div className="grid grid-flow-col grid-col-rows auto-cols-max">
-
-                  {Object.values(STUDY_LIST).map((item, index) => (
-                    <div key={`study-${index}`} className="flex items-center mr-4 pl-4 rounded border border-purple-200 ">
-                      <input
-                        id={`study-${index}`}
-                        type="checkbox"
-                        value={item}
-                        onChange={handleCheckStudy}
-                        name="bordered-checkbox"
-                        className="w-4 h-4 text-purple-600 bg-purple-100 rounded border-gray-300 focus:ring-purple-500"/>
-                      <label
-                        htmlFor={`study-${index}`}
-                        className="py-4 ml-2 mr-2 w-3/5 text-sm font-medium text-gray-900 ">{item}
-                      </label>
-                    </div>
+                  <select defaultValue={"Filière"} onChange={handleCheckStudy}>
+                    <option> Filière </option>
+                  {Object.keys(STUDY_LIST).map((item, index) => (
+                    <option key={index} valule={STUDY_LIST[item]}>
+                      {STUDY_LIST[item]}
+                    </option>
                   ))}
+                  </select>
+                  
                 </div>
               </div>
             </div>
 
             <div className="flex flex-wrap content-center -mx-3 mb-6">
-              <div>
-                <label htmlFor="">
-
-                </label>
-              </div>
+              
+              { response?.status == 201 &&
+                  <p className="text-green-500 text-lg italic mx-4 mb-3" > 
+                    {"Inscrit avec succès"}
+                  </p>}
+                  { response?.status != 201 && response!= "" &&
+                  <p className="text-red-500 text-lg bold italic mx-4 mb-3" > 
+                    {"Assurez-vous que tout les champs soient correctement remplis svp"}
+                  </p>}
               <button
                 type="submit"
                 onClick={regForm}
-                className="inline-block mx-3 px-7 py-3 bg-purple-500 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"
+                className="inline-block mx-3 px-7 py-3 bg-purple-500 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out w-full"
               >
                 S'inscrire
               </button>
+              
               <p className="text-sm font-semibold mx-3 mt-2 pt-1 mb-0">
                 Vous avez déjà un compte ?
                 <a
