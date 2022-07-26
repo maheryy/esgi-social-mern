@@ -7,8 +7,9 @@ const {
 } = require("../models/postgres");
 const router = new Router();
 const { Op } = require("sequelize");
+const { STATUS_CANCELLED } = require("../lib/constants");
 
-router.get("/",  async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     let result = await Conversation.findAll({
       order: [["updatedAt", "DESC"]],
@@ -54,13 +55,13 @@ router.get("/",  async (req, res, next) => {
     res.status(200).json(result);
     next();
   } catch (error) {
-    res.sendStatus(500);
     console.error(error);
+    res.sendStatus(500);
     next();
   }
 });
 
-router.post("/",  async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     const { receiverId } = req.body;
 
@@ -149,7 +150,7 @@ router.post("/",  async (req, res, next) => {
   }
 });
 
-router.get("/:id",  async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   try {
     const result = await Conversation.findOne({
       where: {
@@ -245,6 +246,10 @@ router.post("/message", async (req, res, next) => {
     });
 
     res.status(201).json(result);
+    res.sendEvent("new-message", {
+      from: req.user.id,
+      conversation: conversationId,
+    });
     next();
   } catch (error) {
     res.sendStatus(500);
@@ -253,7 +258,7 @@ router.post("/message", async (req, res, next) => {
   }
 });
 
-router.put("/message/:id",  async (req, res, next) => {
+router.put("/message/:id", async (req, res, next) => {
   try {
     if (!req.body?.content?.length) {
       res.sendStatus(400);
@@ -278,6 +283,10 @@ router.put("/message/:id",  async (req, res, next) => {
       next();
     } else {
       res.json(result);
+      res.sendEvent("edit-message", {
+        from: req.user.id,
+        conversation: result.conversationId,
+      });
       next();
     }
   } catch (error) {
@@ -287,7 +296,7 @@ router.put("/message/:id",  async (req, res, next) => {
   }
 });
 
-router.delete("/message/:id",  async (req, res, next) => {
+router.delete("/message/:id", async (req, res, next) => {
   try {
     const [affectedRows, [result]] = await Message.update(
       {
@@ -306,6 +315,10 @@ router.delete("/message/:id",  async (req, res, next) => {
       next();
     } else {
       res.json(result);
+      res.sendEvent("delete-message", {
+        from: req.user.id,
+        conversation: result.conversationId,
+      });
       next();
     }
   } catch (error) {

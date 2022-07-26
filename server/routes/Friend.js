@@ -164,8 +164,11 @@ router.post("/", async (req, res, next) => {
 
         friendship = updated;
       }
-
       res.status(isRenewal ? 201 : 200).json(friendship);
+      res.sendEvent("friend-request", {
+        from: req.user.id,
+        to: targetId
+      });
       return next();
     }
 
@@ -176,6 +179,10 @@ router.post("/", async (req, res, next) => {
     });
 
     res.status(201).json(result);
+    res.sendEvent("friend-request", {
+      from: req.user.id,
+      to: targetId
+    });
     next();
   } catch (error) {
     res.sendStatus(500);
@@ -214,6 +221,11 @@ router.put("/:id", async (req, res, next) => {
       next();
     } else {
       res.json(result);
+      res.sendEvent("friend-response", {
+        from: req.user.id,
+        to: status === STATUS_CANCELLED ? result.targetId : result.requestorId,
+        status: status,
+      });
       next();
     }
   } catch (error) {

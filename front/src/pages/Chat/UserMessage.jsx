@@ -2,8 +2,10 @@ import { useState, useRef, useCallback } from "react";
 import { API_URL } from "../../services/constants";
 import { MessageActions } from "../../services/reducers/message";
 import { getTimeFromDate } from "../../services/helpers";
+import { useAuthContext, useProtectedContext } from "../../services/hooks";
 
 export const UserMessage = ({ data, dispatch }) => {
+  const { token } = useAuthContext();
   const [editMode, setEditMode] = useState(false);
   const text = useRef();
 
@@ -90,12 +92,12 @@ export const UserMessage = ({ data, dispatch }) => {
     return (
       <>
         <span
-          className={"pt-1.5 px-3 text-xs font-light text-gray-300 " + (data.modifiedAt ? "" : "hidden")}>(modifié)</span>
+          className={"pt-1.5 px-3 text-xs font-light text-gray-300 " + (data.modifiedAt ? "" : "hidden")} title={`Modifié à ${getTimeFromDate(data.modifiedAt)}`}>(modifié)</span>
         <p className={"break-words w-full px-3 pb-1 " + (data.modifiedAt ? "pt-1" : "pt-3")}>{data.content}</p>
         <div
           className="text-xs font-light text-gray-300 w-fit px-2 pb-0.5 self-end flex justify-between flex items-center">
           <span className="">{getTimeFromDate(data.createdAt)}</span>
-          <span className={"ml-0.5 text-cyan-500 " + (data.readAt ? "" : "hidden")}>
+          <span className={"ml-0.5 text-cyan-500 " + (data.readAt ? "" : "hidden")} title={`Vu à ${getTimeFromDate(data.readAt)}`}>
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                      xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round"

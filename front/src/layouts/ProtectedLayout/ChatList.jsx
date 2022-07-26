@@ -4,9 +4,10 @@ import { API_URL } from "../../services/constants";
 import { useAuthContext, useProtectedContext } from "../../services/hooks";
 import { ChatActions } from "../../services/reducers/chat";
 import { SidebarChatItem } from "./SidebarChatItem";
+import { EventActions } from "../../services/reducers/event";
 
 export const ChatList = () => {
-  const { chats, dispatchChats, selectedChat, extendedSidebar } = useProtectedContext();
+  const { chats, dispatchChats, selectedChat, extendedSidebar, event } = useProtectedContext();
   const navigate = useNavigate();
   const { token } = useAuthContext();
 
@@ -29,7 +30,7 @@ export const ChatList = () => {
         handleError(error);
         console.error(error);
       });
-  }, []);
+  }, [event[EventActions.USER_NEW_MESSAGE]]);
 
   const removeChat = (chatId) => {
     fetch(`${API_URL}/chat/${chatId}`, {

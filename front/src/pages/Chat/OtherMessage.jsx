@@ -9,7 +9,7 @@ export const OtherMessage = ({ data }) => {
     return (
       <>
         <span
-          className={"pt-1.5 px-3 text-xs font-light text-gray-300 " + (data.modifiedAt ? "" : "hidden")}>(modifié)</span>
+          className={"pt-1.5 px-3 text-xs font-light text-gray-300 " + (data.modifiedAt ? "" : "hidden")} title={`Modifié à ${getTimeFromDate(data.modifiedAt)}`}>(modifié)</span>
         <p className={"break-words w-full px-3 pb-1 " + (data.modifiedAt ? "pt-1" : "pt-3")}>{data.content}</p>
         <div
           className="text-xs font-light text-gray-300 w-fit px-2 pb-0.5 self-end flex justify-between flex items-center">
