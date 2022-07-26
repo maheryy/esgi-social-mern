@@ -14,13 +14,13 @@ export const Register = () => {
   const [studyChecked, setStudyReg] = useState("");
   const [state, setState] = useState("");
   const [response, setResponse] = useState("");
+  const [picture, setPicture] = useState("");
 
 
   
   const handleCheckStudy = (e) => {
     setStudyReg(e.target.value);
   };
-
 
   const regForm = async (e) => {
     e.preventDefault();
@@ -34,6 +34,8 @@ export const Register = () => {
         pseudo: pseudo,
         techList: techChecked.join(", "),
         studyList: studyChecked,
+        pictureId: picture,
+
       };
 
       const res = await fetch(`${API_URL}/users`, {
@@ -181,6 +183,42 @@ export const Register = () => {
                   ))}
                   </select>
                   
+                </div>
+              </div>
+            </div>
+
+
+            <div
+              className="flex flex-wrap -mx-3 mb-6">
+                <label
+                  className="block uppercase mb-4 text-gray-700 text-xs font-bold mb-2"
+                  htmlFor="grid-techList">
+                  Choisis ta photo de profil
+                </label>
+              <div
+                className="w-full md:w-1/2 px-3 mb-6 md:mb-0x">
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="h-16 w-16">
+                    <input className=" "
+                    type="radio" name="photo" id="1" onChange={(e) => setPicture(e.target.id)} />
+                    <label htmlFor="1">
+                      <img src="/images/1.png"/>
+                    </label>
+                  </div>
+                  <div className="h-16 w-16">
+                  <input className=" "
+                    type="radio" name="photo" id="2" onChange={(e) => setPicture(e.target.id)} />
+                  <label htmlFor="2">
+                      <img src="/images/2.png"/>
+                    </label>
+                  </div>
+                  <div className="h-16 w-16">
+                  <input className=" "
+                    type="radio" name="photo" id="3" onChange={(e) => setPicture(e.target.id)} />
+                  <label htmlFor="3">
+                      <img src="/images/3.png"/>
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
