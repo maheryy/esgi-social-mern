@@ -197,41 +197,6 @@ export const Register = () => {
               </div>
             </div>
 
-
-            <div
-              className="flex flex-wrap -mx-3 mb-6">
-              <div
-                className="w-full md:w-1/2 px-3 mb-6 md:mb-0x">
-                <label
-                  className="block uppercase mb-4 text-gray-700 text-xs font-bold mb-2"
-                  htmlFor="grid-techList">
-                  Choisis ta photo de profil
-                </label>
-                <div className="grid grid-cols-3 gap-4">
-                    
-                <div className=" flex w-16 h-16">
-                <img
-                  src="/images/1.png" 
-                />
-                </div>
-                <div className="w-16 h-16">
-                <img
-                  src="/images/2.png" 
-                />
-                </div>
-                <div className="w-16 h-16">
-                <img
-                  src="/images/3.png" 
-                />
-                </div>
-                      
-                  
-                </div>
-              </div>
-            </div>
-
-
-
             <div className="flex flex-wrap content-center -mx-3 mb-6">
               
               { response?.status == 201 &&
