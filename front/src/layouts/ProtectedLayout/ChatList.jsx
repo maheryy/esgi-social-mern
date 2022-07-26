@@ -25,6 +25,8 @@ export const ChatList = () => {
         });
       })
       .catch((error) => {
+
+        handleError(error);
         console.error(error);
       });
   }, []);
@@ -45,6 +47,7 @@ export const ChatList = () => {
         }
       })
       .catch((error) => {
+        handleError(error);
         console.error(error);
       });
   };

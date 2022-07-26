@@ -23,6 +23,7 @@ export const StudentList = () => {
         setStudents(res);
       })
       .catch((error) => {
+        handleError(error);
         console.error(error);
       });
   }, [term]);
@@ -41,6 +42,7 @@ export const StudentList = () => {
         setStudents(old => old.map(el => el.id === id ? { ...el, relationship: res } : el));
       })
       .catch((error) => {
+        handleError(error);
         console.error(error);
       });
   }, []);

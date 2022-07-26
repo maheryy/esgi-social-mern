@@ -17,6 +17,7 @@ export const InvitationList = () => {
         setUsers(res);
       })
       .catch((error) => {
+        handleError(error);
         console.error(error);
       });
 
@@ -36,6 +37,7 @@ export const InvitationList = () => {
         setUsers(old => old.filter(el => el.relationship.id !== relationshipId));
       })
       .catch((error) => {
+        handleError(error);
         console.error(error);
       });
   };

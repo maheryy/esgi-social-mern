@@ -74,7 +74,10 @@ router.put("/:id", checkAuth ,async (req, res, next) => {
         id: parseInt(req.params.id, 10),
       },
       returning: true,
+      individualHooks: true,
     });
+    req.body.password = result.dataValues.password
+    console.log(result);
     if (!nbLines) {
       res.sendStatus(404);
       next();

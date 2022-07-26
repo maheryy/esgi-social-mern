@@ -43,6 +43,7 @@ function Dashboard() {
                 setLogs(res)
             })
             .catch((error) => {
+                handleError(error);
                 console.error(error);
             });
     }, [])

@@ -21,6 +21,7 @@ function MessageEdit() {
             setMessage(res)
         })
         .catch((error) => {
+            handleError(error);
             console.error(error);
         });
     }, [])

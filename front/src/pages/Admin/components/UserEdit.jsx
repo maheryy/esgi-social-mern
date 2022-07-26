@@ -23,6 +23,7 @@ function UserEdit() {
             setUser(res)
         })
         .catch((error) => {
+            handleError(error);
             console.error(error);
         });
     }, [])
