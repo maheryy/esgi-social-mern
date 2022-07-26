@@ -1,6 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("./db");
 const bcryptjs = require("bcryptjs");
+const { SMALLINT } = require("sequelize");
 
 const User = sequelize.define("user", {
   firstname: {
@@ -57,6 +58,11 @@ const User = sequelize.define("user", {
     defaultValue: false,
     allowNull: false,
   },
+  pictureId:{
+    type : DataTypes.STRING,
+    allowNull: true,
+    defaultValue : "0",
+  }
 });
 
 User.addHook("beforeCreate", async (user) => {
