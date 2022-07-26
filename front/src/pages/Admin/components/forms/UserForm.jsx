@@ -22,6 +22,7 @@ function UserForm( { response, setResponse } ) {
             setUser(res)
         })
         .catch((error) => {
+            handleError(error);
             console.error(error);
         });
     }, [])

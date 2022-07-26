@@ -62,6 +62,7 @@ function CreateForm() {
                     .then((res) => {
                         res.json()
                     }).catch((error) => {
+                        handleError(error);
                         console.error(error);
                     }).finally(() => {
                         setSubmitting(false);

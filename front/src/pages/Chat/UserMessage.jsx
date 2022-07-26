@@ -31,6 +31,7 @@ export const UserMessage = ({ data, dispatch }) => {
         setEditMode(false);
       })
       .catch((error) => {
+        handleError(error);
         console.error(error);
       });
   }, []);

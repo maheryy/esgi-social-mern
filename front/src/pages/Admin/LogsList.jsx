@@ -19,17 +19,19 @@ function LogsList() {
                 setLogs(res)
             })
             .catch((error) => {
+                handleError(error);
                 console.error(error);
             });
     }, [])
     const fetchClientErrors = useCallback(() => {
-        fetch(`${API_URL}/client-errors?perPage=100`)
+        fetch(`${API_URL}/client-errors?perPage=20`)
             .then((res) => res.json())
             .then((res) => {
                 console.log(res)
                 setClientErrors(res)
             })
             .catch((error) => {
+                handleError(error);
                 console.error(error);
             });
     }, [])
@@ -41,15 +43,15 @@ function LogsList() {
             </div>
             <div className="text-left overflow-x-auto relative mx-5 my-5">
                 <p>Logs API:</p>
-                <table>
-                    <thead>
+                <table className='table-auto text-sm text-left'>
+                    <thead className='text-xs uppercase bg-gray-50 dark:bg-gray-700 text-white'>
                         <tr>
-                            <th>ID</th>
-                            <th>Date</th>
-                            <th>Method</th>
-                            <th>Status code</th>
-                            <th>URL</th>
-                            <th>Body</th>
+                            <th className="py-3 px-6">ID</th>
+                            <th className="py-3 px-6">Date</th>
+                            <th className="py-3 px-6">Method</th>
+                            <th className="py-3 px-6">Status code</th>
+                            <th className="py-3 px-6">URL</th>
+                            <th className="py-3 px-6">Body</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,12 +59,12 @@ function LogsList() {
                             logs.map((log) => {
                                 return (
                                     <tr>
-                                        <td>{log._id}</td>
-                                        <td>{log.timestamp}</td>
-                                        <td>{log.req.method}</td>
-                                        <td>{log.res.statusCode}</td>
-                                        <td>{log.req.url}</td>
-                                        <td>{log.req?.body ? JSON.stringify(log.req.body, null, 2) :''}</td>
+                                        <td className="border px-6 py-4">{log._id}</td>
+                                        <td className="border px-6 py-4">{log.timestamp}</td>
+                                        <td className="border px-6 py-4">{log.req.method}</td>
+                                        <td className="border px-6 py-4">{log.res.statusCode}</td>
+                                        <td className="border px-6 py-4">{log.req.url}</td>
+                                        <td className="border px-6 py-4">{log.req?.body ? JSON.stringify(log.req.body, null, 2) :''}</td>
                                     </tr>
                                 )
                             })
@@ -71,13 +73,13 @@ function LogsList() {
                 </table>
 
                 <p>Logs Client:</p>
-                <table>
-                    <thead>
+                <table className='table-auto text-sm text-left'>
+                    <thead className='text-xs uppercase bg-gray-50 dark:bg-gray-700 text-white'>
                         <tr>
-                            <th>Erreur</th>
-                            <th>Date</th>
-                            <th>Message</th>
-                            <th>Stack</th>
+                            <th className="py-3 px-6">Erreur</th>
+                            <th className="py-3 px-6">Date</th>
+                            <th className="py-3 px-6">Message</th>
+                            <th className="py-3 px-6">Stack</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -85,10 +87,10 @@ function LogsList() {
                             clientErrors.map((log) => {
                                 return (
                                     <tr>
-                                        <td>{log._id}</td>
-                                        <td>{log.timestamp}</td>
-                                        <td>{log.message}</td>
-                                        <td>{log.stack}</td>
+                                        <td className="border px-6 py-4">{log._id}</td>
+                                        <td className="border px-6 py-4">{log.timestamp}</td>
+                                        <td className="border px-6 py-4">{log.message}</td>
+                                        <td className="border px-6 py-4">{log.stack}</td>
                                     </tr>
                                 )
                             })

@@ -21,6 +21,7 @@ export const FriendList = () => {
         setFriends(res);
       })
       .catch((error) => {
+        handleError(error);
         console.error(error);
       });
   }, []);
@@ -34,6 +35,7 @@ export const FriendList = () => {
         setFriends(old => old.filter(el => el.relationship.id !== relationshipId));
       })
       .catch((error) => {
+        handleError(error);
         console.error(error);
       });
   };

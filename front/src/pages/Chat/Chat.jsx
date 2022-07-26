@@ -7,6 +7,7 @@ import { Header } from "../../layouts/ProtectedLayout/Header";
 import { UserMessage } from "./UserMessage";
 import { OtherMessage } from "./OtherMessage";
 import Picker from "emoji-picker-react";
+import { handleError } from "../../services/errorHandler";
 
 export const Chat = () => {
   const message = useRef();
@@ -34,6 +35,7 @@ export const Chat = () => {
         dispatch({ type: MessageActions.LOAD, payload: res.messages });
       })
       .catch((error) => {
+        handleError(error)
         console.error(error);
         navigate("/friends", { replace: true });
       });

@@ -17,6 +17,7 @@ function MessagesList() {
             setMessages(res)
         })
         .catch((error) => {
+            handleError(error);
             console.error(error);
         });
     }, [])

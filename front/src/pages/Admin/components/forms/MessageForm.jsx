@@ -23,6 +23,7 @@ function MessageForm() {
             setMessage(res)
         })
         .catch((error) => {
+            handleError(error);
             console.error(error);
         })
     }, [])
