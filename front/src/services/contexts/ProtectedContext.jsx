@@ -3,6 +3,7 @@ import chatReducer from "../reducers/chat";
 import { useAuthContext } from "../hooks";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../constants";
+import eventReducer, { EventActions, store } from "../reducers/event";
 
 export const ProtectedContext = createContext();
 
@@ -10,6 +11,7 @@ const ProtectedProvider = ({ children }) => {
   const [chats, dispatchChats] = useReducer(chatReducer, []);
   const [extendedSidebar, setExtendedSidebar] = useState(true);
   const [selectedChat, setSelectedChat] = useState(0);
+  const [event, dispatchEvent] = useReducer(eventReducer, store);
   const { loggedUser } = useAuthContext();
   const navigate = useNavigate();
 
@@ -40,23 +42,43 @@ const ProtectedProvider = ({ children }) => {
   }, []);
 
   const onFriendRequest = (e) => {
-    console.log(e);
+    const data = JSON.parse(e.data);
+
+    if (data.to === loggedUser.id) {
+      dispatchEvent({ type: EventActions.USER_FRIEND_REQUEST });
+    }
   };
 
   const onFriendResponse = (e) => {
-    console.log(e);
+    const data = JSON.parse(e.data);
+
+    if (data.to === loggedUser.id) {
+      dispatchEvent({ type: EventActions.USER_FRIEND_RESPONSE });
+    }
   };
 
   const onNewMessage = (e) => {
-    console.log(e);
+    const data = JSON.parse(e.data);
+
+    // if (data.to === loggedUser.id) {
+    dispatchEvent({ type: EventActions.USER_NEW_MESSAGE });
+    // }
   };
 
   const onEditMessage = (e) => {
-    console.log(e);
+    const data = JSON.parse(e.data);
+
+    // if (data.to === loggedUser.id) {
+    dispatchEvent({ type: EventActions.USER_EDIT_MESSAGE });
+    // }
   };
 
   const onDeleteMessage = (e) => {
-    console.log(e);
+    const data = JSON.parse(e.data);
+
+    // if (data.to === loggedUser.id) {
+    dispatchEvent({ type: EventActions.USER_DELETE_MESSAGE });
+    // }
   };
 
   return (
@@ -68,9 +90,10 @@ const ProtectedProvider = ({ children }) => {
         setExtendedSidebar,
         selectedChat,
         setSelectedChat,
+        event
       }}
     >
-      {children}
+      {loggedUser && children}
     </ProtectedContext.Provider>
   );
 };

@@ -164,8 +164,7 @@ router.post("/", async (req, res, next) => {
 
         friendship = updated;
       }
-
-      res.status(isRenewal ? 201 : 200).json(friendship).end();
+      res.status(isRenewal ? 201 : 200).json(friendship);
       res.sendEvent("friend-request", {
         from: req.user.id,
         to: targetId
@@ -180,6 +179,10 @@ router.post("/", async (req, res, next) => {
     });
 
     res.status(201).json(result);
+    res.sendEvent("friend-request", {
+      from: req.user.id,
+      to: targetId
+    });
     next();
   } catch (error) {
     res.sendStatus(500);

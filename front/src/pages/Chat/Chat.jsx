@@ -7,12 +7,13 @@ import { Header } from "../../layouts/ProtectedLayout/Header";
 import { UserMessage } from "./UserMessage";
 import { OtherMessage } from "./OtherMessage";
 import Picker from "emoji-picker-react";
+import { EventActions } from "../../services/reducers/event";
 import { handleError } from "../../services/errorHandler";
 
 export const Chat = () => {
   const message = useRef();
   const scrollView = useRef();
-  const { setSelectedChat } = useProtectedContext();
+  const { setSelectedChat, event } = useProtectedContext();
   const [messages, dispatch] = useReducer(messageReducer, []);
   const { chatId } = useParams();
   const navigate = useNavigate();
@@ -25,7 +26,6 @@ export const Chat = () => {
     message.current.value = "";
     message.current.focus();
     setSelectedChat(parseInt(chatId, 10));
-
     fetch(`${API_URL}/chat/${chatId}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -39,7 +39,7 @@ export const Chat = () => {
         console.error(error);
         navigate("/friends", { replace: true });
       });
-  }, [chatId]);
+  }, [chatId, event[EventActions.USER_NEW_MESSAGE], event[EventActions.USER_EDIT_MESSAGE], event[EventActions.USER_DELETE_MESSAGE]]);
 
   useEffect(() => {
     if (countOldMessages !== messages.length) {
@@ -127,7 +127,7 @@ export const Chat = () => {
                 </svg>
               </span>
               <div className={"absolute -top-5 -translate-y-full left-0 " + (emojiPanel ? "" : "hidden")}>
-                <Picker onEmojiClick={emojiHandler}/>
+                {emojiPanel && <Picker native={true} onEmojiClick={emojiHandler}/>}
               </div>
             </div>
             <input
