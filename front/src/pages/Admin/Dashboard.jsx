@@ -12,19 +12,23 @@ import {
     XAxis,
     YAxis,
     CartesianGrid,
-    Legend,
-    ResponsiveContainer
 } from 'recharts';
+import {useAdminContext} from "../../services/hooks";
+import {EventActions} from "../../services/reducers/event";
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#F261E5', '#02F7F3', '#8502F7'];
 
 function Dashboard() {
 
     const [logs, setLogs] = useState(false)
+    const {event} = useAdminContext()
 
     useEffect(() => {
         fetchLogs()
-    }, [])
+
+    }, [event[EventActions.ADMIN_DASHBOARD_UPDATE]])
+
+
 
     const fetchLogs = useCallback(() => {
         fetch(`${API_URL}/access-logs/dashboard`)
@@ -54,14 +58,13 @@ function Dashboard() {
                         value: day.totalReq
                     }
                 })
-                console.log(res)
                 setLogs(res)
             })
             .catch((error) => {
                 handleError(error);
                 console.error(error);
             });
-    }, [])
+    }, [event])
 
     return (
         <div>
