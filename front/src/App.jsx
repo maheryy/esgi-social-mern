@@ -1,45 +1,60 @@
-import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-function App() {
-  const [count, setCount] = useState(0)
+import Admin from "./pages/Admin/Admin";
+import UsersList from "./pages/Admin/UsersList";
+import MessagesList from "./pages/Admin/MessagesList";
+import LogsList from "./pages/Admin/LogsList";
+import "./App.css";
+import Analytic from "./pages/Analytic";
+import Chat from "./pages/Chat";
+import Log from "./pages/Log";
+import Login from "./pages/Login";
+import Profile from "./pages/Profile";
+import Register from "./pages/Register";
+import Home from "./pages/Home";
+import ProtectedLayout from "./layouts/ProtectedLayout";
+import ProtectedAdmin from "./layouts/ProtectedAdmin";
+import AuthProvider from "./services/contexts/AuthContext";
+import Friend from "./pages/Friend";
+import Discover from "./pages/Discover";
+import UserEdit from "./pages/Admin/components/UserEdit";
+import UserCreate from "./pages/Admin/components/UserCreate";
+import MessageEdit from "./pages/Admin/components/MessageEdit";
+import Dashboard from "./pages/Admin/Dashboard";
+import AdminProvider from "./services/contexts/AdminContext";
 
+const App = () => { 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.jsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
-  )
-}
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/analytics" element={<Analytic/>}/>
+          <Route path="/register" element={<Register/>}/>
+          <Route path="/login" element={<Login/>}/>
+          
+          <Route element={<ProtectedLayout/>}>
+            <Route path="/profile" element={<Profile/>}/>
+            <Route path="/discover" element={<Discover/>}/>
+            <Route path="/friends/*" element={<Friend/>}/>
+            <Route path="/chat/:chatId" element={<Chat/>}/>
+          </Route>
 
-export default App
+          <Route path="/admin" element={<ProtectedAdmin/>}>
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="user-list" element={<UsersList />} />
+              <Route path="user-list/:id" element={<UserEdit />} />
+              <Route path="user-list/add" element={<UserCreate />} />
+              <Route path="message-list" element={<MessagesList />} />
+              <Route path="message-list/:id" element={<MessageEdit />} />
+              <Route path="logs-list" element={<LogsList />} />
+          </Route>
+        
+          
+      </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  );
+};
+
+export default App;

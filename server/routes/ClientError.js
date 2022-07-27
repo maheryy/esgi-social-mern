@@ -14,6 +14,7 @@ router.get("/", async (req, res, next) => {
     try {
         const { page = 1, perPage = 10, ...criteria } = req.query;
         const result = await ClientError.find(criteria)
+            .sort({ timestamp: -1 })
             .limit(perPage)
             .skip((page - 1) * perPage);
         res.json(result);

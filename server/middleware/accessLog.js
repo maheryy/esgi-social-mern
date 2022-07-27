@@ -4,8 +4,11 @@ const { AccessLog } = require("../models/mongo");
 module.exports = async (req, res, next) => {
     try {
         const accessLog = AccessLogMapper(req, res);
-        console.log(accessLog);
         await AccessLog.create(accessLog);
+
+        res.sendEvent("dashboard",{
+            date: new Date().toISOString(),
+        });
         next();
     } catch (error) {
         console.error(error);
