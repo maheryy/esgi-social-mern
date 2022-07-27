@@ -1,3 +1,5 @@
+import { STUDY_LIST } from "../services/constants";
+
 const FriendListItem = ({ data, children }) => {
   return (
     <li className="border-t border-gray-700 cursor-pointer w-full">
@@ -12,11 +14,11 @@ const FriendListItem = ({ data, children }) => {
           </span>
           <div className="px-2 flex flex-col leading-6 justify-start items-start w-full">
             <span className="font-semibold">
-              {data.pseudo}
+              {data.pseudo} {data.study ? `(${STUDY_LIST[data.study]})` : ''}
             </span>
-            <span className="hidden sm:block text-xs font-thin truncate w-32 sm:w-64 hover:text-clip">
-                Lorem ipsum dolor sit amet
-            </span>
+            {/*<span className="hidden sm:block text-xs font-thin truncate w-32 sm:w-64 hover:text-clip">*/}
+            {/*    Lorem ipsum dolor sit amet*/}
+            {/*</span>*/}
           </div>
         </div>
         <div className="w-3/12 flex items-center justify-end">

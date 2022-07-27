@@ -43,10 +43,9 @@ export const Register = () => {
         email: mail,
         password: pwd,
         pseudo: pseudo,
-        techList: techChecked.join(", "),
+        techList: techChecked.length ? `;${techChecked.join(";")};` : [],
         studyList: studyChecked,
         pictureId: picture,
-
       };
 
       const res = await fetch(`${API_URL}/security/register`, {

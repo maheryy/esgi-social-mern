@@ -73,11 +73,27 @@ router.get("/", async (req, res, next) => {
 router.get("/discover", async (req, res, next) => {
   try {
     let criteria = {};
+    let { query, techs, studies } = req.query;
+    techs = techs.length ? `;(${techs.replaceAll(",", "|")});` : null;
+    studies = studies.length ? `(${studies.replaceAll(",", "|")})` : null;
 
-    if (req.query.query) {
-      criteria.pseudo = {
-        [Op.iLike]: `%${req.query.query}%`
-      };
+    console.log(techs, studies);
+    if (query) {
+      criteria.pseudo = { [Op.iLike]: `%${query}%` };
+    }
+
+    if (techs && studies) {
+      criteria[Op.and] = [
+        { techList: { [Op.regexp]: techs } },
+        { studyList: { [Op.regexp]: studies } },
+      ];
+    } else {
+      if (techs) {
+        criteria.techList = { [Op.regexp]: techs };
+      }
+      if (studies) {
+        criteria.studyList = { [Op.regexp]: studies };
+      }
     }
 
     let result = await User.findAll({
@@ -119,6 +135,7 @@ router.get("/discover", async (req, res, next) => {
       firstname: row.firstname,
       lastname: row.lastname,
       pseudo: row.pseudo,
+      study: row.studyList,
       relationship: row.requestors.length
         ? (row.requestors[0])
         : (row.targets.length ? row.targets[0] : null)
