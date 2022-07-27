@@ -5,7 +5,7 @@ import { useMemo } from "react";
 
 export const ActionButton = ({ relationship, action }) => {
   const { loggedUser } = useAuthContext();
-  const isUserRequestor = useMemo(() => relationship?.requestorId === loggedUser.id);
+  const isUserRequestor = useMemo(() => relationship?.requestorId === loggedUser.id, [loggedUser]);
 
   switch (relationship?.status) {
     case STATUS_HOLD:

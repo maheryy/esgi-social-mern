@@ -5,6 +5,7 @@ import { useAuthContext, useProtectedContext } from "../../services/hooks";
 import { ChatActions } from "../../services/reducers/chat";
 import { SidebarChatItem } from "./SidebarChatItem";
 import { EventActions } from "../../services/reducers/event";
+import { handleError } from "../../services/errorHandler";
 
 export const ChatList = () => {
   const { chats, dispatchChats, selectedChat, extendedSidebar, event } = useProtectedContext();
@@ -22,6 +23,7 @@ export const ChatList = () => {
           payload: res.map((item) => ({
             id: item.id,
             label: item.users.map((user) => user.pseudo).join(", "),
+            pictureId: item.users[0].pictureId,
           }))
         });
       })

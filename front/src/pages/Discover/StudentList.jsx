@@ -6,6 +6,7 @@ import MultiSelectFilter from "../../components/MultiSelectFilter";
 import FriendListItem from "../../components/FriendListItem";
 import { ActionButton } from "./ActionButton";
 import { useAuthContext } from "../../services/hooks";
+import { handleError } from "../../services/errorHandler";
 
 export const StudentList = () => {
   const [students, setStudents] = useState([]);
@@ -15,7 +16,13 @@ export const StudentList = () => {
   const { token } = useAuthContext();
 
   useEffect(() => {
-    fetch(`${API_URL}/friends/discover?query=${term.trim()}`, {
+    const queryParams = new URLSearchParams({
+      query: term.trim(),
+      techs: filterTech,
+      studies: filterStudy
+    });
+
+    fetch(`${API_URL}/friends/discover?${queryParams.toString()}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -26,7 +33,8 @@ export const StudentList = () => {
         handleError(error);
         console.error(error);
       });
-  }, [term]);
+
+  }, [term, filterStudy, filterTech]);
 
   const sendFriendRequest = useCallback((id) => {
     fetch(`${API_URL}/friends`, {

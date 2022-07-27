@@ -15,7 +15,6 @@ function LogsList() {
         fetch(`${API_URL}/access-logs?perPage=20`)
             .then((res) => res.json())
             .then((res) => {
-                console.log(res)
                 setLogs(res)
             })
             .catch((error) => {

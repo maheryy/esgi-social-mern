@@ -7,12 +7,16 @@ import {
   Link,
   useNavigate
 } from "react-router-dom";
+import { useAuthContext } from "../../services/hooks";
 
 function Sidebar() {
   const navigate = useNavigate();
+  const { setLoggedUser } = useAuthContext();
+
   const logout = () => {
     localStorage.clear();
-    navigate("/Login", { replace: true });
+    setLoggedUser(null);
+    navigate("/login", { replace: true });
   };
 
   return (
