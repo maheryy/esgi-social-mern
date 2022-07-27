@@ -1,7 +1,6 @@
 import {Link} from "react-router-dom";
 
 export const Home = () => {
-    document.body.classList.add("bg-indigo-900");
     return (
         <div className="h-full bg-indigo-900">
             <div className="w-screen bg-indigo-900">
