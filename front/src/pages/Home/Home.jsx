@@ -2,7 +2,7 @@ import {Link} from "react-router-dom";
 
 export const Home = () => {
     return (
-        <div className="h-full bg-indigo-900">
+        <div className="h-screen bg-indigo-900">
             <div className="w-screen bg-indigo-900">
                 <header>
                     <nav className="h-16 flex flex-row items-center justify-between pr-4 pl-4 justify-end">

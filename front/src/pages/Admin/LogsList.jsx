@@ -46,7 +46,6 @@ function LogsList() {
                 <table className='table-auto text-sm text-left'>
                     <thead className='text-xs uppercase bg-gray-50 dark:bg-gray-700 text-white'>
                         <tr>
-                            <th className="py-3 px-6">ID</th>
                             <th className="py-3 px-6">Date</th>
                             <th className="py-3 px-6">Method</th>
                             <th className="py-3 px-6">Status code</th>
@@ -59,7 +58,6 @@ function LogsList() {
                             logs.map((log) => {
                                 return (
                                     <tr>
-                                        <td className="border px-6 py-4">{log._id}</td>
                                         <td className="border px-6 py-4">{log.timestamp}</td>
                                         <td className="border px-6 py-4">{log.req.method}</td>
                                         <td className="border px-6 py-4">{log.res.statusCode}</td>
