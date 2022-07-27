@@ -4,20 +4,29 @@ import {
     useCallback,
     } from 'react';
 import { API_URL } from "../../../../services/constants/index.js";
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import ArrayLoader from '../ArrayLoader'
 import { Field, Formik } from 'formik';
+import { useAuthContext } from '../../../../services/hooks';
 
 function MessageForm() {
 
     const params = useParams();
     const [message, setMessage] = useState()
     const [response, setResponse] = useState()
+    const { token } = useAuthContext();
+    const navigate = useNavigate();
 
     useEffect(() => { fetchMessage() }, [])
 
     const fetchMessage = useCallback(() => {
-        fetch(`${API_URL}/messages/${params.id}`)
+        fetch(`${API_URL}/messages/${params.id}`,
+        {
+            headers: {
+                'Authorization': `Bearer ${token}`
+                }
+        }
+)
         .then((res) => res.json())
         .then((res) => {
             setMessage(res)
@@ -43,6 +52,7 @@ function MessageForm() {
                             method: 'PUT',
                             headers: {
                                 'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
                             },
                             body: JSON.stringify(values),
                         })
@@ -52,7 +62,7 @@ function MessageForm() {
                             console.error(error);
                         }).finally(() => {
                             setSubmitting(false);
-                            navigate("/admin/messages-list");
+                            navigate("/admin/message-list");
                         }
                         )
                     }
@@ -90,7 +100,7 @@ function MessageForm() {
                                 </div>
                             </div>
                             <button type="submit" disabled={isSubmitting} className="shadow bg-indigo-500 hover:bg-indigo-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">
-                                Valider la plainte
+                                Signaler
                             </button>
                         </form>
                     )}

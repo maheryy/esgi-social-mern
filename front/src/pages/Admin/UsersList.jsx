@@ -3,15 +3,21 @@ import ListComponent from './components/ListComponent'
 import ArrayLoader from './components/ArrayLoader'
 import { API_URL } from "../../services/constants/index.js";
 import { useCallback } from 'react';
+import { useAuthContext } from "../../services/hooks"
 
 function UsersList() {
 
     const [users, setUsers] = useState(false)
+    const { token } = useAuthContext()
 
     useEffect(() => { fetchUsers() }, [])
 
     const fetchUsers = useCallback(() => {
-        fetch(`${API_URL}/users`)
+        fetch(`${API_URL}/users`,
+            {
+                headers: 
+                {'Authorization': `Bearer ${token}`}
+            })
         .then((res) => res.json())
         .then((res) => {
             setUsers(res)
@@ -29,7 +35,7 @@ function UsersList() {
             </div>
             <div className="flex justify-start">
                 <button className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded ml-5">
-                    <a href="/admin/users-list/add">Ajouter un utilisateur</a>
+                    <a href="/admin/user-list/add">Ajouter un utilisateur</a>
                 </button>
             </div>
             <div className="ml-5 my-3">

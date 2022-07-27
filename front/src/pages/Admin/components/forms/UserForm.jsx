@@ -7,16 +7,25 @@ import { API_URL } from "../../../../services/constants/index.js";
 import { Formik } from 'formik';
 import { useParams } from 'react-router-dom';
 import ArrayLoader from '../ArrayLoader'
+import { useAuthContext, useProtectedContext } from '../../../../services/hooks/index.js';
 
 function UserForm( { response, setResponse } ) {
 
     const params = useParams();
     const [user, setUser] = useState()
+    const { token } = useAuthContext();
 
     useEffect(() => { fetchUser() }, [])
 
     const fetchUser = useCallback(() => {
-        fetch(`${API_URL}/users/${params.id}`)
+        fetch(`${API_URL}/users/${params.id}`,
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
         .then((res) => res.json())
         .then((res) => {
             setUser(res)
@@ -41,6 +50,7 @@ function UserForm( { response, setResponse } ) {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
                     },
                     body: JSON.stringify(values),
                 })

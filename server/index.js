@@ -29,10 +29,10 @@ app.get("/sse", (req, res, next) => {
 
 app.use("/client-errors", ClientErrorsRouter);
 app.use("/access-logs", AccessLogsRouter);
-app.use("/users", UserRouter);
+app.use("/users", checkAuth, UserRouter);
 app.use("/chat", checkAuth, ChatRouter);
 app.use("/friends", checkAuth, FriendRouter);
-app.use("/messages", MessageRouter);
+app.use("/messages", checkAuth, MessageRouter);
 app.use("/security", SecurityRouter);
 app.use(accessLog);
 

@@ -66,7 +66,7 @@ function CreateForm() {
                         console.error(error);
                     }).finally(() => {
                         setSubmitting(false);
-                        navigate("/admin/users-list");
+                        navigate("/admin/user-list");
                     }
                     )
                 }}
