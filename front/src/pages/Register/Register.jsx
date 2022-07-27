@@ -83,7 +83,7 @@ export const Register = () => {
                   className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="grid-firstname"
                   type="text"
-                  placeholder="firstname"
+                  placeholder="Yves"
                   onChange={(e) => setFirstnameReg(e.target.value)}/>
                   { state?.firstname == "Validation len on firstname failed" &&
                   <p className="text-red-500 text-xs italic"> 
@@ -231,7 +231,7 @@ export const Register = () => {
                   </p>}
                   { response?.status != 201 && response!= "" &&
                   <p className="text-red-500 text-lg bold italic mx-4 mb-3" > 
-                    {"Assurez-vous que tout les champs soient correctement remplis svp"}
+                    {"Assurez-vous que tout les champs soient correctement renseignés"}
                   </p>}
               <button
                 type="submit"
