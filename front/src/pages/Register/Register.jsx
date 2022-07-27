@@ -38,7 +38,7 @@ export const Register = () => {
 
       };
 
-      const res = await fetch(`${API_URL}/users`, {
+      const res = await fetch(`${API_URL}/security/register`, {
         headers: {
           "Content-Type": "application/json"
         },
