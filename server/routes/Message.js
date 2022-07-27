@@ -18,11 +18,8 @@ router.get("/", checkAuth, async (req, res, next) => {
   try {
     const { page = 1, perPage = 10, ...criteria } = req.query;
     const result = await Message.findAll({
-      attributes: ["id", "content", "readAt", "createdAt", "userId", "conversationId"],
-      where: {
-        isModerated: true
-      },
-      order: [["createdAt", "DESC"]],
+      attributes: ["id", "content", "readAt", "createdAt", "userId", "isModerated","conversationId"],
+      order: [["isModerated", "DESC"]],
       limit: perPage,
       offset: (page - 1) * perPage
     });

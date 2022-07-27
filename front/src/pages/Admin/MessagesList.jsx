@@ -3,15 +3,21 @@ import ListComponent from './components/ListComponent'
 import ArrayLoader from './components/ArrayLoader'
 import { API_URL } from "../../services/constants/index.js";
 import { useCallback } from 'react';
+import { useAuthContext } from "../../services/hooks"
 
 function MessagesList() {
 
     const [messages, setMessages] = useState(false)
+    const { token } = useAuthContext()
 
     useEffect(() => { fetchMessages() }, [])
 
     const fetchMessages = useCallback(() => {
-        fetch(`${API_URL}/messages`)
+        fetch(`${API_URL}/messages`,
+        {
+            headers:
+            {'Authorization': `Bearer ${token}`}
+            })
         .then((res) => res.json())
         .then((res) => {
             setMessages(res)

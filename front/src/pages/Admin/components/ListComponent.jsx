@@ -109,7 +109,7 @@ function ListComponent( {users = [], messages = [], logs = []}) {
                 ),
                 messages.length > 0 && (
                     <td className="border px-6 py-4">
-                    <Link to={`/admin/messages-list/${item.props.children[0].props.children}`}>
+                    <Link to={`/admin/message-list/${item.props.children[0].props.children}`}>
                         <button className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
                             Editer
                         </button>

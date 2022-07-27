@@ -46,9 +46,9 @@ const App = () => {
               <Route path="admin/user-list" element={<UsersList />} />
               <Route path="admin/user-list/:id" element={<UserEdit />} />
               <Route path="admin/user-list/add" element={<UserCreate />} />
-              <Route path="messages-list" element={<MessagesList />} />
-              <Route path="messages-list/:id" element={<MessageEdit />} />
-              <Route path="logs-list" element={<LogsList />} />
+              <Route path="admin/message-list" element={<MessagesList />} />
+              <Route path="admin/message-list/:id" element={<MessageEdit />} />
+              <Route path="admin/logs-list" element={<LogsList />} />
           </Route>
         
           

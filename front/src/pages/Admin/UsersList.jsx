@@ -3,7 +3,7 @@ import ListComponent from './components/ListComponent'
 import ArrayLoader from './components/ArrayLoader'
 import { API_URL } from "../../services/constants/index.js";
 import { useCallback } from 'react';
-import { useAuthContext, useProtectedContext } from "../../services/hooks"
+import { useAuthContext } from "../../services/hooks"
 
 function UsersList() {
 
