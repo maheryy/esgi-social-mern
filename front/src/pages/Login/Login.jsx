@@ -108,11 +108,11 @@ export const Login = () => {
               >
                 Connexion
               </button>
-              <p className="text-sm font-semibold mt-2 pt-1 mb-0">
+              <p class="text-sm font-semibold mt-2 pt-1 mb-0">
                   Pas encore de compte ?
                   <a
                     href="/register"
-                    className="text-pink-600 hover:text-pink-700 focus:text-pink-700 transition duration-200 ease-in-out"
+                    class="text-pink-600 hover:text-pink-700 focus:text-pink-700 transition duration-200 ease-in-out"
                     > Inscrivez-vous</a
                   >
                 </p>
