@@ -43,13 +43,12 @@ const App = () => {
           <Route element={<ProtectedAdmin/>}>
               <Route path="/admin" element={<Admin />}/>
               <Route path="/admin/dashboard" element={<Dashboard />} />
-              <Route path="users-list" element={<UsersList />} />
-              <Route path="users-list/:id" element={<UserEdit />} />
-              <Route path="users-list/add" element={<UserCreate />} />
+              <Route path="admin/user-list" element={<UsersList />} />
+              <Route path="admin/user-list/:id" element={<UserEdit />} />
+              <Route path="admin/user-list/add" element={<UserCreate />} />
               <Route path="messages-list" element={<MessagesList />} />
               <Route path="messages-list/:id" element={<MessageEdit />} />
               <Route path="logs-list" element={<LogsList />} />
-            
           </Route>
         
           

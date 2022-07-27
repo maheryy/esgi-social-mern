@@ -41,7 +41,7 @@ function Sidebar() {
                   <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
                         clipRule="evenodd"></path>
                 </svg>
-                <span className="flex-1 ml-3 whitespace-nowrap"><Link to="users-list">Users</Link></span>
+                <span className="flex-1 ml-3 whitespace-nowrap"><Link to="user-list">Users</Link></span>
                 <span
                   className="inline-flex justify-center items-center p-3 ml-3 w-3 h-3 text-sm font-medium text-blue-600 bg-blue-200 rounded-full dark:bg-blue-900 dark:text-blue-200">3</span>
               </a>

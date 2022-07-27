@@ -7,10 +7,10 @@ import {
     Link,
 } from "react-router-dom";
 import { API_URL } from "../../../services/constants/index.js";
+import { useAuthContext, useProtectedContext } from '../../../services/hooks/index.js';
 
 function ListComponent( {users = [], messages = [], logs = []}) {
 
-    console.log(logs)
     const getProperties = (array) => {
         if(array !== undefined) {
             return Object.keys(array)
@@ -93,7 +93,7 @@ function ListComponent( {users = [], messages = [], logs = []}) {
             item.props.children.push(
                 users.length > 0 && (
                     <td className="border px-6 py-4">
-                    <Link to={`/admin/users-list/${item.props.children[0].props.children}`}>
+                    <Link to={`/admin/user-list/${item.props.children[0].props.children}`}>
                         <button className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
                             Editer
                         </button>
@@ -122,11 +122,14 @@ function ListComponent( {users = [], messages = [], logs = []}) {
         return body;
     }
 
+    const { token } = useAuthContext()
+
     const hundleDelete = (id) => {
         fetch(`${API_URL}/users/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
                 firstname: "deleted",

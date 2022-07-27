@@ -3,6 +3,7 @@ const { User } = require("../models/postgres");
 const { ValidationError } = require("sequelize");
 const checkIsAdmin = require("../middleware/checkIsAdmin");
 const checkAuth = require("../middleware/checkAuth");
+const { Op } = require("sequelize");
 
 
 const router = new Router();
@@ -14,19 +15,25 @@ const formatError = (validationError) => {
   }, {});
 };
 
-router.get("/", checkIsAdmin, async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const users = await User.findAll(
       {
         attributes: ["id", "firstname", "email", "pseudo", "status", "techList", "studyList"],
         order: [["status", "DESC"]],
-      },
+        where: {
+          status: {
+            [Op.ne]: -1,
+          }
+        }
+      }
     );
     res.json(users);
     next();
   }
   catch (error) {
-    res.status(500).json({ message: error.message });
+    res.sendStatus(500);
+    console.error(error);
     next();
   }
 }
@@ -50,7 +57,7 @@ router.post("/",async (req, res, next) => {
   }
 });
 
-router.get("/:id",checkAuth ,async (req, res, next) => {
+router.get("/:id" ,async (req, res, next) => {
   try {
     const result = await User.findByPk(parseInt(req.params.id, 10));
     if (!result) {
@@ -67,7 +74,7 @@ router.get("/:id",checkAuth ,async (req, res, next) => {
   }
 });
 
-router.put("/:id", checkAuth ,async (req, res, next) => {
+router.put("/:id" ,async (req, res, next) => {
   try {
     const [nbLines, [result]] = await User.update(req.body, {
       where: {
@@ -99,7 +106,7 @@ router.put("/:id", checkAuth ,async (req, res, next) => {
   }
 });
 
-router.delete("/:id",checkAuth ,async (req, res, next) => {
+router.delete("/:id" ,async (req, res, next) => {
   try {
     const nbLines = await User.destroy({
       where: {
