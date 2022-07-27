@@ -40,15 +40,14 @@ const App = () => {
             <Route path="/chat/:chatId" element={<Chat/>}/>
           </Route>
 
-          <Route element={<ProtectedAdmin/>}>
-              <Route path="/admin" element={<Admin />}/>
-              <Route path="/admin/dashboard" element={<Dashboard />} />
-              <Route path="admin/user-list" element={<UsersList />} />
-              <Route path="admin/user-list/:id" element={<UserEdit />} />
-              <Route path="admin/user-list/add" element={<UserCreate />} />
-              <Route path="admin/message-list" element={<MessagesList />} />
-              <Route path="admin/message-list/:id" element={<MessageEdit />} />
-              <Route path="admin/logs-list" element={<LogsList />} />
+          <Route path="/admin" element={<ProtectedAdmin/>}>
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="user-list" element={<UsersList />} />
+              <Route path="user-list/:id" element={<UserEdit />} />
+              <Route path="user-list/add" element={<UserCreate />} />
+              <Route path="message-list" element={<MessagesList />} />
+              <Route path="message-list/:id" element={<MessageEdit />} />
+              <Route path="logs-list" element={<LogsList />} />
           </Route>
         
           
