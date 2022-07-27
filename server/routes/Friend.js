@@ -54,6 +54,7 @@ router.get("/", async (req, res, next) => {
         pseudo: user.pseudo,
         email: user.email,
         status: user.status,
+        pictureId: user.pictureId,
         relationship: {
           id: row.id,
           status: row.status
@@ -136,6 +137,7 @@ router.get("/discover", async (req, res, next) => {
       lastname: row.lastname,
       pseudo: row.pseudo,
       study: row.studyList,
+      pictureId: row.pictureId,
       relationship: row.requestors.length
         ? (row.requestors[0])
         : (row.targets.length ? row.targets[0] : null)

@@ -19,6 +19,7 @@ export const Chat = () => {
   const navigate = useNavigate();
   const countOldMessages = usePrevious(messages.length);
   const [title, setTitle] = useState("");
+  const [icon, setIcon] = useState("");
   const [emojiPanel, setEmojiPanel] = useState(false);
   const { token, loggedUser } = useAuthContext();
 
@@ -32,6 +33,7 @@ export const Chat = () => {
       .then((res) => res.json())
       .then((res) => {
         setTitle(res.userParticipants.map((el) => el.user.pseudo).join(", "));
+        setIcon(res.userParticipants[0].user.pictureId);
         dispatch({ type: MessageActions.LOAD, payload: res.messages });
       })
       .catch((error) => {
@@ -103,7 +105,7 @@ export const Chat = () => {
 
   return (
     <div className="flex flex-col h-screen border-l border-gray-700 text-gray-300">
-      <Header title={title} icon={true}/>
+      <Header title={title} icon={`/images/${icon}.png`}/>
       <div className="bg-slate-800 w-full basis-full h-0 px-6 pb-4 flex flex-col justify-between">
         <div className="h-full overflow-y-auto scrollbar-dark">
           <ul className="py-4 px-2" ref={scrollView}>

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 export const SidebarChatItem = ({ data, visible, remove }) => {
+
   const isSelected = () => {
     const match = window.location.pathname.match(/\/chat\/(\d+)/);
     return match ? parseInt(match[1], 10) === data.id : false;
@@ -16,7 +17,8 @@ export const SidebarChatItem = ({ data, visible, remove }) => {
           <span className="flex justify-center items-center">
             <img
               className="rounded-full w-12 h-12 bg-cover bg-center "
-              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1760&q=80"
+              // src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1760&q=80"
+              src={`/images/${data.pictureId}.png`}
               alt="profileImage"
             />
           </span>
