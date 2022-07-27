@@ -5,6 +5,13 @@ const { createToken } = require("../lib/jwt");
 const {ValidationError} = require("sequelize");
 const router = new Router();
 
+const formatError = (validationError) => {
+  return Object.keys(validationError.errors).reduce((acc, key) => {
+    acc[key] = validationError.errors[key].message;
+    return acc;
+  }, {});
+};
+
 router.post("/login", async (req, res, next) => {
   try {
     const result = await User.findOne({
