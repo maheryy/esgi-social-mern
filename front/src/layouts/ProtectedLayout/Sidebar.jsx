@@ -1,16 +1,18 @@
 import { Link, useNavigate } from "react-router-dom";
 import { SidebarLinkItem } from "./SidebarLinkItem";
 import { SidebarChatItem } from "./SidebarChatItem";
-import { useProtectedContext } from "../../services/hooks";
+import { useAuthContext, useProtectedContext } from "../../services/hooks";
 import { ChatList } from "./ChatList";
 
 export const Sidebar = () => {
   const navigate = useNavigate();
   const { extendedSidebar, setExtendedSidebar } = useProtectedContext();
+  const { setLoggedUser } = useAuthContext();
 
   const logout = () => {
     localStorage.clear();
-    navigate("/Login", { replace: true });
+    setLoggedUser(null);
+    navigate("/login", { replace: true });
   };
   return (
     <div
