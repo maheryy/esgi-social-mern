@@ -13,7 +13,7 @@ const accessLog = require("./middleware/accessLog");
 const SecurityRouter = require("./routes/Security");
 const checkAuth = require("./middleware/checkAuth");
 const sse = require("sse-esgi-iw2");
-// const sse = require("./middleware/sse");
+//const sse = require("./middleware/sse");
 
 app.use(express.json());
 app.use(cors());

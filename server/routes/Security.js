@@ -2,6 +2,7 @@ const { Router } = require("express");
 const { User } = require("../models/postgres");
 const bcryptjs = require("bcryptjs");
 const { createToken } = require("../lib/jwt");
+const {ValidationError} = require("sequelize");
 const router = new Router();
 
 router.post("/login", async (req, res, next) => {
@@ -28,6 +29,24 @@ router.post("/login", async (req, res, next) => {
     res.sendStatus(500);
     console.error(error);
     return next();
+  }
+});
+
+router.post("/register",async (req, res, next) => {
+  try {
+    const result = await User.create(req.body);
+    req.body.password = result.dataValues.password;
+    res.status(201).json(result);
+    next();
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      res.status(422).json(formatError(error));
+      next();
+    } else {
+      res.sendStatus(500);
+      next();
+      console.error(error);
+    }
   }
 });
 
